@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Личный кабинет</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+body{
+    font-family: Arial;
+    background:#eef1f6;
+    margin:0;
+}
+
+.logo{
+    width:120px;
+    display:block;
+    margin:15px auto 5px auto;
+}
+
+.topbar{
+    background:#fff;
+    padding:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    border-bottom:3px solid #e74c3c;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.topbar button{
+    background:#e74c3c;
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:10px;
+    font-weight:bold;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+.code-box{
+    background:#e74c3c;
+    color:#fff;
+    padding:15px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.code{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.warehouse{
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+    border-left:5px solid #e74c3c;
+    margin-bottom:15px;
+    white-space:pre-line;
+}
+
+.copy-btn{
+    margin-top:10px;
+    background:#2ecc71;
+    color:#fff;
+    border:none;
+    padding:10px;
+    border-radius:10px;
+    width:100%;
+    font-weight:bold;
+}
+
+.success{
+    background:#2ecc71;
+    color:#fff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+    display:none;
+}
+
+.level-box{
+    padding:15px;
+    border-radius:15px;
+    color:#fff;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
+.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
+.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
+.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
+
+.page{display:none;}
+.page.active{display:block;}
+</style>
+</head>
+
+<body>
+
+<img src="logo.jpg" class="logo">
+
+<div class="topbar">
+    <button onclick="showPage('home')">Главная</button>
+    <button onclick="showPage('office')">В офисе</button>
+    <button onclick="showPage('way')">В пути</button>
+</div>
+
+<div class="container">
+
+<h2>👤 Личный кабинет</h2>
+
+<div id="success" class="success"></div>
+
+<div id="home" class="page active">
+
+<div class="card header">⏳ Загрузка...</div>
+
+<div class="code-box">
+Ваш клиентский код<br>
+<div class="code">---</div>
+</div>
+
+<div class="warehouse">
+<div id="warehouseText">⏳ Загрузка...</div>
+<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
+</div>
+
+<div class="card bonus">⏳ Бонусы...</div>
+
+<div id="levelBox" class="level-box">⏳ Уровень...</div>
+
+</div>
+
+<div id="office" class="page">
+<div class="card">
+<h3>🏢 В офисе</h3>
+<p>Ваш товар находится в офисе.</p>
+</div>
+</div>
+
+<div id="way" class="page">
+<div class="card">
+<h3>🚚 В пути</h3>
+<p>Ваш товар в пути.</p>
+</div>
+</div>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzqLGxenlFoQyj-BQ1aydKuqKEvk7C2vOdkKe6Eo9QxLUzPUjJWDLTT0qCdXSpnTvs8Lw/exec";
+
+function showPage(id){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function getTG(){
+    try{
+        if(window.Telegram && Telegram.WebApp){
+            Telegram.WebApp.ready();
+            const user = Telegram.WebApp.initDataUnsafe?.user;
+            if(user && user.id) return user.id.toString();
+        }
+    }catch(e){}
+    return new URLSearchParams(window.location.search).get("tg_id");
+}
+
+function copyAddress(){
+    const text = document.getElementById("warehouseText").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Адрес скопирован!");
+}
+
+function loadClient(){
+
+    const tg_id = getTG();
+
+    if(!tg_id){
+        document.querySelector(".header").innerHTML = "❌ Откройте через Telegram";
+        return;
+    }
+
+    fetch(API_URL + "?tg_id=" + tg_id)
+    .then(r => r.json())
+    .then(data => {
+
+        if(!data || data.status !== "ok"){
+            document.querySelector(".header").innerHTML = "❌ Клиент не найден";
+            return;
+        }
+
+        document.querySelector(".header").innerHTML =
+            "Имя: " + (data.name || "-") + "<br>Телефон: " + (data.phone || "-");
+
+        document.querySelector(".code").innerText = data.client_code || "-";
+
+        // ✅ СКЛАД (J колонка)
+        document.getElementById("warehouseText").innerText =
+`📦 Адрес склада:
+${data.address_warehouse || "нет данных"}`;
+
+        document.querySelector(".bonus").innerHTML =
+            "🎁 Бонусы: " + (data.bonusy || 0) + "<br>" +
+            "До бонуса: " + (data.do_bonusa || 0) + " кг";
+
+        let lvl = (data.level || "").toLowerCase();
+
+        let text = "🆕 Новичок";
+        let cls = "newbie";
+
+        if(lvl.includes("vip")){
+            text = "💎 VIP";
+            cls = "vip";
+        }
+        else if(lvl.includes("золото")){
+            text = "🥇 Золото";
+            cls = "gold";
+        }
+        else if(lvl.includes("серебро")){
+            text = "🥈 Серебро";
+            cls = "silver";
+        }
+
+        let box = document.getElementById("levelBox");
+        box.className = "level-box " + cls;
+        box.innerText = text;
+
+        let msg = document.getElementById("success");
+        msg.style.display = "block";
+
+        msg.innerText =
+        (Number(data.bonusy) || 0) >= 15
+        ? "🎉 Вы получили 1 кг бесплатно!"
+        : "📦 До бонуса: " + (data.do_bonusa || 0) + " бонус";
+
+    })
+    .catch(err => {
+        document.querySelector(".header").innerHTML = "❌ Ошибка загрузки";
+        console.log(err);
+    });
+}
+
+window.onload = loadClient;
+
+</script>
+
+</body>
+</html>
