@@ -132,6 +132,7 @@ body{
 
 <div id="success" class="success"></div>
 
+<!-- HOME -->
 <div id="home" class="page active">
 
 <div class="card header">⏳ Загрузка...</div>
@@ -152,25 +153,27 @@ body{
 
 </div>
 
+<!-- OFFICE -->
 <div id="office" class="page">
-<div class="card">
-<h3>🏢 В офисе</h3>
-<p>Ваш товар находится в офисе.</p>
-</div>
+  <div class="card">
+    <h3>🏢 В офисе</h3>
+    <div id="officeList">Загрузка...</div>
+  </div>
 </div>
 
+<!-- WAY -->
 <div id="way" class="page">
-<div class="card">
-<h3>🚚 В пути</h3>
-<p>Ваш товар в пути.</p>
-</div>
+  <div class="card">
+    <h3>🚚 В пути</h3>
+    <div id="wayList">Загрузка...</div>
+  </div>
 </div>
 
 </div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzM6-8npDhScJyY6Nu2Ov_qU2zFx1pD1RRJjik9SC7FLtGPVnvOCkvZzXesDIMm9S3vug/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbybbtY9dWzSHwde8I2CWh9ksdSGVdHMq1EVOlE7tPtV5Akll5bq7DwwHTK03zjMMMd46g/exec";
 
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -212,12 +215,12 @@ function loadClient(){
             return;
         }
 
+        // ===== USER INFO =====
         document.querySelector(".header").innerHTML =
             "Имя: " + (data.name || "-") + "<br>Телефон: " + (data.phone || "-");
 
         document.querySelector(".code").innerText = data.client_code || "-";
 
-        // ✅ СКЛАД (J колонка)
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
@@ -250,11 +253,50 @@ ${data.address_warehouse || "нет данных"}`;
 
         let msg = document.getElementById("success");
         msg.style.display = "block";
-
         msg.innerText =
         (Number(data.bonusy) || 0) >= 15
         ? "🎉 Вы получили 1 кг бесплатно!"
         : "📦 До бонуса: " + (data.do_bonusa || 0) + " бонус";
+
+        // =======================
+        // 🏢 OFFICE (только клиент)
+        // =======================
+        let officeHTML = "";
+
+        if (data.office && data.office.length > 0) {
+            data.office.forEach(item => {
+                officeHTML += `
+                <div class="card">
+                    📦 Трек: ${item.track}<br>
+                    💰 Цена: ${item.price}<br>
+                    📅 Отправка: ${item.date_sent}<br>
+                    📅 Прибытие: ${item.date_arrived}
+                </div>`;
+            });
+        } else {
+            officeHTML = "<p>Нет посылок</p>";
+        }
+
+        document.getElementById("officeList").innerHTML = officeHTML;
+
+        // =======================
+        // 🚚 WAY (все в пути)
+        // =======================
+        let wayHTML = "";
+
+        if (data.way && data.way.length > 0) {
+            data.way.forEach(item => {
+                wayHTML += `
+                <div class="card">
+                    🚚 Трек: ${item.track}<br>
+                    👤 Клиент: ${item.client_code}
+                </div>`;
+            });
+        } else {
+            wayHTML = "<p>Нет посылок в пути</p>";
+        }
+
+        document.getElementById("wayList").innerHTML = wayHTML;
 
     })
     .catch(err => {
