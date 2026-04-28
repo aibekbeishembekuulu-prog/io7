@@ -113,26 +113,6 @@ body{
 
 .page{display:none;}
 .page.active{display:block;}
-
-/* 🔎 поиск */
-.search-box input{
-    width:100%;
-    padding:10px;
-    border-radius:10px;
-    border:1px solid #ccc;
-    margin-bottom:10px;
-}
-
-.search-box button{
-    width:100%;
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    background:#3498db;
-    color:#fff;
-    font-weight:bold;
-}
-
 </style>
 </head>
 
@@ -144,7 +124,6 @@ body{
     <button onclick="showPage('home')">Главная</button>
     <button onclick="showPage('office')">В офисе</button>
     <button onclick="showPage('way')">В пути</button>
-    <button onclick="showPage('track')">Поиск</button>
 </div>
 
 <div class="container">
@@ -152,6 +131,19 @@ body{
 <h2>👤 Личный кабинет</h2>
 
 <div id="success" class="success"></div>
+
+<!-- 🔎 SEARCH -->
+<div class="card">
+    <h3>🔎 Поиск посылки</h3>
+    <input id="trackInput" placeholder="Введите трек-код"
+        style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
+    <button onclick="searchTrack()"
+        style="width:100%;padding:10px;border:none;border-radius:10px;background:#e74c3c;color:#fff;font-weight:bold;">
+        Найти
+    </button>
+
+    <div id="searchResult" style="margin-top:10px;"></div>
+</div>
 
 <!-- HOME -->
 <div id="home" class="page active">
@@ -190,20 +182,11 @@ body{
   </div>
 </div>
 
-<!-- TRACK SEARCH -->
-<div id="track" class="page">
-  <div class="card search-box">
-    <h3>🔎 Поиск по трек-коду</h3>
-    <input type="text" id="trackInput" placeholder="Введите трек-код">
-    <button onclick="searchTrack()">Поиск</button>
-    <div id="trackResult" style="margin-top:10px;"></div>
-  </div>
-</div>
-
 </div>
 
 <script>
 
+// ✅ ИСПРАВЛЕННАЯ ССЫЛКА
 const API_URL = "https://script.google.com/macros/s/AKfycbzVyD7Nm1dJ8A477h_3bc0ikqv51tcRQh8fz3syT84tellRHspmTpDI7bO51rhU1gUp/exec";
 
 function showPage(id){
@@ -237,7 +220,7 @@ function loadClient(){
         return;
     }
 
-    fetch(API_URL + "?tg_id=" + tg_id)
+    fetch(API_URL + "?action=profile&tg_id=" + tg_id)
     .then(r => r.json())
     .then(data => {
 
@@ -247,7 +230,7 @@ function loadClient(){
         }
 
         document.querySelector(".header").innerHTML =
-            "Имя: " + data.name + "<br>Телефон: " + data.phone;
+            "Имя: " + (data.name || "-") + "<br>Телефон: " + (data.phone || "-");
 
         document.querySelector(".code").innerText = data.client_code || "-";
 
@@ -256,50 +239,69 @@ function loadClient(){
 ${data.address_warehouse || "нет данных"}`;
 
         document.querySelector(".bonus").innerHTML =
-            "🎁 Бонусы: " + data.bonusy + "<br>До бонуса: " + data.do_bonusa;
+            "🎁 Бонусы: " + (data.bonusy || 0) + "<br>" +
+            "До бонуса: " + (data.do_bonusa || 0) + " кг";
+
+        let lvl = (data.level || "").toLowerCase();
+
+        let text = "🆕 Новичок";
+        let cls = "newbie";
+
+        if(lvl.includes("vip")){
+            text = "💎 VIP";
+            cls = "vip";
+        }
+        else if(lvl.includes("золото")){
+            text = "🥇 Золото";
+            cls = "gold";
+        }
+        else if(lvl.includes("серебро")){
+            text = "🥈 Серебро";
+            cls = "silver";
+        }
 
         let box = document.getElementById("levelBox");
-        box.innerText = data.level || "Новичок";
+        box.className = "level-box " + cls;
+        box.innerText = text;
 
-        let officeHTML = "";
-        if (data.office?.length){
-            data.office.forEach(i=>{
-                officeHTML += `<div class="card">📦 ${i.track} | ${i.price}</div>`;
-            });
-        } else officeHTML = "Нет посылок";
-
-        document.getElementById("officeList").innerHTML = officeHTML;
-
-        let wayHTML = "";
-        if (data.way?.length){
-            data.way.forEach(i=>{
-                wayHTML += `<div class="card">🚚 ${i.track}</div>`;
-            });
-        } else wayHTML = "Нет в пути";
-
-        document.getElementById("wayList").innerHTML = wayHTML;
-
-    });
+    })
+    .catch(err => console.log(err));
 }
 
-/* 🔎 ПОИСК ТРЕКА */
+// 🔎 ПОИСК ТРЕКА
 function searchTrack(){
-    const track = document.getElementById("trackInput").value;
 
-    fetch(API_URL + "?track=" + track)
+    let track = document.getElementById("trackInput").value.trim();
+
+    if(!track){
+        alert("Введите трек-код");
+        return;
+    }
+
+    document.getElementById("searchResult").innerHTML = "⏳ Поиск...";
+
+    fetch(API_URL + "?action=search_track&track=" + track)
     .then(r => r.json())
-    .then(res => {
-        if(!res || res.status !== "ok"){
-            document.getElementById("trackResult").innerHTML = "❌ Не найдено";
+    .then(data => {
+
+        if(!data || data.status !== "ok"){
+            document.getElementById("searchResult").innerHTML = "❌ Не найдено";
             return;
         }
 
-        document.getElementById("trackResult").innerHTML =
-        `<div class="card">
-            📦 ${res.track}<br>
-            👤 ${res.client_code}<br>
-            📍 ${res.status}
+        document.getElementById("searchResult").innerHTML = `
+        <div class="card">
+            📦 Трек: ${data.track}<br>
+            👤 Клиент: ${data.client_code}<br>
+            💰 Цена: ${data.price}<br>
+            📍 Статус: ${data.status}<br>
+            📅 Отправка: ${data.date_sent}<br>
+            📅 Прибытие: ${data.date_arrived}
         </div>`;
+    })
+    .catch(err => {
+        document.getElementById("searchResult").innerHTML = "❌ Ошибка";
+        console.log(err);
     });
 }
 
