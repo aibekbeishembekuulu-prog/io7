@@ -113,6 +113,26 @@ body{
 
 .page{display:none;}
 .page.active{display:block;}
+
+/* 🔎 поиск */
+.search-box input{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-bottom:10px;
+}
+
+.search-box button{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#3498db;
+    color:#fff;
+    font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -124,6 +144,7 @@ body{
     <button onclick="showPage('home')">Главная</button>
     <button onclick="showPage('office')">В офисе</button>
     <button onclick="showPage('way')">В пути</button>
+    <button onclick="showPage('track')">Поиск</button>
 </div>
 
 <div class="container">
@@ -169,11 +190,21 @@ body{
   </div>
 </div>
 
+<!-- TRACK SEARCH -->
+<div id="track" class="page">
+  <div class="card search-box">
+    <h3>🔎 Поиск по трек-коду</h3>
+    <input type="text" id="trackInput" placeholder="Введите трек-код">
+    <button onclick="searchTrack()">Поиск</button>
+    <div id="trackResult" style="margin-top:10px;"></div>
+  </div>
+</div>
+
 </div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbybbtY9dWzSHwde8I2CWh9ksdSGVdHMq1EVOlE7tPtV5Akll5bq7DwwHTK03zjMMMd46g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzVyD7Nm1dJ8A477h_3bc0ikqv51tcRQh8fz3syT84tellRHspmTpDI7bO51rhU1gUp/exec";
 
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -215,9 +246,8 @@ function loadClient(){
             return;
         }
 
-        // ===== USER INFO =====
         document.querySelector(".header").innerHTML =
-            "Имя: " + (data.name || "-") + "<br>Телефон: " + (data.phone || "-");
+            "Имя: " + data.name + "<br>Телефон: " + data.phone;
 
         document.querySelector(".code").innerText = data.client_code || "-";
 
@@ -226,82 +256,50 @@ function loadClient(){
 ${data.address_warehouse || "нет данных"}`;
 
         document.querySelector(".bonus").innerHTML =
-            "🎁 Бонусы: " + (data.bonusy || 0) + "<br>" +
-            "До бонуса: " + (data.do_bonusa || 0) + " кг";
-
-        let lvl = (data.level || "").toLowerCase();
-
-        let text = "🆕 Новичок";
-        let cls = "newbie";
-
-        if(lvl.includes("vip")){
-            text = "💎 VIP";
-            cls = "vip";
-        }
-        else if(lvl.includes("золото")){
-            text = "🥇 Золото";
-            cls = "gold";
-        }
-        else if(lvl.includes("серебро")){
-            text = "🥈 Серебро";
-            cls = "silver";
-        }
+            "🎁 Бонусы: " + data.bonusy + "<br>До бонуса: " + data.do_bonusa;
 
         let box = document.getElementById("levelBox");
-        box.className = "level-box " + cls;
-        box.innerText = text;
+        box.innerText = data.level || "Новичок";
 
-        let msg = document.getElementById("success");
-        msg.style.display = "block";
-        msg.innerText =
-        (Number(data.bonusy) || 0) >= 15
-        ? "🎉 Вы получили 1 кг бесплатно!"
-        : "📦 До бонуса: " + (data.do_bonusa || 0) + " бонус";
-
-        // =======================
-        // 🏢 OFFICE (только клиент)
-        // =======================
         let officeHTML = "";
-
-        if (data.office && data.office.length > 0) {
-            data.office.forEach(item => {
-                officeHTML += `
-                <div class="card">
-                    📦 Трек: ${item.track}<br>
-                    💰 Цена: ${item.price}<br>
-                    📅 Отправка: ${item.date_sent}<br>
-                    📅 Прибытие: ${item.date_arrived}
-                </div>`;
+        if (data.office?.length){
+            data.office.forEach(i=>{
+                officeHTML += `<div class="card">📦 ${i.track} | ${i.price}</div>`;
             });
-        } else {
-            officeHTML = "<p>Нет посылок</p>";
-        }
+        } else officeHTML = "Нет посылок";
 
         document.getElementById("officeList").innerHTML = officeHTML;
 
-        // =======================
-        // 🚚 WAY (все в пути)
-        // =======================
         let wayHTML = "";
-
-        if (data.way && data.way.length > 0) {
-            data.way.forEach(item => {
-                wayHTML += `
-                <div class="card">
-                    🚚 Трек: ${item.track}<br>
-                    👤 Клиент: ${item.client_code}
-                </div>`;
+        if (data.way?.length){
+            data.way.forEach(i=>{
+                wayHTML += `<div class="card">🚚 ${i.track}</div>`;
             });
-        } else {
-            wayHTML = "<p>Нет посылок в пути</p>";
-        }
+        } else wayHTML = "Нет в пути";
 
         document.getElementById("wayList").innerHTML = wayHTML;
 
-    })
-    .catch(err => {
-        document.querySelector(".header").innerHTML = "❌ Ошибка загрузки";
-        console.log(err);
+    });
+}
+
+/* 🔎 ПОИСК ТРЕКА */
+function searchTrack(){
+    const track = document.getElementById("trackInput").value;
+
+    fetch(API_URL + "?track=" + track)
+    .then(r => r.json())
+    .then(res => {
+        if(!res || res.status !== "ok"){
+            document.getElementById("trackResult").innerHTML = "❌ Не найдено";
+            return;
+        }
+
+        document.getElementById("trackResult").innerHTML =
+        `<div class="card">
+            📦 ${res.track}<br>
+            👤 ${res.client_code}<br>
+            📍 ${res.status}
+        </div>`;
     });
 }
 
