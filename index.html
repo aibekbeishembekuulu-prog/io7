@@ -181,7 +181,7 @@ h3{margin-top:0;}
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxU58GXaJ8DgwEP74aZNF88tKa05qC5mJST184OPJUFq9RSWDgc7ueG6CBO3NXGhbkK/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyJLM9PshaTHO168brGyS2sh1YFtWTOHDEOMmxe6Cuwbr_lmc4dGqQUgRRc58wxZ6sp/exec";
 
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -209,17 +209,21 @@ function loadClient(){
 
     const tg_id = getTG();
 
-    if(!tg_id){
+    if(!tg_id || tg_id === "undefined"){
         document.querySelector(".header").innerHTML = "❌ Откройте через Telegram";
         return;
     }
 
-    fetch(API_URL + "?tg_id=" + tg_id)
+    // ✅ ВАЖНО: ДОБАВЛЕН action=profile
+    fetch(API_URL + "?action=profile&tg_id=" + tg_id)
     .then(r => r.json())
     .then(data => {
 
+        console.log("API DATA:", data);
+
         if(!data || data.status !== "ok"){
-            document.querySelector(".header").innerHTML = "❌ Клиент не найден";
+            document.querySelector(".header").innerHTML =
+                "❌ Клиент не найден";
             return;
         }
 
@@ -232,9 +236,9 @@ function loadClient(){
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
-        // 💰 БАЛАНС (H)
+        // 💰 БАЛАНС
         document.querySelector(".bonus").innerHTML =
-            "💰 Общий баланс: " + (data.balance || 0) + " сом";
+            "💰 Общий баланс: " + (data.balance ?? 0) + " сом";
 
         // LEVEL
         let lvl = (data.level || "").toLowerCase();
@@ -262,10 +266,11 @@ ${data.address_warehouse || "нет данных"}`;
         // SUCCESS
         let msg = document.getElementById("success");
         msg.style.display = "block";
-        msg.innerText = "💰 Ваш баланс: " + (data.balance || 0) + " сом";
+        msg.innerText = "💰 Ваш баланс: " + (data.balance ?? 0) + " сом";
 
         // OFFICE
         let officeHTML = "";
+
         if (data.office && data.office.length > 0) {
             data.office.forEach(item => {
                 officeHTML += `
@@ -281,28 +286,32 @@ ${data.address_warehouse || "нет данных"}`;
         } else {
             officeHTML = "<p>Нет посылок</p>";
         }
+
         document.getElementById("officeList").innerHTML = officeHTML;
 
         // WAY
         let wayHTML = "";
+
         if (data.way && data.way.length > 0) {
             data.way.forEach(item => {
                 wayHTML += `
                 <div class="card">
                     🚚 Трек: ${item.track}<br>
-                    👤 Клиент: ${item.client_code}<br>
+                    👤 Клиент: ${item.client_code || "-"}<br>
                     🎁 Бонус: ${item.bonus || 0} сом
                 </div>`;
             });
         } else {
             wayHTML = "<p>Нет посылок в пути</p>";
         }
+
         document.getElementById("wayList").innerHTML = wayHTML;
 
     })
     .catch(err => {
-        document.querySelector(".header").innerHTML = "❌ Ошибка загрузки";
         console.log(err);
+        document.querySelector(".header").innerHTML =
+            "❌ Ошибка загрузки API";
     });
 }
 
