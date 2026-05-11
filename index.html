@@ -237,9 +237,8 @@ function loadClient(){
 ${data.address_warehouse || "нет данных"}`;
 
         // 💰 БАЛАНС
-        document.querySelector(".bonus").innerHTML =
-            "💰 Общий баланс: " + (data.balance ?? 0) + " сом";
-
+       document.querySelector(".bonus").innerHTML =
+    "💰 Общий баланс: " + (data.total_balance ?? 0) + " сом";
         // LEVEL
         let lvl = (data.level || "").toLowerCase();
 
@@ -266,8 +265,9 @@ ${data.address_warehouse || "нет данных"}`;
         // SUCCESS
         let msg = document.getElementById("success");
         msg.style.display = "block";
-        msg.innerText = "💰 Ваш баланс: " + (data.balance ?? 0) + " сом";
-
+       msg.innerText =
+    "💰 Ваш баланс: " + (data.balance ?? 0) + " сом\n" +
+    "💰 Общий баланс: " + (data.total_balance ?? 0) + " сом";
         // OFFICE
         let officeHTML = "";
 
