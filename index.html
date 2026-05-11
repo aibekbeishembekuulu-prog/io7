@@ -66,10 +66,7 @@ body{
     margin-bottom:15px;
 }
 
-.code{
-    font-size:22px;
-    font-weight:bold;
-}
+.code{font-size:22px;font-weight:bold;}
 
 .warehouse{
     background:#fff;
@@ -91,6 +88,15 @@ body{
     font-weight:bold;
 }
 
+.success{
+    background:#2ecc71;
+    color:#fff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+    display:none;
+}
+
 .level-box{
     padding:15px;
     border-radius:15px;
@@ -98,13 +104,12 @@ body{
     font-weight:bold;
     text-align:center;
     margin-bottom:15px;
-    font-size:18px;
 }
 
 .vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
 .gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
 .silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
-.newbie{background:linear-gradient(135deg,#cd7f32,#a97142);}
+.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
 
 .page{display:none;}
 .page.active{display:block;}
@@ -125,6 +130,9 @@ body{
 
 <h2>👤 Личный кабинет</h2>
 
+<div id="success" class="success"></div>
+
+<!-- HOME -->
 <div id="home" class="page active">
 
 <div class="card header">⏳ Загрузка...</div>
@@ -149,6 +157,7 @@ body{
 
 </div>
 
+<!-- OFFICE -->
 <div id="office" class="page">
   <div class="card">
     <h3>🏢 В офисе</h3>
@@ -156,6 +165,7 @@ body{
   </div>
 </div>
 
+<!-- WAY -->
 <div id="way" class="page">
   <div class="card">
     <h3>🚚 В пути</h3>
@@ -232,27 +242,36 @@ function loadClient(){
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
-        let level = data.level || "🥉 Бронза";
-        let discount = data.discount || 2;
-
+        // 🔥 LEVEL SYSTEM + EMOJI
+        let level = "Новичок 🟢";
         let levelClass = "newbie";
 
-        if(level.includes("VIP")){
+        let total = Number(data.total_balance || 0);
+
+        if(total >= 1000){
+            level = "VIP 👑";
             levelClass = "vip";
         }
-        else if(level.includes("Золото")){
+        else if(total >= 500){
+            level = "Золото 🥇";
             levelClass = "gold";
         }
-        else if(level.includes("Серебро")){
+        else if(total >= 100){
+            level = "Серебро 🥈";
             levelClass = "silver";
         }
 
-        document.getElementById("levelBox").className =
-            "level-box " + levelClass;
-
+        document.getElementById("levelBox").className = "level-box " + levelClass;
         document.getElementById("levelBox").innerHTML =
-            `${level}<br>🎁 Скидка: ${discount}%`;
+            "🏆 Уровень: " + level;
 
+        const success = document.getElementById("success");
+success.style.display = "block";
+success.innerText = "🔄 Данные обновлены";
+
+setTimeout(() => {
+   success.style.display = "none";
+}, 3000);
     });
 
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
@@ -268,7 +287,7 @@ ${data.address_warehouse || "нет данных"}`;
                 <div class="card">
                     📦 ${item.track}<br>
                     💰 ${item.price} сом<br>
-                    📅 Прибыло: ${item.date_arrived}
+                    📅 ${item.date_arrived}
                 </div>`;
             });
         } else {
@@ -280,8 +299,7 @@ ${data.address_warehouse || "нет данных"}`;
                 wayHTML += `
                 <div class="card">
                     🚚 ${item.track}<br>
-                    💰 ${item.price} сом<br>
-                    📅 Отправлено: ${item.date_sent}
+                    💰 ${item.price} сом
                 </div>`;
             });
         } else {
