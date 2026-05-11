@@ -137,6 +137,8 @@ body{
 
 <div class="card header">⏳ Загрузка...</div>
 
+<div class="card phone">📱 Телефон...</div>
+
 <div class="code-box">
 Ваш клиентский код<br>
 <div class="code">---</div>
@@ -147,7 +149,9 @@ body{
 <button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
 </div>
 
-<div class="card bonus">⏳ Баланс...</div>
+<div class="card bonus">💰 Бонус...</div>
+
+<div class="card total-bonus">💎 Общий бонус...</div>
 
 <div id="levelBox" class="level-box">⏳ Уровень...</div>
 
@@ -201,7 +205,7 @@ function copyAddress(){
 
 function startRealtime(){
     loadClient();
-    setInterval(loadClient, 15000); // 🔥 каждые 15 секунд
+    setInterval(loadClient, 15000);
 }
 
 function loadClient(){
@@ -220,25 +224,53 @@ function loadClient(){
         if(data.status !== "ok") return;
 
         document.querySelector(".header").innerHTML =
-            "Имя: " + data.name;
+            "👤 Имя: " + data.name;
 
-        document.querySelector(".code").innerText = data.client_code;
+        document.querySelector(".phone").innerHTML =
+            "📱 Телефон: " + (data.phone ?? "нет данных");
+
+        document.querySelector(".bonus").innerHTML =
+            "💰 Бонус: " + (data.balance ?? 0) + " сом";
+
+        document.querySelector(".total-bonus").innerHTML =
+            "💎 Общий накопленный бонус: " + (data.total_balance ?? 0) + " сом";
+
+        document.querySelector(".code").innerText =
+            data.client_code;
 
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
-        document.querySelector(".bonus").innerHTML =
-            "💰 Общий баланс: " + (data.total_balance ?? 0) + " сом";
+        // 🔥 LEVEL SYSTEM + EMOJI
+        let level = "Новичок 🟢";
+        let levelClass = "newbie";
+
+        let total = Number(data.total_balance || 0);
+
+        if(total >= 1000){
+            level = "VIP 👑";
+            levelClass = "vip";
+        }
+        else if(total >= 500){
+            level = "Золото 🥇";
+            levelClass = "gold";
+        }
+        else if(total >= 100){
+            level = "Серебро 🥈";
+            levelClass = "silver";
+        }
+
+        document.getElementById("levelBox").className = "level-box " + levelClass;
+        document.getElementById("levelBox").innerHTML =
+            "🏆 Уровень: " + level;
 
         document.getElementById("success").style.display = "block";
-
         document.getElementById("success").innerText =
-            "💰 Баланс: " + (data.balance ?? 0) + " сом";
+            "Данные обновлены";
 
     });
 
-    // 🔥 PARCELS (REALTME)
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
     .then(r => r.json())
     .then(p => {
@@ -247,14 +279,14 @@ ${data.address_warehouse || "нет данных"}`;
         let wayHTML = "";
 
         if(p.office && p.office.length > 0){
-           p.office.forEach(item => {
-    officeHTML += `
-    <div class="card parcel-card">
-        <div class="track">📦 ${item.track}</div>
-        <div class="price">💰 ${item.price} сом</div>
-        <div class="date">📅 ${item.date_arrived}</div>
-    </div>`;
-});
+            p.office.forEach(item => {
+                officeHTML += `
+                <div class="card">
+                    📦 ${item.track}<br>
+                    💰 ${item.price} сом<br>
+                    📅 ${item.date_arrived}
+                </div>`;
+            });
         } else {
             officeHTML = "<p>Нет посылок</p>";
         }
