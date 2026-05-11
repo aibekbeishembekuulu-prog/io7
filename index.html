@@ -55,9 +55,7 @@ body{
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.header{
-    font-weight:bold;
-}
+.header{font-weight:bold;}
 
 .code-box{
     background:#e74c3c;
@@ -68,10 +66,7 @@ body{
     margin-bottom:15px;
 }
 
-.code{
-    font-size:22px;
-    font-weight:bold;
-}
+.code{font-size:22px;font-weight:bold;}
 
 .warehouse{
     background:#fff;
@@ -118,8 +113,6 @@ body{
 
 .page{display:none;}
 .page.active{display:block;}
-
-h3{margin-top:0;}
 </style>
 </head>
 
@@ -154,7 +147,6 @@ h3{margin-top:0;}
 <button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
 </div>
 
-<!-- 💰 БАЛАНС -->
 <div class="card bonus">⏳ Баланс...</div>
 
 <div id="levelBox" class="level-box">⏳ Уровень...</div>
@@ -183,6 +175,8 @@ h3{margin-top:0;}
 
 const API_URL ="https://script.google.com/macros/s/AKfycby_E3dMXmPUXdzzKiRIztIXKmOdbezVd2IRFfrT5V28kI0O2E4194gYZl-dLDDFWio_/exec";
 
+let lastHash = "";
+
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -202,120 +196,89 @@ function getTG(){
 function copyAddress(){
     const text = document.getElementById("warehouseText").innerText;
     navigator.clipboard.writeText(text);
-    alert("Адрес скопирован!");
+    alert("Скопировано!");
+}
+
+function startRealtime(){
+    loadClient();
+    setInterval(loadClient, 15000); // 🔥 каждые 15 секунд
 }
 
 function loadClient(){
 
     const tg_id = getTG();
+    if(!tg_id) return;
 
-    if(!tg_id || tg_id === "undefined"){
-        document.querySelector(".header").innerHTML = "❌ Откройте через Telegram";
-        return;
-    }
-
-    // ✅ ВАЖНО: ДОБАВЛЕН action=profile
     fetch(API_URL + "?action=profile&tg_id=" + tg_id)
     .then(r => r.json())
     .then(data => {
 
-        console.log("API DATA:", data);
+        let hash = JSON.stringify(data);
+        if(hash === lastHash) return;
+        lastHash = hash;
 
-        if(!data || data.status !== "ok"){
-            document.querySelector(".header").innerHTML =
-                "❌ Клиент не найден";
-            return;
-        }
+        if(data.status !== "ok") return;
 
         document.querySelector(".header").innerHTML =
-            "Имя: " + (data.name || "-") + "<br>Телефон: " + (data.phone || "-");
+            "Имя: " + data.name;
 
-        document.querySelector(".code").innerText = data.client_code || "-";
+        document.querySelector(".code").innerText = data.client_code;
 
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
-        // 💰 БАЛАНС
-       document.querySelector(".bonus").innerHTML =
-    "💰 Общий баланс: " + (data.total_balance ?? 0) + " сом";
-        // LEVEL
-        let lvl = (data.level || "").toLowerCase();
+        document.querySelector(".bonus").innerHTML =
+            "💰 Общий баланс: " + (data.total_balance ?? 0) + " сом";
 
-        let text = "🆕 Новичок";
-        let cls = "newbie";
+        document.getElementById("success").style.display = "block";
 
-        if(lvl.includes("vip")){
-            text = "💎 VIP";
-            cls = "vip";
-        }
-        else if(lvl.includes("золото")){
-            text = "🥇 Золото";
-            cls = "gold";
-        }
-        else if(lvl.includes("серебро")){
-            text = "🥈 Серебро";
-            cls = "silver";
-        }
+        document.getElementById("success").innerText =
+            "💰 Баланс: " + (data.balance ?? 0) + " сом";
 
-        let box = document.getElementById("levelBox");
-        box.className = "level-box " + cls;
-        box.innerText = text;
+    });
 
-        // SUCCESS
-        let msg = document.getElementById("success");
-        msg.style.display = "block";
-       msg.innerText =
-    "💰 Ваш баланс: " + (data.balance ?? 0) + " сом\n" +
-    "💰 Общий баланс: " + (data.total_balance ?? 0) + " сом";
-        // OFFICE
+    // 🔥 PARCELS (REALTME)
+    fetch(API_URL + "?action=all&tg_id=" + tg_id)
+    .then(r => r.json())
+    .then(p => {
+
         let officeHTML = "";
+        let wayHTML = "";
 
-        if (data.office && data.office.length > 0) {
-            data.office.forEach(item => {
+        if(p.office && p.office.length > 0){
+            p.office.forEach(item => {
                 officeHTML += `
                 <div class="card">
-                    📦 Трек: ${item.track}<br>
-                    💰 Цена: ${item.price} сом<br>
-                    🎁 Бонус: ${item.bonus || 0} сом<br>
-                    💰 Баланс: ${item.balance || 0} сом<br>
-                    📅 Отправка: ${item.date_sent}<br>
-                    📅 Прибытие: ${item.date_arrived}
+                    📦 ${item.track}<br>
+                    💰 ${item.price} сом<br>
+                    📅 ${item.date_arrived}
                 </div>`;
             });
         } else {
             officeHTML = "<p>Нет посылок</p>";
         }
 
-        document.getElementById("officeList").innerHTML = officeHTML;
-
-        // WAY
-        let wayHTML = "";
-
-        if (data.way && data.way.length > 0) {
-            data.way.forEach(item => {
+        if(p.way && p.way.length > 0){
+            p.way.forEach(item => {
                 wayHTML += `
                 <div class="card">
-                    🚚 Трек: ${item.track}<br>
-                    👤 Клиент: ${item.client_code || "-"}<br>
-                    🎁 Бонус: ${item.bonus || 0} сом
+                    🚚 ${item.track}<br>
+                    💰 ${item.price} сом
                 </div>`;
             });
         } else {
-            wayHTML = "<p>Нет посылок в пути</p>";
+            wayHTML = "<p>Нет посылок</p>";
         }
 
+        document.getElementById("officeList").innerHTML = officeHTML;
         document.getElementById("wayList").innerHTML = wayHTML;
 
-    })
-    .catch(err => {
-        console.log(err);
-        document.querySelector(".header").innerHTML =
-            "❌ Ошибка загрузки API";
     });
+
 }
 
-window.onload = loadClient;
+window.onload = startRealtime;
 
 </script>
 
