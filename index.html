@@ -247,14 +247,14 @@ ${data.address_warehouse || "нет данных"}`;
         let wayHTML = "";
 
         if(p.office && p.office.length > 0){
-            p.office.forEach(item => {
-                officeHTML += `
-                <div class="card">
-                    📦 ${item.track}<br>
-                    💰 ${item.price} сом<br>
-                    📅 ${item.date_arrived}
-                </div>`;
-            });
+           p.office.forEach(item => {
+    officeHTML += `
+    <div class="card parcel-card">
+        <div class="track">📦 ${item.track}</div>
+        <div class="price">💰 ${item.price} сом</div>
+        <div class="date">📅 ${item.date_arrived}</div>
+    </div>`;
+});
         } else {
             officeHTML = "<p>Нет посылок</p>";
         }
