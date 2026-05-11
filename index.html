@@ -265,10 +265,13 @@ ${data.address_warehouse || "нет данных"}`;
         document.getElementById("levelBox").innerHTML =
             "🏆 Уровень: " + level;
 
-        document.getElementById("success").style.display = "block";
-        document.getElementById("success").innerText =
-            "Данные обновлены";
+        const success = document.getElementById("success");
+success.style.display = "block";
+success.innerText = "🔄 Данные обновлены";
 
+setTimeout(() => {
+   success.style.display = "none";
+}, 3000);
     });
 
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
