@@ -12,306 +12,98 @@ body{
     font-family: Arial;
     background:#eef1f6;
     margin:0;
-}
-
-.logo{
-    width:120px;
-    display:block;
-    margin:15px auto 5px auto;
-}
-
-.topbar{
-    background:#fff;
-    padding:10px;
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    border-bottom:3px solid #e74c3c;
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-.topbar button{
-    background:#e74c3c;
-    color:#fff;
-    border:none;
-    padding:8px 12px;
-    border-radius:10px;
-    font-weight:bold;
-}
-
-.container{
-    max-width:500px;
-    margin:auto;
     padding:15px;
 }
 
 .card{
     background:#fff;
     padding:15px;
-    border-radius:15px;
-    margin-bottom:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    max-width:500px;
+    margin:auto;
 }
 
-.header{font-weight:bold;}
-
-.code-box{
-    background:#e74c3c;
-    color:#fff;
-    padding:15px;
-    border-radius:15px;
+h2{
     text-align:center;
-    margin-bottom:15px;
 }
 
-.code{font-size:22px;font-weight:bold;}
-
-.warehouse{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    border-left:5px solid #e74c3c;
-    margin-bottom:15px;
-    white-space:pre-line;
+.address{
+    background:#f5f5f5;
+    padding:10px;
+    border-radius:8px;
+    margin:10px 0;
+    font-size:13px;
 }
 
-.copy-btn{
-    margin-top:10px;
-    background:#2ecc71;
+button{
+    background:#2ea6ff;
     color:#fff;
     border:none;
     padding:10px;
-    border-radius:10px;
+    border-radius:8px;
     width:100%;
-    font-weight:bold;
+    margin-top:10px;
+    cursor:pointer;
 }
-
-.success{
-    background:#2ecc71;
-    color:#fff;
-    padding:12px;
-    border-radius:12px;
-    margin-bottom:15px;
-    display:none;
-}
-
-.level-box{
-    padding:15px;
-    border-radius:15px;
-    color:#fff;
-    font-weight:bold;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
-.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
-.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
-.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
-
-.page{display:none;}
-.page.active{display:block;}
 </style>
 </head>
 
 <body>
 
-<img src="logo.jpg" class="logo">
+<div class="card">
+    <h2>👤 Личный кабинет</h2>
 
-<div class="topbar">
-    <button onclick="showPage('home')">Главная</button>
-    <button onclick="showPage('office')">В офисе</button>
-    <button onclick="showPage('way')">В пути</button>
-</div>
+    <p>👤 Имя: Айбек</p>
+    <p>📱 Телефон: 996702263388</p>
+    <p>🆔 Клиентский код: <b>T0265</b></p>
 
-<div class="container">
+    <p>📦 Адрес склада:</p>
+    <div class="address">
+        刘影（LY388）13845320678 广东省佛山市南海区里水镇岗美工业区10号老船长创意园米莎288库房LY388
+    </div>
 
-<h2>👤 Личный кабинет</h2>
+    <button onclick="copyAddress()">📋 Скопировать адрес</button>
 
-<div id="success" class="success"></div>
+    <p>💰 Бонус: <b id="bonus">15.62</b> сом</p>
+    <p>💎 Общий бонус: <b id="total">218.68</b> сом</p>
 
-<!-- HOME -->
-<div id="home" class="page active">
-
-<div class="card header">⏳ Загрузка...</div>
-
-<div class="card phone">📱 Телефон...</div>
-
-<div class="code-box">
-Ваш клиентский код<br>
-<div class="code">---</div>
-</div>
-
-<div class="warehouse">
-<div id="warehouseText">⏳ Загрузка...</div>
-<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
-</div>
-
-<div class="card bonus">💰 Бонус...</div>
-
-<div class="card total-bonus">💎 Общий бонус...</div>
-
-<div id="levelBox" class="level-box">⏳ Уровень...</div>
-
-</div>
-
-<!-- OFFICE -->
-<div id="office" class="page">
-  <div class="card">
-    <h3>🏢 В офисе</h3>
-    <div id="officeList">Загрузка...</div>
-  </div>
-</div>
-
-<!-- WAY -->
-<div id="way" class="page">
-  <div class="card">
-    <h3>🚚 В пути</h3>
-    <div id="wayList">Загрузка...</div>
-  </div>
-</div>
-
+    <p>🏆 Уровень: <b id="level">---</b></p>
 </div>
 
 <script>
+let totalBonus = 218.68;
 
-const API_URL ="https://script.google.com/macros/s/AKfycbzXAhIn6zmsPqyRnuUOMAtofimwGusGdv6NezudT4bvBMCtbMFcpD5WFacGnBIgCn8W/exec";
-
-let lastHash = "";
-
-function showPage(id){
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+// 🔥 ЛОГИКА УРОВНЕЙ
+function getLevel(total) {
+    if (total >= 7000) {
+        return "VIP 💎";
+    } 
+    else if (total >= 3000) {
+        return "Золото 🥇";
+    } 
+    else if (total >= 1000) {
+        return "Серебро 🥈";
+    } 
+    else {
+        return "Новичок 💚";
+    }
 }
 
-function getTG(){
-    try{
-        if(window.Telegram && Telegram.WebApp){
-            Telegram.WebApp.ready();
-            const user = Telegram.WebApp.initDataUnsafe?.user;
-            if(user && user.id) return user.id.toString();
-        }
-    }catch(e){}
-    return new URLSearchParams(window.location.search).get("tg_id");
+// 📊 Обновление интерфейса
+function updateUI() {
+    document.getElementById("level").innerText = getLevel(totalBonus);
 }
 
-function copyAddress(){
-    const text = document.getElementById("warehouseText").innerText;
+// 📋 Копирование адреса
+function copyAddress() {
+    let text = "刘影（LY388）13845320678 广东省佛山市南海区里水镇岗美工业区10号老船长创意园米莎288库房LY388";
     navigator.clipboard.writeText(text);
-    alert("Скопировано!");
+    alert("Адрес скопирован!");
 }
 
-function startRealtime(){
-    loadClient();
-    setInterval(loadClient, 15000);
-}
-
-function loadClient(){
-
-    const tg_id = getTG();
-    if(!tg_id) return;
-
-    fetch(API_URL + "?action=profile&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(data => {
-
-        let hash = JSON.stringify(data);
-        if(hash === lastHash) return;
-        lastHash = hash;
-
-        if(data.status !== "ok") return;
-
-        document.querySelector(".header").innerHTML =
-            "👤 Имя: " + data.name;
-
-        document.querySelector(".phone").innerHTML =
-            "📱 Телефон: " + (data.phone ?? "нет данных");
-
-        document.querySelector(".bonus").innerHTML =
-            "💰 Бонус: " + (data.balance ?? 0) + " сом";
-
-        document.querySelector(".total-bonus").innerHTML =
-            "💎 Общий накопленный бонус: " + (data.total_balance ?? 0) + " сом";
-
-        document.querySelector(".code").innerText =
-            data.client_code;
-
-        document.getElementById("warehouseText").innerText =
-`📦 Адрес склада:
-${data.address_warehouse || "нет данных"}`;
-
-        // 🔥 LEVEL SYSTEM + EMOJI
-        let level = "Новичок 🟢";
-        let levelClass = "newbie";
-
-        let total = Number(data.total_balance || 0);
-
-        if(total >= 1000){
-            level = "VIP 👑";
-            levelClass = "vip";
-        }
-        else if(total >= 500){
-            level = "Золото 🥇";
-            levelClass = "gold";
-        }
-        else if(total >= 100){
-            level = "Серебро 🥈";
-            levelClass = "silver";
-        }
-
-        document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML =
-            "🏆 Уровень: " + level;
-
-        document.getElementById("success").style.display = "block";
-        document.getElementById("success").innerText =
-            "Данные обновлены";
-
-    });
-
-    fetch(API_URL + "?action=all&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(p => {
-
-        let officeHTML = "";
-        let wayHTML = "";
-
-        if(p.office && p.office.length > 0){
-            p.office.forEach(item => {
-                officeHTML += `
-                <div class="card">
-                    📦 ${item.track}<br>
-                    💰 ${item.price} сом<br>
-                    📅 ${item.date_arrived}
-                </div>`;
-            });
-        } else {
-            officeHTML = "<p>Нет посылок</p>";
-        }
-
-        if(p.way && p.way.length > 0){
-            p.way.forEach(item => {
-                wayHTML += `
-                <div class="card">
-                    🚚 ${item.track}<br>
-                    💰 ${item.price} сом
-                </div>`;
-            });
-        } else {
-            wayHTML = "<p>Нет посылок</p>";
-        }
-
-        document.getElementById("officeList").innerHTML = officeHTML;
-        document.getElementById("wayList").innerHTML = wayHTML;
-
-    });
-
-}
-
-window.onload = startRealtime;
-
+// 🚀 запуск
+updateUI();
 </script>
 
 </body>
