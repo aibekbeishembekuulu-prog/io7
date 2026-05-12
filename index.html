@@ -177,7 +177,7 @@ body{
 
 <script>
 
-const API_URL ="https://script.google.com/macros/s/AKfycbyCvPUyZVEd2pNDchPfT6igxO03C4H4CkTIvlnCf061FGOc3jHdDXMnuWpFKyAvPXCo/exec";
+const API_URL ="https://script.google.com/macros/s/AKfycbx8orEC4jF44KrbvsxmDRFGWAEk5ZhiF-W_PQQOqeTOiHFqTxkdHnhHuRPCvW8yq12j/exec";
 
 let lastHash = "";
 
@@ -243,23 +243,27 @@ function loadClient(){
 ${data.address_warehouse || "нет данных"}`;
 
         // 🔥 LEVEL SYSTEM + EMOJI
-        let level = "Новичок 🟢";
-        let levelClass = "newbie";
+       let level = "🥉 Бронза";
+let levelClass = "newbie";
 
-        let total = Number(data.total_balance || 0);
+let total = Number(data.total_balance || 0);
 
-        if(total >= 1000){
-            level = "VIP 👑";
-            levelClass = "vip";
-        }
-        else if(total >= 500){
-            level = "Золото 🥇";
-            levelClass = "gold";
-        }
-        else if(total >= 100){
-            level = "Серебро 🥈";
-            levelClass = "silver";
-        }
+if(total >= 600){
+    level = "💎 VIP 👑";
+    levelClass = "vip";
+}
+else if(total >= 400){
+    level = "🥇 Золото";
+    levelClass = "gold";
+}
+else if(total >= 200){
+    level = "🥈 Серебро";
+    levelClass = "silver";
+}
+else {
+    level = "🥉 Бронза";
+    levelClass = "newbie";
+}
 
         document.getElementById("levelBox").className = "level-box " + levelClass;
         document.getElementById("levelBox").innerHTML =
