@@ -55,64 +55,38 @@ body{
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.header{font-weight:bold;}
+.page{display:none;}
+.page.active{display:block;}
 
-.code-box{
-    background:#e74c3c;
-    color:#fff;
-    padding:15px;
-    border-radius:15px;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.code{font-size:22px;font-weight:bold;}
-
-.warehouse{
+/* ПАРСЕЛ КАРТОЧКА */
+.parcel-card{
     background:#fff;
     padding:15px;
     border-radius:15px;
+    margin-bottom:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
     border-left:5px solid #e74c3c;
-    margin-bottom:15px;
-    white-space:pre-line;
 }
 
-.copy-btn{
-    margin-top:10px;
-    background:#2ecc71;
-    color:#fff;
-    border:none;
-    padding:10px;
-    border-radius:10px;
-    width:100%;
+.track{
     font-weight:bold;
+    font-size:16px;
+    margin-bottom:8px;
 }
 
-.success{
-    background:#2ecc71;
-    color:#fff;
-    padding:12px;
-    border-radius:12px;
-    margin-bottom:15px;
-    display:none;
-}
-
-.level-box{
-    padding:15px;
-    border-radius:15px;
-    color:#fff;
+.status{
     font-weight:bold;
-    text-align:center;
-    margin-bottom:15px;
+    margin-bottom:8px;
 }
 
-.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
-.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
-.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
-.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
+.in-office{color:#e67e22;}
+.in-way{color:#3498db;}
+.in-china{color:#9b59b6;}
 
-.page{display:none;}
-.page.active{display:block;}
+.row{
+    margin:3px 0;
+    font-size:14px;
+}
 </style>
 </head>
 
@@ -122,55 +96,24 @@ body{
 
 <div class="topbar">
     <button onclick="showPage('home')">Главная</button>
-    <button onclick="showPage('office')">В офисе</button>
-    <button onclick="showPage('way')">В пути</button>
+    <button onclick="showPage('parcels')">Мои посылки</button>
 </div>
 
 <div class="container">
 
 <h2>👤 Личный кабинет</h2>
 
-<div id="success" class="success"></div>
-
 <!-- HOME -->
 <div id="home" class="page active">
-
-<div class="card header">⏳ Загрузка...</div>
-
-<div class="card phone">📱 Телефон...</div>
-
-<div class="code-box">
-Ваш клиентский код<br>
-<div class="code">---</div>
+    <div class="card header">⏳ Загрузка...</div>
+    <div class="card phone">📱 Телефон...</div>
+    <div class="card bonus">💰 Бонус...</div>
+    <div class="card total-bonus">💎 Общий бонус...</div>
 </div>
 
-<div class="warehouse">
-<div id="warehouseText">⏳ Загрузка...</div>
-<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
-</div>
-
-<div class="card bonus">💰 Бонус...</div>
-
-<div class="card total-bonus">💎 Общий бонус...</div>
-
-<div id="levelBox" class="level-box">⏳ Уровень...</div>
-
-</div>
-
-<!-- OFFICE -->
-<div id="office" class="page">
-  <div class="card">
-    <h3>🏢 В офисе</h3>
-    <div id="officeList">Загрузка...</div>
-  </div>
-</div>
-
-<!-- WAY -->
-<div id="way" class="page">
-  <div class="card">
-    <h3>🚚 В пути</h3>
-    <div id="wayList">Загрузка...</div>
-  </div>
+<!-- PARCELS -->
+<div id="parcels" class="page">
+    <div id="parcelList">Загрузка...</div>
 </div>
 
 </div>
@@ -178,8 +121,6 @@ body{
 <script>
 
 const API_URL ="https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
-
-let lastHash = "";
 
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -197,29 +138,15 @@ function getTG(){
     return new URLSearchParams(window.location.search).get("tg_id");
 }
 
-function copyAddress(){
-    const text = document.getElementById("warehouseText").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Скопировано!");
-}
-
-function startRealtime(){
-    loadClient();
-    setInterval(loadClient, 15000);
-}
-
 function loadClient(){
 
     const tg_id = getTG();
     if(!tg_id) return;
 
+    // PROFILE
     fetch(API_URL + "?action=profile&tg_id=" + tg_id)
     .then(r => r.json())
     .then(data => {
-
-        let hash = JSON.stringify(data);
-        if(hash === lastHash) return;
-        lastHash = hash;
 
         if(data.status !== "ok") return;
 
@@ -233,95 +160,68 @@ function loadClient(){
             "💰 Бонус: " + (data.balance ?? 0) + " сом";
 
         document.querySelector(".total-bonus").innerHTML =
-            "💎 Общий накопленный бонус: " + (data.total_balance ?? 0) + " сом";
-
-        document.querySelector(".code").innerText =
-            data.client_code;
-
-        document.getElementById("warehouseText").innerText =
-`📦 Адрес склада:
-${data.address_warehouse || "нет данных"}`;
-
-        // 🔥 LEVEL SYSTEM + EMOJI
-       let level = "🥉 Бронза";
-let levelClass = "newbie";
-
-let total = Number(data.total_balance || 0);
-
-if(total >= 1000){
-    level = "💎 VIP 👑";
-    levelClass = "vip";
-}
-else if(total >= 800){
-    level = "🥇 Золото";
-    levelClass = "gold";
-}
-else if(total >= 600){
-    level = "🥈 Серебро";
-    levelClass = "silver";
-}
-else {
-    level = "🥉 Бронза";
-    levelClass = "newbie";
-}
-
-        document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML =
-            "🏆 Уровень: " + level;
-
-        const success = document.getElementById("success");
-success.style.display = "block";
-success.innerText = "🔄 Данные обновлены";
-
-setTimeout(() => {
-   success.style.display = "none";
-}, 3000);
+            "💎 Общий бонус: " + (data.total_balance ?? 0) + " сом";
     });
 
+    // PARCELS
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
     .then(r => r.json())
     .then(p => {
 
-        let officeHTML = "";
-        let wayHTML = "";
+        let all = [];
 
-        if(p.office && p.office.length > 0){
-            p.office.forEach(item => {
-              officeHTML += `
-<div class="card parcel">
-    <div class="track">📦 Трек: ${item.track}</div>
+        if(p.office) p.office.forEach(i => all.push({...i, status:"office"}));
+        if(p.china) p.china.forEach(i => all.push({...i, status:"china"}));
+        if(p.way) p.way.forEach(i => all.push({...i, status:"way"}));
 
-    <div class="status office">🏢 Статус: В офисе (Китай/склад)</div>
+        if(all.length === 0){
+            document.getElementById("parcelList").innerHTML = "<p>Нет посылок</p>";
+            return;
+        }
 
-    <div class="row">💰 Цена: ${item.price} сом</div>
+        let html = "";
+
+        all.forEach(item => {
+
+            let statusText = "";
+            let statusClass = "";
+
+            if(item.status === "office"){
+                statusText = "🏢 В офисе";
+                statusClass = "in-office";
+            }
+            else if(item.status === "china"){
+                statusText = "🇨🇳 В Китае";
+                statusClass = "in-china";
+            }
+            else{
+                statusText = "🚚 В пути";
+                statusClass = "in-way";
+            }
+
+            html += `
+<div class="parcel-card">
+
+    <div class="track">📦 ${item.track}</div>
+
+    <div class="status ${statusClass}">
+        ${statusText}
+    </div>
+
+    <div class="row">💰 Цена: ${item.price || 0} сом</div>
     <div class="row">📅 Отправка: ${item.date_sent || "—"}</div>
     <div class="row">📦 Прибытие: ${item.date_arrived || "—"}</div>
+
 </div>`;
-            });
-        } else {
-            officeHTML = "<p>Нет посылок</p>";
-        }
+        });
 
-        if(p.way && p.way.length > 0){
-            p.way.forEach(item => {
-                wayHTML += `
-                <div class="card">
-                    🚚 ${item.track}<br>
-                    💰 ${item.price} сом
-                </div>`;
-            });
-        } else {
-            wayHTML = "<p>Нет посылок</p>";
-        }
-
-        document.getElementById("officeList").innerHTML = officeHTML;
-        document.getElementById("wayList").innerHTML = wayHTML;
+        document.getElementById("parcelList").innerHTML = html;
 
     });
-
 }
 
-window.onload = startRealtime;
+window.onload = loadClient;
+setInterval(loadClient, 15000);
 
 </script>
 
