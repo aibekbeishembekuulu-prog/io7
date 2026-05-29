@@ -379,74 +379,75 @@ ${data.address_warehouse || "нет данных"}`;
         console.log(error);
     });
 
-    // PARCELS
-   fetch(API_URL + "?action=all&tg_id=" + tg_id)
+    // PARCELS (КРАСИВЫЙ ВАРИАНТ)
 
+fetch(API_URL + "?action=all&tg_id=" + tg_id)
 .then(response => response.json())
-
 .then(data => {
 
-    let html = "";
     let all = [];
 
-    // 📦 СКЛАД КИТАЙ (НОВЫЙ)
-    if (data.china && Array.isArray(data.china)) {
+    function format(arr, status){
 
-        all = all.concat(
-            data.china.map(item => ({
-                ...item,
-                status: "📦 Склад Китай"
-            }))
-        );
+        if(!Array.isArray(arr)) return [];
+
+        return arr.map(item => ({
+            track: item.track || "-",
+            sendDate: item.sendDate || "нет данных",
+            expected: item.expected || "нет данных",
+            price: item.price || 0,
+            status: status
+        }));
     }
 
-    // 🏢 В ОФИСЕ
-    if (data.office && Array.isArray(data.office)) {
+    // 📦 Китай
+    all = all.concat(format(data.china, "📦 На складе Китай"));
 
-        all = all.concat(
-            data.office.map(item => ({
-                ...item,
-                status: "🏢 В офисе"
-            }))
-        );
-    }
+    // 🚚 В пути
+    all = all.concat(format(data.way, "🚚 В пути"));
 
-    // 🚚 В ПУТИ
-    if (data.way && Array.isArray(data.way)) {
+    // 🏢 Офис
+    all = all.concat(format(data.office, "🏢 В офисе"));
 
-        all = all.concat(
-            data.way.map(item => ({
-                ...item,
-                status: "🚚 В пути"
-            }))
-        );
-    }
+    let html = "";
 
-    if (all.length > 0) {
+    if(all.length > 0){
 
         all.forEach(item => {
 
+            let color = "#e74c3c";
+
+            if(item.status.includes("Китай")){
+                color = "#3498db";
+            }
+            else if(item.status.includes("В пути")){
+                color = "#f39c12";
+            }
+            else if(item.status.includes("офис")){
+                color = "#2ecc71";
+            }
+
             html += `
-            <div class="parcel-card">
+            <div class="parcel-card" style="border-left:5px solid ${color}">
 
                 <div class="parcel-status">
                     ${item.status}
                 </div>
 
                 <div class="track">
-                    📦 Трек: ${item.track || "-"}
+                    📦 <b>Трек-код:</b> ${item.track}
                 </div>
 
                 <div class="track">
-                    📅 Отправка: ${item.sendDate || "нет данных"}
+                    📅 <b>Дата отправки:</b> ${item.sendDate}
                 </div>
 
                 <div class="track">
-                    ⏳ Ожидается: ${item.expected || "нет данных"}
+                    ⏳ <b>Ожидаемое поступление:</b> ${item.expected}
                 </div>
 
                 <div class="price">
-                    💰 Китай: ${item.price || 0} сом
+                    💰 Оплата: ${item.price} сом
                 </div>
 
             </div>`;
@@ -454,15 +455,18 @@ ${data.address_warehouse || "нет данных"}`;
 
     } else {
 
-        html = `
-        <div class="empty">
-            📭 Нет посылок
-        </div>`;
+        html = `<div class="empty">📭 У вас нет посылок</div>`;
     }
 
     document.getElementById("parcelsList").innerHTML = html;
 
 })
 .catch(error => {
+
     console.log(error);
+
+    document.getElementById("parcelsList").innerHTML =
+        `<div class="empty">❌ Ошибка загрузки данных</div>`;
 });
+   
+    
