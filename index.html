@@ -36,8 +36,8 @@ body{
     background:#e74c3c;
     color:#fff;
     border:none;
-    padding:8px 12px;
-    border-radius:10px;
+    padding:8px 14px;
+    border-radius:12px;
     font-weight:bold;
 }
 
@@ -58,14 +58,14 @@ body{
 .page{display:none;}
 .page.active{display:block;}
 
-/* ПАРСЕЛ КАРТОЧКА */
+/* PARCEL CARD */
 .parcel-card{
     background:#fff;
     padding:15px;
-    border-radius:15px;
+    border-radius:18px;
     margin-bottom:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
-    border-left:5px solid #e74c3c;
+    box-shadow:0 3px 12px rgba(0,0,0,0.08);
+    border-left:6px solid #e74c3c;
 }
 
 .track{
@@ -74,17 +74,22 @@ body{
     margin-bottom:8px;
 }
 
+/* STATUS BADGES */
 .status{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:13px;
     font-weight:bold;
-    margin-bottom:8px;
+    margin-bottom:10px;
 }
 
-.in-office{color:#e67e22;}
-.in-way{color:#3498db;}
-.in-china{color:#9b59b6;}
+.in-office{background:#ffe6cc; color:#e67e22;}
+.in-way{background:#dff1ff; color:#3498db;}
+.in-china{background:#f0e6ff; color:#8e44ad;}
 
 .row{
-    margin:3px 0;
+    margin:4px 0;
     font-size:14px;
 }
 </style>
@@ -209,8 +214,8 @@ function loadClient(){
     </div>
 
     <div class="row">💰 Цена: ${item.price || 0} сом</div>
-    <div class="row">📅 Отправка: ${item.date_sent || "—"}</div>
-    <div class="row">📦 Прибытие: ${item.date_arrived || "—"}</div>
+    <div class="row">📅 Дата отправки: ${item.date_sent || "—"}</div>
+    <div class="row">⏳ Ожидаемое прибытие: ${item.date_arrived || "—"}</div>
 
 </div>`;
         });
