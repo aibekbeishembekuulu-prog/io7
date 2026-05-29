@@ -8,10 +8,12 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+
 body{
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     background:#eef1f6;
     margin:0;
+    padding:0;
 }
 
 .logo{
@@ -36,9 +38,10 @@ body{
     background:#e74c3c;
     color:#fff;
     border:none;
-    padding:8px 12px;
+    padding:10px 14px;
     border-radius:10px;
     font-weight:bold;
+    cursor:pointer;
 }
 
 .container{
@@ -53,9 +56,12 @@ body{
     border-radius:15px;
     margin-bottom:12px;
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    line-height:1.5;
 }
 
-.header{font-weight:bold;}
+.header{
+    font-weight:bold;
+}
 
 .code-box{
     background:#e74c3c;
@@ -66,7 +72,11 @@ body{
     margin-bottom:15px;
 }
 
-.code{font-size:22px;font-weight:bold;}
+.code{
+    font-size:24px;
+    font-weight:bold;
+    margin-top:5px;
+}
 
 .warehouse{
     background:#fff;
@@ -82,10 +92,11 @@ body{
     background:#2ecc71;
     color:#fff;
     border:none;
-    padding:10px;
+    padding:12px;
     border-radius:10px;
     width:100%;
     font-weight:bold;
+    cursor:pointer;
 }
 
 .success{
@@ -95,6 +106,8 @@ body{
     border-radius:12px;
     margin-bottom:15px;
     display:none;
+    text-align:center;
+    font-weight:bold;
 }
 
 .level-box{
@@ -106,13 +119,63 @@ body{
     margin-bottom:15px;
 }
 
-.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
-.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
-.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
-.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
+.vip{
+    background:linear-gradient(135deg,#8e44ad,#6c5ce7);
+}
 
-.page{display:none;}
-.page.active{display:block;}
+.gold{
+    background:linear-gradient(135deg,#f1c40f,#f39c12);
+    color:#000;
+}
+
+.silver{
+    background:linear-gradient(135deg,#bdc3c7,#95a5a6);
+    color:#000;
+}
+
+.newbie{
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.parcel-card{
+    background:#fff;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    border-left:5px solid #e74c3c;
+}
+
+.parcel-status{
+    font-weight:bold;
+    margin-bottom:8px;
+    font-size:16px;
+}
+
+.track{
+    font-size:15px;
+    margin-bottom:6px;
+}
+
+.price{
+    color:#27ae60;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:20px;
+}
+
 </style>
 </head>
 
@@ -121,7 +184,7 @@ body{
 <img src="logo.jpg" class="logo">
 
 <div class="topbar">
-    <button onclick="showPage('home')">Главная</button>
+    <button onclick="showPage('home')">🏠 Главная</button>
     <button onclick="showPage('parcels')">📦 Мои посылки</button>
 </div>
 
@@ -134,162 +197,257 @@ body{
 <!-- HOME -->
 <div id="home" class="page active">
 
-<div class="card header">⏳ Загрузка...</div>
+    <div class="card header">⏳ Загрузка...</div>
 
-<div class="card phone">📱 Телефон...</div>
+    <div class="card phone">📱 Телефон...</div>
 
-<div class="code-box">
-Ваш клиентский код<br>
-<div class="code">---</div>
+    <div class="code-box">
+        Ваш клиентский код
+        <div class="code">---</div>
+    </div>
+
+    <div class="warehouse">
+        <div id="warehouseText">⏳ Загрузка...</div>
+
+        <button class="copy-btn" onclick="copyAddress()">
+            📋 Скопировать адрес
+        </button>
+    </div>
+
+    <div class="card bonus">💰 Бонус...</div>
+
+    <div class="card total-bonus">💎 Общий бонус...</div>
+
+    <div id="levelBox" class="level-box">
+        ⏳ Уровень...
+    </div>
+
 </div>
 
-<div class="warehouse">
-<div id="warehouseText">⏳ Загрузка...</div>
-<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
-</div>
-
-<div class="card bonus">💰 Бонус...</div>
-
-<div class="card total-bonus">💎 Общий бонус...</div>
-
-<div id="levelBox" class="level-box">⏳ Уровень...</div>
-
-</div>
-
-<!-- PARCELS (NEW) -->
+<!-- PARCELS -->
 <div id="parcels" class="page">
-  <div class="card">
-    <h3>📦 Мои посылки</h3>
-    <div id="parcelsList">Загрузка...</div>
-  </div>
+
+    <div class="card">
+        <h3>📦 Мои посылки</h3>
+        <div id="parcelsList">Загрузка...</div>
+    </div>
+
 </div>
 
 </div>
 
 <script>
 
-const API_URL ="https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
 let lastHash = "";
 
 function showPage(id){
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+
     document.getElementById(id).classList.add('active');
 }
 
 function getTG(){
+
     try{
+
         if(window.Telegram && Telegram.WebApp){
+
             Telegram.WebApp.ready();
+
             const user = Telegram.WebApp.initDataUnsafe?.user;
-            if(user && user.id) return user.id.toString();
+
+            if(user && user.id){
+                return user.id.toString();
+            }
         }
-    }catch(e){}
+
+    }catch(e){
+        console.log(e);
+    }
+
     return new URLSearchParams(window.location.search).get("tg_id");
 }
 
 function copyAddress(){
+
     const text = document.getElementById("warehouseText").innerText;
+
     navigator.clipboard.writeText(text);
-    alert("Скопировано!");
+
+    alert("✅ Адрес скопирован");
 }
 
 function startRealtime(){
+
     loadClient();
+
     setInterval(loadClient, 15000);
 }
 
 function loadClient(){
 
     const tg_id = getTG();
-    if(!tg_id) return;
 
+    if(!tg_id){
+        alert("Telegram ID не найден");
+        return;
+    }
+
+    // PROFILE
     fetch(API_URL + "?action=profile&tg_id=" + tg_id)
-    .then(r => r.json())
+
+    .then(response => response.json())
+
     .then(data => {
 
-        let hash = JSON.stringify(data);
+        const hash = JSON.stringify(data);
+
         if(hash === lastHash) return;
+
         lastHash = hash;
 
         if(data.status !== "ok") return;
 
         document.querySelector(".header").innerHTML =
-            "👤 Имя: " + data.name;
+            "👤 Имя: " + (data.name || "Не указано");
 
         document.querySelector(".phone").innerHTML =
-            "📱 Телефон: " + (data.phone ?? "нет данных");
+            "📱 Телефон: " + (data.phone || "нет данных");
 
         document.querySelector(".bonus").innerHTML =
-            "💰 Бонус: " + (data.balance ?? 0) + " сом";
+            "💰 Бонус: " + (data.balance || 0) + " сом";
 
         document.querySelector(".total-bonus").innerHTML =
-            "💎 Общий накопленный бонус: " + (data.total_balance ?? 0) + " сом";
+            "💎 Общий накопленный бонус: " + (data.total_balance || 0) + " сом";
 
         document.querySelector(".code").innerText =
-            data.client_code;
+            data.client_code || "---";
 
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
+
 ${data.address_warehouse || "нет данных"}`;
 
         // LEVEL
         let level = "🥉 Бронза";
         let levelClass = "newbie";
-        let total = Number(data.total_balance || 0);
+
+        const total = Number(data.total_balance || 0);
 
         if(total >= 1000){
+
             level = "💎 VIP 👑";
             levelClass = "vip";
-        }
-        else if(total >= 800){
+
+        }else if(total >= 800){
+
             level = "🥇 Золото";
             levelClass = "gold";
-        }
-        else if(total >= 600){
+
+        }else if(total >= 600){
+
             level = "🥈 Серебро";
             levelClass = "silver";
         }
 
-        document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML =
+        const levelBox = document.getElementById("levelBox");
+
+        levelBox.className = "level-box " + levelClass;
+
+        levelBox.innerHTML =
             "🏆 Уровень: " + level;
 
+        // SUCCESS
         const success = document.getElementById("success");
+
         success.style.display = "block";
+
         success.innerText = "🔄 Данные обновлены";
 
         setTimeout(() => {
-           success.style.display = "none";
+            success.style.display = "none";
         }, 3000);
+
+    })
+
+    .catch(error => {
+        console.log(error);
     });
 
-    // PARCELS (COMBINED)
+    // PARCELS
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(p => {
+
+    .then(response => response.json())
+
+    .then(data => {
 
         let html = "";
 
         let all = [];
 
-        if(p.office) all = all.concat(p.office.map(x => ({...x, status:"🏢 В офисе"})));
-        if(p.way) all = all.concat(p.way.map(x => ({...x, status:"🚚 В пути"})));
+        // В офисе
+        if(data.office && Array.isArray(data.office)){
+
+            all = all.concat(
+                data.office.map(item => ({
+                    ...item,
+                    status: "🏢 В офисе"
+                }))
+            );
+        }
+
+        // В пути
+        if(data.way && Array.isArray(data.way)){
+
+            all = all.concat(
+                data.way.map(item => ({
+                    ...item,
+                    status: "🚚 В пути"
+                }))
+            );
+        }
 
         if(all.length > 0){
+
             all.forEach(item => {
+
                 html += `
-                <div class="card">
-                    ${item.status}<br>
-                    📦 ${item.track}<br>
-                    💰 ${item.price} сом
+                <div class="parcel-card">
+
+                    <div class="parcel-status">
+                        ${item.status}
+                    </div>
+
+                    <div class="track">
+                        📦 ${item.track || "-"}
+                    </div>
+
+                    <div class="price">
+                        💰 Китай: ${item.price || 0} сом
+                    </div>
+
                 </div>`;
             });
-        } else {
-            html = "<p>Нет посылок</p>";
+
+        }else{
+
+            html = `
+            <div class="empty">
+                📭 Нет посылок
+            </div>`;
         }
 
         document.getElementById("parcelsList").innerHTML = html;
+
+    })
+
+    .catch(error => {
+        console.log(error);
     });
 
 }
