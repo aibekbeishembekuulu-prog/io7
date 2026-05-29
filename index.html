@@ -380,81 +380,89 @@ ${data.address_warehouse || "нет данных"}`;
     });
 
     // PARCELS
-    fetch(API_URL + "?action=all&tg_id=" + tg_id)
+   fetch(API_URL + "?action=all&tg_id=" + tg_id)
 
-    .then(response => response.json())
+.then(response => response.json())
 
-    .then(data => {
+.then(data => {
 
-        let html = "";
+    let html = "";
+    let all = [];
 
-        let all = [];
+    // 📦 СКЛАД КИТАЙ (НОВЫЙ)
+    if (data.china && Array.isArray(data.china)) {
 
-        // В офисе
-        if(data.office && Array.isArray(data.office)){
+        all = all.concat(
+            data.china.map(item => ({
+                ...item,
+                status: "📦 Склад Китай"
+            }))
+        );
+    }
 
-            all = all.concat(
-                data.office.map(item => ({
-                    ...item,
-                    status: "🏢 В офисе"
-                }))
-            );
-        }
+    // 🏢 В ОФИСЕ
+    if (data.office && Array.isArray(data.office)) {
 
-        // В пути
-        if(data.way && Array.isArray(data.way)){
+        all = all.concat(
+            data.office.map(item => ({
+                ...item,
+                status: "🏢 В офисе"
+            }))
+        );
+    }
 
-            all = all.concat(
-                data.way.map(item => ({
-                    ...item,
-                    status: "🚚 В пути"
-                }))
-            );
-        }
+    // 🚚 В ПУТИ
+    if (data.way && Array.isArray(data.way)) {
 
-        if(all.length > 0){
+        all = all.concat(
+            data.way.map(item => ({
+                ...item,
+                status: "🚚 В пути"
+            }))
+        );
+    }
 
-            all.forEach(item => {
+    if (all.length > 0) {
 
-                html += `
-                <div class="parcel-card">
+        all.forEach(item => {
 
-                    <div class="parcel-status">
-                        ${item.status}
-                    </div>
+            html += `
+            <div class="parcel-card">
 
-                    <div class="track">
-                        📦 ${item.track || "-"}
-                    </div>
+                <div class="parcel-status">
+                    ${item.status}
+                </div>
 
-                    <div class="price">
-                        💰 Китай: ${item.price || 0} сом
-                    </div>
+                <div class="track">
+                    📦 Трек: ${item.track || "-"}
+                </div>
 
-                </div>`;
-            });
+                <div class="track">
+                    📅 Отправка: ${item.sendDate || "нет данных"}
+                </div>
 
-        }else{
+                <div class="track">
+                    ⏳ Ожидается: ${item.expected || "нет данных"}
+                </div>
 
-            html = `
-            <div class="empty">
-                📭 Нет посылок
+                <div class="price">
+                    💰 Китай: ${item.price || 0} сом
+                </div>
+
             </div>`;
-        }
+        });
 
-        document.getElementById("parcelsList").innerHTML = html;
+    } else {
 
-    })
+        html = `
+        <div class="empty">
+            📭 Нет посылок
+        </div>`;
+    }
 
-    .catch(error => {
-        console.log(error);
-    });
+    document.getElementById("parcelsList").innerHTML = html;
 
-}
-
-window.onload = startRealtime;
-
-</script>
-
-</body>
-</html>
+})
+.catch(error => {
+    console.log(error);
+});
