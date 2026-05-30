@@ -122,8 +122,7 @@ body{
 
 <div class="topbar">
     <button onclick="showPage('home')">Главная</button>
-    <button onclick="showPage('office')">В офисе</button>
-    <button onclick="showPage('way')">В пути</button>
+    <button onclick="showPage('parcels')">Мои посылки</button>
 </div>
 
 <div class="container">
@@ -157,19 +156,11 @@ body{
 
 </div>
 
-<!-- OFFICE -->
-<div id="office" class="page">
+<!-- PARCELS -->
+<div id="parcels" class="page">
   <div class="card">
-    <h3>🏢 В офисе</h3>
-    <div id="officeList">Загрузка...</div>
-  </div>
-</div>
-
-<!-- WAY -->
-<div id="way" class="page">
-  <div class="card">
-    <h3>🚚 В пути</h3>
-    <div id="wayList">Загрузка...</div>
+    <h3>📦 Мои посылки</h3>
+    <div id="parcelList">Загрузка...</div>
   </div>
 </div>
 
@@ -242,77 +233,85 @@ function loadClient(){
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
-        // 🔥 LEVEL SYSTEM + EMOJI
-       let level = "🥉 Бронза";
-let levelClass = "newbie";
+        let level = "🥉 Бронза";
+        let levelClass = "newbie";
 
-let total = Number(data.total_balance || 0);
+        let total = Number(data.total_balance || 0);
 
-if(total >= 1000){
-    level = "💎 VIP 👑";
-    levelClass = "vip";
-}
-else if(total >= 800){
-    level = "🥇 Золото";
-    levelClass = "gold";
-}
-else if(total >= 600){
-    level = "🥈 Серебро";
-    levelClass = "silver";
-}
-else {
-    level = "🥉 Бронза";
-    levelClass = "newbie";
-}
+        if(total >= 1000){
+            level = "💎 VIP 👑";
+            levelClass = "vip";
+        }
+        else if(total >= 800){
+            level = "🥇 Золото";
+            levelClass = "gold";
+        }
+        else if(total >= 600){
+            level = "🥈 Серебро";
+            levelClass = "silver";
+        }
 
         document.getElementById("levelBox").className = "level-box " + levelClass;
         document.getElementById("levelBox").innerHTML =
             "🏆 Уровень: " + level;
 
         const success = document.getElementById("success");
-success.style.display = "block";
-success.innerText = "🔄 Данные обновлены";
+        success.style.display = "block";
+        success.innerText = "🔄 Данные обновлены";
 
-setTimeout(() => {
-   success.style.display = "none";
-}, 3000);
+        setTimeout(() => {
+           success.style.display = "none";
+        }, 3000);
     });
 
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
     .then(r => r.json())
     .then(p => {
 
-        let officeHTML = "";
-        let wayHTML = "";
+        let html = "";
 
-        if(p.office && p.office.length > 0){
-            p.office.forEach(item => {
-                officeHTML += `
+        let all = [];
+
+        if(p.office){
+            p.office.forEach(i => {
+                all.push({
+                    track: i.track,
+                    status: "🏢 В офисе",
+                    price: i.price,
+                    send_date: i.date_arrived,
+                    expected: i.expected || "-"
+                });
+            });
+        }
+
+        if(p.way){
+            p.way.forEach(i => {
+                all.push({
+                    track: i.track,
+                    status: "🚚 В пути",
+                    price: i.price,
+                    send_date: i.date_arrived,
+                    expected: i.expected || "-"
+                });
+            });
+        }
+
+        if(all.length > 0){
+            all.forEach(item => {
+                html += `
                 <div class="card">
-                    📦 ${item.track}<br>
-                    💰 ${item.price} сом<br>
-                    📅 ${item.date_arrived}
+                    📦 Трек: ${item.track}<br>
+                    📊 Статус: ${item.status}<br>
+                    💰 Цена: ${item.price} сом<br>
+                    📅 Дата отправки: ${item.send_date}<br>
+                    ⏳ Ожидаемое прибытие: ${item.expected}
                 </div>`;
             });
         } else {
-            officeHTML = "<p>Нет посылок</p>";
+            html = "<p>Нет посылок</p>";
         }
 
-        if(p.way && p.way.length > 0){
-            p.way.forEach(item => {
-                wayHTML += `
-                <div class="card">
-                    🚚 ${item.track}<br>
-                    💰 ${item.price} сом
-                </div>`;
-            });
-        } else {
-            wayHTML = "<p>Нет посылок</p>";
-        }
-
-        document.getElementById("officeList").innerHTML = officeHTML;
-        document.getElementById("wayList").innerHTML = wayHTML;
-
+        document.getElementById("parcelList").innerHTML = html;
     });
 
 }
