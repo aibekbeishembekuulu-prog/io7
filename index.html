@@ -199,6 +199,16 @@ function startRealtime(){
     setInterval(loadClient, 15000);
 }
 
+function getStatus(i){
+    // если в будущем придёт статус из таблицы — будет работать автоматически
+    if(i.stage === "office") return "🏢 В офисе";
+    if(i.stage === "china") return "🇨🇳 Китай";
+    if(i.stage === "way") return "🚚 В пути";
+
+    // fallback (если нет stage)
+    return "🚚 В пути";
+}
+
 function loadClient(){
 
     const tg_id = getTG();
@@ -209,13 +219,11 @@ function loadClient(){
     .then(r => r.json())
     .then(data => {
 
-        if(!data) return;
+        if(!data || data.status !== "ok") return;
 
         let hash = JSON.stringify(data);
         if(hash === lastHash) return;
         lastHash = hash;
-
-        if(data.status !== "ok") return;
 
         document.querySelector(".header").innerHTML =
             "👤 Имя: " + (data.name || "-");
@@ -272,6 +280,7 @@ ${data.address_warehouse || "нет данных"}`;
 
         p = p || {};
 
+        // ===== OFFICE =====
         if(Array.isArray(p.office)){
             p.office.forEach(i => {
                 all.push({
@@ -283,22 +292,13 @@ ${data.address_warehouse || "нет данных"}`;
                 });
             });
         }
-if (Array.isArray(p.way)) {
-    p.way.forEach(i => {
-        all.push({
-            track: i.track || "-",
-            status: "🇨🇳 Китай",
-            price: i.price || 0,
-            send_date: i.date_sent || "-",
-            expected: i.date_arrived || "-"
-        });
-    });
-}
+
+        // ===== CHINA / WAY =====
         if(Array.isArray(p.way)){
             p.way.forEach(i => {
                 all.push({
                     track: i.track || "-",
-                    status: "🚚 В пути",
+                    status: getStatus(i), // 🇨🇳 Китай / 🚚 В пути
                     price: i.price || 0,
                     send_date: i.date_sent || "-",
                     expected: i.date_arrived || "-"
@@ -332,6 +332,5 @@ if (Array.isArray(p.way)) {
 window.onload = startRealtime;
 
 </script>
-
 </body>
 </html>
