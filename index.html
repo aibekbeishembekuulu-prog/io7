@@ -283,7 +283,17 @@ ${data.address_warehouse || "нет данных"}`;
                 });
             });
         }
-
+if (Array.isArray(p.way)) {
+    p.way.forEach(i => {
+        all.push({
+            track: i.track || "-",
+            status: "🇨🇳 Китай",
+            price: i.price || 0,
+            send_date: i.date_sent || "-",
+            expected: i.date_arrived || "-"
+        });
+    });
+}
         if(Array.isArray(p.way)){
             p.way.forEach(i => {
                 all.push({
