@@ -124,6 +124,7 @@ body{
     <button onclick="showPage('home')">Главная</button>
     <button onclick="showPage('parcels')">📦 Мои посылки</button>
 </div>
+
 <div class="container">
 
 <h2>👤 Личный кабинет</h2>
@@ -134,7 +135,6 @@ body{
 <div id="home" class="page active">
 
 <div class="card header">⏳ Загрузка...</div>
-
 <div class="card phone">📱 Телефон...</div>
 
 <div class="code-box">
@@ -148,7 +148,6 @@ body{
 </div>
 
 <div class="card bonus">💰 Бонус...</div>
-
 <div class="card total-bonus">💎 Общий бонус...</div>
 
 <div id="levelBox" class="level-box">⏳ Уровень...</div>
@@ -204,11 +203,7 @@ function loadClient(){
     .then(r => r.json())
     .then(data => {
 
-        let hash = JSON.stringify(data);
-        if(hash === lastHash) return;
-        lastHash = hash;
-
-        if(data.status !== "ok") return;
+        if(!data || data.status !== "ok") return;
 
         document.querySelector(".header").innerHTML =
             "👤 Имя: " + data.name;
@@ -223,137 +218,73 @@ function loadClient(){
             "💎 Общий накопленный бонус: " + (data.total_balance ?? 0) + " сом";
 
         document.querySelector(".code").innerText =
-            data.client_code;
+            data.client_code || "---";
 
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
-        // 🔥 LEVEL SYSTEM + EMOJI
-       let level = "🥉 Бронза";
-let levelClass = "newbie";
+        let total = Number(data.total_balance || 0);
 
-let total = Number(data.total_balance || 0);
+        let level = "🥉 Бронза";
+        let cls = "newbie";
 
-if(total >= 1000){
-    level = "💎 VIP 👑";
-    levelClass = "vip";
-}
-else if(total >= 800){
-    level = "🥇 Золото";
-    levelClass = "gold";
-}
-else if(total >= 600){
-    level = "🥈 Серебро";
-    levelClass = "silver";
-}
-else {
-    level = "🥉 Бронза";
-    levelClass = "newbie";
-}
+        if(total >= 1000){ level="💎 VIP 👑"; cls="vip"; }
+        else if(total >= 800){ level="🥇 Золото"; cls="gold"; }
+        else if(total >= 600){ level="🥈 Серебро"; cls="silver"; }
 
-        document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML =
-            "🏆 Уровень: " + level;
+        document.getElementById("levelBox").className = "level-box " + cls;
+        document.getElementById("levelBox").innerHTML = "🏆 Уровень: " + level;
 
-        const success = document.getElementById("success");
-success.style.display = "block";
-success.innerText = "🔄 Данные обновлены";
-
-setTimeout(() => {
-   success.style.display = "none";
-}, 3000);
-    });
+        let success = document.getElementById("success");
+        success.style.display = "block";
+        success.innerText = "🔄 Данные обновлены";
+        setTimeout(()=> success.style.display="none", 3000);
+    })
+    .catch(err => console.log("profile error", err));
 
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
-.then(r => r.json())
-.then(p => {
+    .then(r => r.json())
+    .then(p => {
 
-    let html = "";
+        let html = "";
 
-    if(p.parcels && p.parcels.length > 0){
+        if(p && p.parcels && p.parcels.length > 0){
 
-        p.parcels.forEach(item => {
+            p.parcels.forEach(item => {
 
-            let status = item.status || "В Китае";
+                let status = item.status || "В Китае";
+                let color = "#f39c12";
+                let border = "#f39c12";
+                let icon = "🇨🇳";
 
-            let statusColor = "#f39c12";
-            let borderColor = "#f39c12";
-            let icon = "🇨🇳";
+                if(status==="В пути"){ color="#3498db"; border="#3498db"; icon="🚚"; }
+                if(status==="В офисе"){ color="#2ecc71"; border="#2ecc71"; icon="🏢"; }
 
-            if(status === "В пути"){
-                statusColor = "#3498db";
-                borderColor = "#3498db";
-                icon = "🚚";
-            }
+                html += `
+                <div style="background:#fff;padding:16px;border-radius:18px;margin-bottom:15px;border-left:6px solid ${border}">
+                    <div style="font-weight:bold;">📦 ${item.track || "-"}</div>
+                    <div style="margin-top:8px;background:${color};color:#fff;padding:6px 12px;border-radius:20px;display:inline-block;">
+                        ${icon} ${status}
+                    </div>
+                    <div>💰 Цена: ${item.price || 0} сом</div>
+                    <div>📅 Отправка: ${item.date_sent || "-"}</div>
+                    <div>⏳ Прибытие: ${item.arrival_date || "-"}</div>
+                </div>`;
+            });
 
-            if(status === "В офисе"){
-                statusColor = "#2ecc71";
-                borderColor = "#2ecc71";
-                icon = "🏢";
-            }
+        } else {
+            html = `<div class="card">📦 Посылок пока нет</div>`;
+        }
 
-            html += `
-            <div style="
-                background:#fff;
-                border-radius:18px;
-                padding:16px;
-                margin-bottom:15px;
-                box-shadow:0 4px 12px rgba(0,0,0,0.08);
-                border-left:6px solid ${borderColor};
-            ">
+        document.getElementById("parcelList").innerHTML = html;
 
-                <div style="
-                    font-size:17px;
-                    font-weight:bold;
-                    color:#2c3e50;
-                    margin-bottom:12px;
-                    word-break:break-all;
-                ">
-                    📦 ${item.track}
-                </div>
+    })
+    .catch(err => {
+        document.getElementById("parcelList").innerHTML = "<div class='card'>Ошибка загрузки посылок</div>";
+    });
+}
 
-                <div style="
-                    display:inline-block;
-                    background:${statusColor};
-                    color:#fff;
-                    padding:7px 14px;
-                    border-radius:20px;
-                    font-size:13px;
-                    font-weight:bold;
-                    margin-bottom:12px;
-                ">
-                    ${icon} ${status}
-                </div>
-
-                <div style="margin-top:10px;font-size:15px;">
-                    💰 <b>Цена:</b> ${item.price || 0} сом
-                </div>
-
-                <div style="margin-top:8px;font-size:15px;">
-                    📅 <b>Дата отправки:</b> ${item.date_sent || "-"}
-                </div>
-
-                <div style="margin-top:8px;font-size:15px;">
-                    ⏳ <b>Ожидаемое прибытие:</b> ${item.arrival_date || "-"}
-                </div>
-
-            </div>
-            `;
-        });
-
-    } else {
-
-        html = `
-        <div class="card">
-            📦 Посылок пока нет
-        </div>
-        `;
-    }
-
-    document.getElementById("parcelList").innerHTML = html;
-
-});
 window.onload = startRealtime;
 
 </script>
