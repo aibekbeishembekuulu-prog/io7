@@ -204,6 +204,7 @@ function loadClient(){
     const tg_id = getTG();
     if(!tg_id) return;
 
+    // ===== PROFILE =====
     fetch(API_URL + "?action=profile&tg_id=" + tg_id)
     .then(r => r.json())
     .then(data => {
@@ -264,36 +265,37 @@ ${data.address_warehouse || "нет данных"}`;
         }, 3000);
     });
 
+    // ===== PARCELS =====
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
     .then(r => r.json())
     .then(p => {
 
         let html = "";
-
         let all = [];
 
-        if(p.office){
+        if(p.office && Array.isArray(p.office)){
             p.office.forEach(i => {
                 all.push({
                     track: i.track,
                     status: "🏢 В офисе",
                     price: i.price,
-                    send_date: i.date_sent,
+                    send_date: i.date_sent || "-",
                     expected: i.date_arrived || "-"
                 });
             });
         }
 
-     p.way.forEach(i => {
-    all.push({
-        track: i.track,
-        status: "🚚 В пути",
-        price: i.price,
-        send_date: i.date_sent || "-",
-        expected: i.date_arrived || "-"
-    });
-});
-}
+        if(p.way && Array.isArray(p.way)){
+            p.way.forEach(i => {
+                all.push({
+                    track: i.track,
+                    status: "🚚 В пути",
+                    price: i.price,
+                    send_date: i.date_sent || "-",
+                    expected: i.date_arrived || "-"
+                });
+            });
+        }
 
         if(all.length > 0){
             all.forEach(item => {
@@ -312,7 +314,6 @@ ${data.address_warehouse || "нет данных"}`;
 
         document.getElementById("parcelList").innerHTML = html;
     });
-
 }
 
 window.onload = startRealtime;
