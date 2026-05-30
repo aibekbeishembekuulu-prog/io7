@@ -284,17 +284,17 @@ ${data.address_warehouse || "нет данных"}`;
             });
         }
 
-        if(p.way){
-            p.way.forEach(i => {
-                all.push({
-                    track: i.track,
-                    status: "🚚 В пути",
-                    price: i.price,
-                    send_date: i.date_sent,
-                    expected: i.date_arrived || "-"
-                });
-            });
-        }
+      if (p.way) {
+    p.way.forEach(i => {
+        all.push({
+            track: i.track,
+            status: "🚚 В пути",
+            price: i.price,
+            send_date: i.E,
+            expected: i.F || "-"
+        });
+    });
+}
 
         if(all.length > 0){
             all.forEach(item => {
