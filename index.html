@@ -278,8 +278,8 @@ ${data.address_warehouse || "нет данных"}`;
                     track: i.track,
                     status: "🏢 В офисе",
                     price: i.price,
-                    send_date: i.date_arrived,
-                    expected: i.expected || "-"
+                    send_date: i.date_sent,
+                    expected: i.date_arrived || "-"
                 });
             });
         }
@@ -290,8 +290,8 @@ ${data.address_warehouse || "нет данных"}`;
                     track: i.track,
                     status: "🚚 В пути",
                     price: i.price,
-                    send_date: i.date_arrived,
-                    expected: i.expected || "-"
+                    send_date: i.date_sent,
+                    expected: i.date_arrived || "-"
                 });
             });
         }
