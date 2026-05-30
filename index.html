@@ -298,7 +298,7 @@ ${data.address_warehouse || "нет данных"}`;
             p.way.forEach(i => {
                 all.push({
                     track: i.track || "-",
-                    status: getStatus(i), // 🇨🇳 Китай / 🚚 В пути
+                    status: getStatus(i), // 🇨🇳 Китай / Китай
                     price: i.price || 0,
                     send_date: i.date_sent || "-",
                     expected: i.date_arrived || "-"
