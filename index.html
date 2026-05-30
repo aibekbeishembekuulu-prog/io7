@@ -168,7 +168,7 @@ body{
 
 <script>
 
-const API_URL ="https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
 let lastHash = "";
 
@@ -209,6 +209,8 @@ function loadClient(){
     .then(r => r.json())
     .then(data => {
 
+        if(!data) return;
+
         let hash = JSON.stringify(data);
         if(hash === lastHash) return;
         lastHash = hash;
@@ -216,53 +218,48 @@ function loadClient(){
         if(data.status !== "ok") return;
 
         document.querySelector(".header").innerHTML =
-            "👤 Имя: " + data.name;
+            "👤 Имя: " + (data.name || "-");
 
         document.querySelector(".phone").innerHTML =
-            "📱 Телефон: " + (data.phone ?? "нет данных");
+            "📱 Телефон: " + (data.phone || "нет данных");
 
         document.querySelector(".bonus").innerHTML =
-            "💰 Бонус: " + (data.balance ?? 0) + " сом";
+            "💰 Бонус: " + (data.balance || 0) + " сом";
 
         document.querySelector(".total-bonus").innerHTML =
-            "💎 Общий накопленный бонус: " + (data.total_balance ?? 0) + " сом";
+            "💎 Общий бонус: " + (data.total_balance || 0) + " сом";
 
         document.querySelector(".code").innerText =
-            data.client_code;
+            data.client_code || "---";
 
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
 ${data.address_warehouse || "нет данных"}`;
 
+        let total = Number(data.total_balance || 0);
+
         let level = "🥉 Бронза";
         let levelClass = "newbie";
-
-        let total = Number(data.total_balance || 0);
 
         if(total >= 1000){
             level = "💎 VIP 👑";
             levelClass = "vip";
-        }
-        else if(total >= 800){
+        } else if(total >= 800){
             level = "🥇 Золото";
             levelClass = "gold";
-        }
-        else if(total >= 600){
+        } else if(total >= 600){
             level = "🥈 Серебро";
             levelClass = "silver";
         }
 
         document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML =
-            "🏆 Уровень: " + level;
+        document.getElementById("levelBox").innerHTML = "🏆 Уровень: " + level;
 
         const success = document.getElementById("success");
         success.style.display = "block";
         success.innerText = "🔄 Данные обновлены";
 
-        setTimeout(() => {
-           success.style.display = "none";
-        }, 3000);
+        setTimeout(() => success.style.display = "none", 2500);
     });
 
     // ===== PARCELS =====
@@ -273,31 +270,35 @@ ${data.address_warehouse || "нет данных"}`;
         let html = "";
         let all = [];
 
-        if(p.office && Array.isArray(p.office)){
+        p = p || {};
+
+        if(Array.isArray(p.office)){
             p.office.forEach(i => {
                 all.push({
-                    track: i.track,
+                    track: i.track || "-",
                     status: "🏢 В офисе",
-                    price: i.price,
+                    price: i.price || 0,
                     send_date: i.date_sent || "-",
                     expected: i.date_arrived || "-"
                 });
             });
         }
 
-        if(p.way && Array.isArray(p.way)){
+        if(Array.isArray(p.way)){
             p.way.forEach(i => {
                 all.push({
-                    track: i.track,
+                    track: i.track || "-",
                     status: "🚚 В пути",
-                    price: i.price,
+                    price: i.price || 0,
                     send_date: i.date_sent || "-",
                     expected: i.date_arrived || "-"
                 });
             });
         }
 
-        if(all.length > 0){
+        if(all.length === 0){
+            html = "<p>Нет посылок</p>";
+        } else {
             all.forEach(item => {
                 html += `
                 <div class="card">
@@ -308,11 +309,13 @@ ${data.address_warehouse || "нет данных"}`;
                     ⏳ Ожидаемое прибытие: ${item.expected}
                 </div>`;
             });
-        } else {
-            html = "<p>Нет посылок</p>";
         }
 
         document.getElementById("parcelList").innerHTML = html;
+    })
+    .catch(err => {
+        document.getElementById("parcelList").innerHTML =
+            "<p style='color:red'>Ошибка загрузки данных</p>";
     });
 }
 
