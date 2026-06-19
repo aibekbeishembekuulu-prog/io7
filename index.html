@@ -158,14 +158,22 @@ body{
 
 <!-- PARCELS -->
 <div id="parcels" class="page">
+
   <div class="card">
     <h3>📦 Мои посылки</h3>
+
+    <div class="topbar" style="position:static; border:none; flex-wrap:wrap;">
+        <button onclick="setFilter('all')">Все</button>
+        <button onclick="setFilter('china')">🇨🇳 Китай</button>
+        <button onclick="setFilter('way')">🚚 В пути</button>
+        <button onclick="setFilter('office')">🏢 Офис</button>
+        <button onclick="setFilter('issued')">✅ Выдано</button>
+    </div>
+
     <div id="parcelList">Загрузка...</div>
   </div>
-</div>
 
 </div>
-
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
