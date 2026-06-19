@@ -24,8 +24,9 @@ body{
     background:#fff;
     padding:10px;
     display:flex;
-    gap:10px;
+    gap:8px;
     justify-content:center;
+    flex-wrap:wrap;
     border-bottom:3px solid #e74c3c;
     position:sticky;
     top:0;
@@ -36,7 +37,7 @@ body{
     background:#e74c3c;
     color:#fff;
     border:none;
-    padding:8px 12px;
+    padding:8px 10px;
     border-radius:10px;
     font-weight:bold;
 }
@@ -54,8 +55,6 @@ body{
     margin-bottom:12px;
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
-
-.header{font-weight:bold;}
 
 .code-box{
     background:#e74c3c;
@@ -135,7 +134,6 @@ body{
 <div id="home" class="page active">
 
 <div class="card header">⏳ Загрузка...</div>
-
 <div class="card phone">📱 Телефон...</div>
 
 <div class="code-box">
@@ -149,7 +147,6 @@ body{
 </div>
 
 <div class="card bonus">💰 Бонус...</div>
-
 <div class="card total-bonus">💎 Общий бонус...</div>
 
 <div id="levelBox" class="level-box">⏳ Уровень...</div>
@@ -159,30 +156,38 @@ body{
 <!-- PARCELS -->
 <div id="parcels" class="page">
 
-  <div class="card">
+<div class="topbar">
+    <button onclick="setFilter('all')">Все</button>
+    <button onclick="setFilter('china')">🇨🇳 Китай</button>
+    <button onclick="setFilter('way')">🚚 В пути</button>
+    <button onclick="setFilter('office')">🏢 Офис</button>
+    <button onclick="setFilter('issued')">✅ Выдано</button>
+</div>
+
+<div class="card">
     <h3>📦 Мои посылки</h3>
-
-    <div class="topbar" style="position:static; border:none; flex-wrap:wrap;">
-        <button onclick="setFilter('all')">Все</button>
-        <button onclick="setFilter('china')">🇨🇳 Китай</button>
-        <button onclick="setFilter('way')">🚚 В пути</button>
-        <button onclick="setFilter('office')">🏢 Офис</button>
-        <button onclick="setFilter('issued')">✅ Выдано</button>
-    </div>
-
     <div id="parcelList">Загрузка...</div>
-  </div>
+</div>
 
 </div>
+
+</div>
+
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
 let lastHash = "";
+let currentFilter = "all";
 
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+}
+
+function setFilter(type){
+    currentFilter = type;
+    loadClient();
 }
 
 function getTG(){
@@ -202,59 +207,41 @@ function copyAddress(){
     alert("Скопировано!");
 }
 
-function startRealtime(){
-    loadClient();
-    setInterval(loadClient, 15000);
-}
-
 function getStatus(i){
 
     let status = (i.status || "").toLowerCase().trim();
 
     if(status === "китай")
-        return `<span class="status st-china">🇨🇳 На складе в Китае</span>`;
+        return {key:"china", text:"🇨🇳 На складе в Китае"};
 
     if(status === "в путь" || status === "в пути")
-        return `<span class="status st-way">🚚 В пути</span>`;
+        return {key:"way", text:"🚚 В пути"};
 
     if(status === "офис")
-        return `<span class="status st-office">🏢 В офисе</span>`;
+        return {key:"office", text:"🏢 В офисе"};
 
     if(status === "выдано")
-        return `<span class="status st-issued">✅ Выдано</span>`;
+        return {key:"issued", text:"✅ Выдано"};
 
-    return `<span class="status st-wait">⏳ Обработка</span>`;
+    return {key:"other", text:"⏳ Обработка"};
 }
+
 function loadClient(){
 
     const tg_id = getTG();
     if(!tg_id) return;
 
-    // ===== PROFILE =====
     fetch(API_URL + "?action=profile&tg_id=" + tg_id)
     .then(r => r.json())
     .then(data => {
 
         if(!data || data.status !== "ok") return;
 
-        let hash = JSON.stringify(data);
-        if(hash === lastHash) return;
-        lastHash = hash;
-
-        document.querySelector(".header").innerHTML =
-            "👤 Имя: " + (data.name || "-");
-
-        document.querySelector(".phone").innerHTML =
-            "📱 Телефон: " + (data.phone || "нет данных");
-
-        document.querySelector(".bonus").innerHTML =
-            "💰 Бонус: " + (data.balance || 0) + " сом";
-
-        document.querySelector(".total-bonus").innerHTML =
-            "💎 Общий бонус: " + (data.total_balance || 0) + " сом";
-
-        document.querySelector(".code").innerText =
-            data.client_code || "---";
+        document.querySelector(".header").innerHTML = "👤 Имя: " + (data.name || "-");
+        document.querySelector(".phone").innerHTML = "📱 Телефон: " + (data.phone || "нет данных");
+        document.querySelector(".bonus").innerHTML = "💰 Бонус: " + (data.balance || 0) + " сом";
+        document.querySelector(".total-bonus").innerHTML = "💎 Общий бонус: " + (data.total_balance || 0) + " сом";
+        document.querySelector(".code").innerText = data.client_code || "---";
 
         document.getElementById("warehouseText").innerText =
 `📦 Адрес склада:
@@ -266,86 +253,77 @@ ${data.address_warehouse || "нет данных"}`;
         let levelClass = "newbie";
 
         if(total >= 1000){
-            level = "💎 VIP 👑";
-            levelClass = "vip";
+            level = "💎 VIP 👑"; levelClass = "vip";
         } else if(total >= 800){
-            level = "🥇 Золото";
-            levelClass = "gold";
+            level = "🥇 Золото"; levelClass = "gold";
         } else if(total >= 600){
-            level = "🥈 Серебро";
-            levelClass = "silver";
+            level = "🥈 Серебро"; levelClass = "silver";
         }
 
         document.getElementById("levelBox").className = "level-box " + levelClass;
         document.getElementById("levelBox").innerHTML = "🏆 Уровень: " + level;
-
-        const success = document.getElementById("success");
-        success.style.display = "block";
-        success.innerText = "🔄 Данные обновлены";
-
-        setTimeout(() => success.style.display = "none", 2500);
     });
 
-    // ===== PARCELS =====
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
     .then(r => r.json())
     .then(p => {
 
-        let html = "";
         let all = [];
 
-        p = p || {};
-
-        // ===== OFFICE =====
         if(Array.isArray(p.office)){
             p.office.forEach(i => {
                 all.push({
-                    track: i.track || "-",
-                    status: "🏢 В офисе",
-                    price: i.price || 0,
-                    send_date: i.date_sent || "-",
-                    expected: i.date_arrived || "-"
+                    track: i.track,
+                    status: "office",
+                    statusText: "🏢 В офисе",
+                    price: i.price,
+                    send_date: i.date_sent,
+                    expected: i.date_arrived
                 });
             });
         }
 
-        // ===== CHINA / WAY =====
         if(Array.isArray(p.way)){
             p.way.forEach(i => {
+                let st = getStatus(i);
                 all.push({
-                    track: i.track || "-",
-                    status: getStatus(i), // 🇨🇳 Китай / Китай
-                    price: i.price || 0,
-                    send_date: i.date_sent || "-",
-                    expected: i.date_arrived || "-"
+                    track: i.track,
+                    status: st.key,
+                    statusText: st.text,
+                    price: i.price,
+                    send_date: i.date_sent,
+                    expected: i.date_arrived
                 });
             });
         }
 
-        if(all.length === 0){
+        let filtered = all.filter(i => {
+            if(currentFilter === "all") return true;
+            return i.status === currentFilter;
+        });
+
+        let html = "";
+
+        if(filtered.length === 0){
             html = "<p>Нет посылок</p>";
         } else {
-            all.forEach(item => {
+            filtered.forEach(item => {
                 html += `
                 <div class="card">
                     📦 Трек: ${item.track}<br>
-                    📊 Статус: ${item.status}<br>
-                    💰 Цена: ${item.price} сом<br>
-                    📅 Дата отправки: ${item.send_date}<br>
-                    ⏳ Ожидаемое прибытие: ${item.expected}
+                    📊 Статус: ${item.statusText}<br>
+                    💰 Цена: ${item.price || 0} сом<br>
+                    📅 Дата отправки: ${item.send_date || "-"}<br>
+                    ⏳ Ожидаемое прибытие: ${item.expected || "-"}
                 </div>`;
             });
         }
 
         document.getElementById("parcelList").innerHTML = html;
-    })
-    .catch(err => {
-        document.getElementById("parcelList").innerHTML =
-            "<p style='color:red'>Ошибка загрузки данных</p>";
     });
 }
 
-window.onload = startRealtime;
+window.onload = loadClient;
 
 </script>
 </body>
