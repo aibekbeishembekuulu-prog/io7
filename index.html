@@ -212,9 +212,11 @@ function getStatus(i){
     if(status === "офис")
         return "🏢 В офисе";
 
+    if(status === "выдано")
+        return "✅ Выдано";
+
     return "⏳ Обработка";
 }
-
 function loadClient(){
 
     const tg_id = getTG();
