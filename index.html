@@ -200,13 +200,19 @@ function startRealtime(){
 }
 
 function getStatus(i){
-    // если в будущем придёт статус из таблицы — будет работать автоматически
-    if(i.stage === "office") return "🏢 В офисе";
-    if(i.stage === "china") return "🇨🇳 Китай";
-    if(i.stage === "way") return "🚚 В пути";
 
-    // fallback (если нет stage)
-    return "🚚 В пути";
+    let status = (i.status || "").toLowerCase().trim();
+
+    if(status === "китай")
+        return "🇨🇳 На складе в Китае";
+
+    if(status === "в путь" || status === "в пути")
+        return "🚚 В пути";
+
+    if(status === "офис")
+        return "🏢 В офисе";
+
+    return "⏳ Обработка";
 }
 
 function loadClient(){
