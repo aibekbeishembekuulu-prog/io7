@@ -3,187 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tez Kargo PRO Tracking</title>
+<title>Личный кабинет</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <style>
 body{
-    margin:0;
-    font-family:Arial;
+    font-family: Arial;
     background:#eef1f6;
+    margin:0;
 }
 
-.header{
+.logo{
+    width:120px;
+    display:block;
+    margin:15px auto 5px auto;
+}
+
+.topbar{
     background:#fff;
-    padding:12px;
-    text-align:center;
-    font-weight:bold;
+    padding:10px;
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
     border-bottom:3px solid #e74c3c;
+    position:sticky;
+    top:0;
+    z-index:10;
 }
 
-#map{
-    height:500px;
-    width:100%;
+.topbar button{
+    background:#e74c3c;
+    color:#fff;
+    border:none;
+    padding:8px 10px;
+    border-radius:10px;
+    font-weight:bold;
 }
 
-.info{
+.container{
+    max-width:500px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
     background:#fff;
-    margin:10px;
     padding:15px;
     border-radius:15px;
+    margin-bottom:12px;
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.status{
-    font-size:16px;
+.code-box{
+    background:#e74c3c;
+    color:#fff;
+    padding:15px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.code{font-size:22px;font-weight:bold;}
+
+.warehouse{
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+    border-left:5px solid #e74c3c;
+    margin-bottom:15px;
+    white-space:pre-line;
+}
+
+.copy-btn{
+    margin-top:10px;
+    background:#2ecc71;
+    color:#fff;
+    border:none;
+    padding:10px;
+    border-radius:10px;
+    width:100%;
     font-weight:bold;
 }
 
-.small{
-    color:#666;
-    margin-top:5px;
+.success{
+    background:#2ecc71;
+    color:#fff;
+    padding:12px;
+    border-radius:12px;
+    margin-bottom:15px;
+    display:none;
 }
+
+.level-box{
+    padding:15px;
+    border-radius:15px;
+    color:#fff;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
+.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
+.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
+.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
+
+.page{display:none;}
+.page.active{display:block;}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-📦 Tez Kargo PRO Tracking
+<img src="logo.jpg" class="logo">
+
+<div class="topbar">
+    <button onclick="showPage('home')">Главная</button>
+    <button onclick="showPage('parcels')">Мои посылки</button>
 </div>
 
-<div id="map"></div>
+<div class="container">
 
-<div class="info">
-<div class="status" id="statusText">Загрузка...</div>
-<div class="small" id="track">Трек: ---</div>
+<h2>👤 Личный кабинет</h2>
+
+<div id="success" class="success"></div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
+<div class="card header">⏳ Загрузка...</div>
+<div class="card phone">📱 Телефон...</div>
+
+<div class="code-box">
+Ваш клиентский код<br>
+<div class="code">---</div>
+</div>
+
+<div class="warehouse">
+<div id="warehouseText">⏳ Загрузка...</div>
+<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
+</div>
+
+<div class="card bonus">💰 Бонус...</div>
+<div class="card total-bonus">💎 Общий бонус...</div>
+
+<div id="levelBox" class="level-box">⏳ Уровень...</div>
+
+</div>
+
+<!-- PARCELS -->
+<div id="parcels" class="page">
+
+<div class="topbar">
+    <button onclick="setFilter('all')">Все</button>
+    <button onclick="setFilter('china')">🇨🇳 Китай</button>
+    <button onclick="setFilter('way')">🚚 В пути</button>
+    <button onclick="setFilter('office')">🏢 Офис</button>
+    <button onclick="setFilter('issued')">✅ Выдано</button>
+</div>
+
+<div class="card">
+    <h3>📦 Мои посылки</h3>
+    <div id="parcelList">Загрузка...</div>
+</div>
+
+</div>
+
 </div>
 
 <script>
 
-// ================= MAP =================
-let map = L.map('map').setView([41.2, 74.8], 4);
+const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution:'© OpenStreetMap'
-}).addTo(map);
+let lastHash = "";
+let currentFilter = "all";
 
-// ================= POINTS =================
-const china = [39.9042, 116.4074];   // Китай (Пекин)
-const bishkek = [42.8746, 74.5698];  // Бишкек
-
-// маршрут
-let route = L.polyline([china, bishkek], {
-    color:'#e74c3c',
-    weight:4
-}).addTo(map);
-
-// маркеры
-L.marker(china).addTo(map).bindPopup("🇨🇳 Китай склад");
-L.marker(bishkek).addTo(map).bindPopup("📍 Бишкек");
-
-// 🚚 иконка машины
-let carIcon = L.divIcon({
-    className: "",
-    html: "🚚",
-    iconSize: [30,30]
-});
-
-let car = L.marker(china, {icon: carIcon}).addTo(map);
-
-// ================= STATUS =================
-function setStatus(status, track){
-
-    if(track){
-        document.getElementById("track").innerText = "Трек: " + track;
-    }
-
-    let s = (status || "").toLowerCase();
-
-    let progress = 0;
-    let text = "⏳ Обработка";
-
-    if(s.includes("китай")){
-        progress = 0;
-        text = "🇨🇳 Посылка на складе в Китае";
-    }
-    else if(s.includes("в пути")){
-        progress = 0.5;
-        text = "🚚 Посылка в пути";
-    }
-    else if(s.includes("офис")){
-        progress = 0.8;
-        text = "🏢 Посылка в офисе Бишкек";
-    }
-    else if(s.includes("выдано")){
-        progress = 1;
-        text = "📍 Посылка выдана";
-    }
-
-    document.getElementById("statusText").innerText = text;
-
-    moveCar(progress);
+function showPage(id){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
 
-// ================= CAR MOVE =================
-function moveCar(p){
-
-    let lat = china[0] + (bishkek[0] - china[0]) * p;
-    let lng = china[1] + (bishkek[1] - china[1]) * p;
-
-    car.setLatLng([lat, lng]);
-
-    map.panTo([lat, lng], {animate:true});
+function setFilter(type){
+    currentFilter = type;
+    loadClient();
 }
 
-// ================= TELEGRAM =================
 function getTG(){
     try{
         if(window.Telegram && Telegram.WebApp){
             Telegram.WebApp.ready();
-            return Telegram.WebApp.initDataUnsafe?.user?.id;
+            const user = Telegram.WebApp.initDataUnsafe?.user;
+            if(user && user.id) return user.id.toString();
         }
     }catch(e){}
-    return null;
+    return new URLSearchParams(window.location.search).get("tg_id");
 }
 
-// ================= LOAD API =================
-const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
+function copyAddress(){
+    const text = document.getElementById("warehouseText").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Скопировано!");
+}
 
-function load(){
+function getStatus(i){
 
-    let tg_id = getTG();
-    if(!tg_id) tg_id = new URLSearchParams(location.search).get("tg_id");
+    let status = (i.status || "").toLowerCase().trim();
 
+    if(status === "китай")
+        return {key:"china", text:"🇨🇳 На складе в Китае"};
+
+    if(status === "в путь" || status === "в пути")
+        return {key:"way", text:"🚚 В пути"};
+
+    if(status === "офис")
+        return {key:"office", text:"🏢 В офисе"};
+
+    if(status === "выдано")
+        return {key:"issued", text:"✅ Выдано"};
+
+    return {key:"other", text:"⏳ Обработка"};
+}
+
+function loadClient(){
+
+    const tg_id = getTG();
     if(!tg_id) return;
 
-    fetch(API_URL + "?action=all&tg_id=" + tg_id)
-    .then(r=>r.json())
-    .then(data=>{
+    fetch(API_URL + "?action=profile&tg_id=" + tg_id)
+    .then(r => r.json())
+    .then(data => {
 
-        if(data && data.way && data.way.length){
+        if(!data || data.status !== "ok") return;
 
-            let item = data.way[0];
+        document.querySelector(".header").innerHTML = "👤 Имя: " + (data.name || "-");
+        document.querySelector(".phone").innerHTML = "📱 Телефон: " + (data.phone || "нет данных");
+        document.querySelector(".bonus").innerHTML = "💰 Бонус: " + (data.balance || 0) + " сом";
+        document.querySelector(".total-bonus").innerHTML = "💎 Общий бонус: " + (data.total_balance || 0) + " сом";
+        document.querySelector(".code").innerText = data.client_code || "---";
 
-            setStatus(item.status, item.track);
+        document.getElementById("warehouseText").innerText =
+`📦 Адрес склада:
+${data.address_warehouse || "нет данных"}`;
 
-        } else {
+        let total = Number(data.total_balance || 0);
 
-            setStatus("китай", "---");
+        let level = "🥉 Бронза";
+        let levelClass = "newbie";
+
+        if(total >= 1000){
+            level = "💎 VIP 👑"; levelClass = "vip";
+        } else if(total >= 800){
+            level = "🥇 Золото"; levelClass = "gold";
+        } else if(total >= 600){
+            level = "🥈 Серебро"; levelClass = "silver";
         }
-    })
-    .catch(()=>{
-        setStatus("китай", "---");
+
+        document.getElementById("levelBox").className = "level-box " + levelClass;
+        document.getElementById("levelBox").innerHTML = "🏆 Уровень: " + level;
+    });
+
+    fetch(API_URL + "?action=all&tg_id=" + tg_id)
+    .then(r => r.json())
+    .then(p => {
+
+        let all = [];
+
+        if(Array.isArray(p.office)){
+            p.office.forEach(i => {
+                all.push({
+                    track: i.track,
+                    status: "office",
+                    statusText: "🏢 В офисе",
+                    price: i.price,
+                    send_date: i.date_sent,
+                    expected: i.date_arrived
+                });
+            });
+        }
+
+        if(Array.isArray(p.way)){
+            p.way.forEach(i => {
+                let st = getStatus(i);
+                all.push({
+                    track: i.track,
+                    status: st.key,
+                    statusText: st.text,
+                    price: i.price,
+                    send_date: i.date_sent,
+                    expected: i.date_arrived
+                });
+            });
+        }
+
+        let filtered = all.filter(i => {
+            if(currentFilter === "all") return true;
+            return i.status === currentFilter;
+        });
+
+        let html = "";
+
+        if(filtered.length === 0){
+            html = "<p>Нет посылок</p>";
+        } else {
+            filtered.forEach(item => {
+                html += `
+                <div class="card">
+                    📦 Трек: ${item.track}<br>
+                    📊 Статус: ${item.statusText}<br>
+                    💰 Цена: ${item.price || 0} сом<br>
+                    📅 Дата отправки: ${item.send_date || "-"}<br>
+                    ⏳ Ожидаемое прибытие: ${item.expected || "-"}
+                </div>`;
+            });
+        }
+
+        document.getElementById("parcelList").innerHTML = html;
     });
 }
 
-load();
+window.onload = loadClient;
 
 </script>
-
 </body>
 </html>
