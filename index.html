@@ -104,7 +104,7 @@ body{
 .page{display:none;}
 .page.active{display:block;}
 
-/* ===== TRACK ROAD ===== */
+/* TRACK */
 .track-box{
     background:#fff;
     padding:15px;
@@ -166,7 +166,7 @@ body{
     position:absolute;
     top:5px;
     font-size:26px;
-    transition:all 1s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:all 1s ease;
 }
 </style>
 </head>
@@ -280,7 +280,7 @@ if(Array.isArray(p.way)){
 p.way.forEach(i=>{
 all.push({
 track:i.track,
-status:(i.status||"").toLowerCase().trim(),
+status:i.status,
 price:i.price,
 send:i.date_sent
 });
@@ -291,22 +291,25 @@ let html="";
 
 all.forEach(item=>{
 
+let status = (item.status || "").toString().toLowerCase();
+
+if(status.includes("китай")) status="china";
+else if(status.includes("в пути") || status.includes("way")) status="way";
+else if(status.includes("офис")) status="office";
+else if(status.includes("выдан")) status="issued";
+
 let pos="5%";
 let d=["","","",""];
 
-switch(item.status){
+switch(status){
     case "china":
-        pos="5%"; d[0]="active";
-        break;
+        pos="5%"; d[0]="active"; break;
     case "way":
-        pos="35%"; d[1]="active";
-        break;
+        pos="35%"; d[1]="active"; break;
     case "office":
-        pos="65%"; d[2]="active";
-        break;
+        pos="65%"; d[2]="active"; break;
     case "issued":
-        pos="90%"; d[3]="active";
-        break;
+        pos="90%"; d[3]="active"; break;
 }
 
 html+=`
