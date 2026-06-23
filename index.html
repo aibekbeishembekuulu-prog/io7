@@ -308,14 +308,43 @@ ${data.address_warehouse || "нет данных"}`;
             html = "<p>Нет посылок</p>";
         } else {
             filtered.forEach(item => {
-                html += `
-                <div class="card">
-                    📦 Трек: ${item.track}<br>
-                    📊 Статус: ${item.statusText}<br>
-                    💰 Цена: ${item.price || 0} сом<br>
-                    📅 Дата отправки: ${item.send_date || "-"}<br>
-                    ⏳ Ожидаемое прибытие: ${item.expected || "-"}
-                </div>`;
+               let truckPos = 0;
+let dots = ["", "", "", ""];
+
+if(item.status === "china") { truckPos = "5%"; dots[0] = "active"; }
+if(item.status === "way") { truckPos = "35%"; dots[1] = "active"; }
+if(item.status === "office") { truckPos = "65%"; dots[2] = "active"; }
+if(item.status === "issued") { truckPos = "90%"; dots[3] = "active"; }
+
+html += `
+<div class="track-box">
+
+    <div class="track-title">📦 Трек: ${item.track}</div>
+
+    <div class="road-line">
+
+        <div class="truck" style="left:${truckPos}">🚚</div>
+
+        <div class="line"></div>
+
+        <div class="dot ${dots[0]} d1"></div>
+        <div class="dot ${dots[1]} d2"></div>
+        <div class="dot ${dots[2]} d3"></div>
+        <div class="dot ${dots[3]} d4"></div>
+
+        <div class="label2" style="left:5%">Китай</div>
+        <div class="label2" style="left:35%">В пути</div>
+        <div class="label2" style="left:65%">Офис</div>
+        <div class="label2" style="left:90%">Выдано</div>
+
+    </div>
+
+    📊 ${item.statusText}<br>
+    💰 Цена: ${item.price || 0} сом<br>
+    📅 Отправка: ${item.send_date || "-"}<br>
+    ⏳ Прибытие: ${item.expected || "-"}
+</div>
+`;
             });
         }
 
