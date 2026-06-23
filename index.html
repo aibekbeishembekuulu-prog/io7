@@ -3,336 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Личный кабинет</title>
+<title>Tez Kargo PRO Tracking</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <style>
 body{
-    font-family: Arial;
-    background:#eef1f6;
     margin:0;
+    font-family:Arial;
+    background:#eef1f6;
 }
 
-.logo{
-    width:120px;
-    display:block;
-    margin:15px auto 5px auto;
-}
-
-.topbar{
+.header{
     background:#fff;
-    padding:10px;
-    display:flex;
-    gap:8px;
-    justify-content:center;
-    flex-wrap:wrap;
-    border-bottom:3px solid #e74c3c;
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-.topbar button{
-    background:#e74c3c;
-    color:#fff;
-    border:none;
-    padding:8px 10px;
-    border-radius:10px;
+    padding:12px;
+    text-align:center;
     font-weight:bold;
+    border-bottom:3px solid #e74c3c;
 }
 
-.container{
-    max-width:500px;
-    margin:auto;
-    padding:15px;
+#map{
+    height:500px;
+    width:100%;
 }
 
-.card{
+.info{
     background:#fff;
+    margin:10px;
     padding:15px;
     border-radius:15px;
-    margin-bottom:12px;
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-.code-box{
-    background:#e74c3c;
-    color:#fff;
-    padding:15px;
-    border-radius:15px;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.code{font-size:22px;font-weight:bold;}
-
-.warehouse{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    border-left:5px solid #e74c3c;
-    margin-bottom:15px;
-    white-space:pre-line;
-}
-
-.copy-btn{
-    margin-top:10px;
-    background:#2ecc71;
-    color:#fff;
-    border:none;
-    padding:10px;
-    border-radius:10px;
-    width:100%;
+.status{
+    font-size:16px;
     font-weight:bold;
 }
 
-.page{display:none;}
-.page.active{display:block;}
-
-/* ===== MAP ===== */
-.map{
-    position:relative;
-    height:170px;
-    background:#eef3fb;
-    border-radius:15px;
-    overflow:hidden;
-    margin-top:10px;
+.small{
+    color:#666;
+    margin-top:5px;
 }
-
-.route{
-    position:absolute;
-    top:85px;
-    left:60px;
-    right:60px;
-    height:4px;
-    background:#4CAF50;
-    border-radius:10px;
-}
-
-.point{
-    position:absolute;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.china{
-    top:20px;
-    left:40px;
-}
-
-.bishkek{
-    top:20px;
-    right:40px;
-}
-
-/* 🚚 машина */
-.truck{
-    position:absolute;
-    top:70px;
-    left:60px;
-    font-size:26px;
-    transition:2s ease;
-}
-
 </style>
 </head>
 
 <body>
 
-<img src="logo.jpg" class="logo">
-
-<div class="topbar">
-    <button onclick="showPage('home')">Главная</button>
-    <button onclick="showPage('parcels')">Мои посылки</button>
+<div class="header">
+📦 Tez Kargo PRO Tracking
 </div>
 
-<div class="container">
+<div id="map"></div>
 
-<!-- HOME -->
-<div id="home" class="page active">
-
-<div class="card header">⏳ Загрузка...</div>
-<div class="card phone">📱 Телефон...</div>
-
-<div class="code-box">
-Ваш клиентский код<br>
-<div class="code">---</div>
-</div>
-
-<div class="warehouse">
-<div id="warehouseText">⏳ Загрузка...</div>
-<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
-</div>
-
-<!-- 🗺️ МАРШРУТ -->
-<div class="card">
-<h3>🗺️ Маршрут доставки</h3>
-
-<div class="map">
-
-<div class="route"></div>
-
-<div class="point china">🇨🇳 Китай</div>
-<div class="point bishkek">🇰🇬 Бишкек</div>
-
-<div class="truck" id="truck">🚚</div>
-
-</div>
-</div>
-
-<div class="card bonus">💰 Бонус...</div>
-<div class="card total-bonus">💎 Общий бонус...</div>
-
-<div id="levelBox" class="card">⏳ Уровень...</div>
-
-</div>
-
-<!-- PARCELS -->
-<div id="parcels" class="page">
-
-<div class="card">
-    <h3>📦 Мои посылки</h3>
-    <div id="parcelList">Загрузка...</div>
-</div>
-
-</div>
-
+<div class="info">
+<div class="status" id="statusText">Загрузка...</div>
+<div class="small" id="track">Трек: ---</div>
 </div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
+// ================= MAP =================
+let map = L.map('map').setView([41.2, 74.8], 4);
 
-function showPage(id){
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap'
+}).addTo(map);
+
+// ================= POINTS =================
+const china = [39.9042, 116.4074];   // Китай (Пекин)
+const bishkek = [42.8746, 74.5698];  // Бишкек
+
+// маршрут
+let route = L.polyline([china, bishkek], {
+    color:'#e74c3c',
+    weight:4
+}).addTo(map);
+
+// маркеры
+L.marker(china).addTo(map).bindPopup("🇨🇳 Китай склад");
+L.marker(bishkek).addTo(map).bindPopup("📍 Бишкек");
+
+// 🚚 иконка машины
+let carIcon = L.divIcon({
+    className: "",
+    html: "🚚",
+    iconSize: [30,30]
+});
+
+let car = L.marker(china, {icon: carIcon}).addTo(map);
+
+// ================= STATUS =================
+function setStatus(status, track){
+
+    if(track){
+        document.getElementById("track").innerText = "Трек: " + track;
+    }
+
+    let s = (status || "").toLowerCase();
+
+    let progress = 0;
+    let text = "⏳ Обработка";
+
+    if(s.includes("китай")){
+        progress = 0;
+        text = "🇨🇳 Посылка на складе в Китае";
+    }
+    else if(s.includes("в пути")){
+        progress = 0.5;
+        text = "🚚 Посылка в пути";
+    }
+    else if(s.includes("офис")){
+        progress = 0.8;
+        text = "🏢 Посылка в офисе Бишкек";
+    }
+    else if(s.includes("выдано")){
+        progress = 1;
+        text = "📍 Посылка выдана";
+    }
+
+    document.getElementById("statusText").innerText = text;
+
+    moveCar(progress);
 }
 
+// ================= CAR MOVE =================
+function moveCar(p){
+
+    let lat = china[0] + (bishkek[0] - china[0]) * p;
+    let lng = china[1] + (bishkek[1] - china[1]) * p;
+
+    car.setLatLng([lat, lng]);
+
+    map.panTo([lat, lng], {animate:true});
+}
+
+// ================= TELEGRAM =================
 function getTG(){
     try{
         if(window.Telegram && Telegram.WebApp){
             Telegram.WebApp.ready();
-            const user = Telegram.WebApp.initDataUnsafe?.user;
-            if(user && user.id) return user.id.toString();
+            return Telegram.WebApp.initDataUnsafe?.user?.id;
         }
     }catch(e){}
-    return new URLSearchParams(window.location.search).get("tg_id");
+    return null;
 }
 
-function copyAddress(){
-    const text = document.getElementById("warehouseText").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Скопировано!");
-}
+// ================= LOAD API =================
+const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
-/* ===== STATUS MAP ===== */
-function getStatus(status){
-    status = (status || "").toLowerCase().trim();
+function load(){
 
-    if(status.includes("китай")) return "china";
-    if(status.includes("в пути")) return "way";
-    if(status.includes("офис")) return "office";
-    if(status.includes("выдан")) return "issued";
+    let tg_id = getTG();
+    if(!tg_id) tg_id = new URLSearchParams(location.search).get("tg_id");
 
-    return "china";
-}
-
-/* ===== 🚚 MAP ANIMATION ===== */
-function moveTruck(status){
-
-    let truck = document.getElementById("truck");
-
-    if(status === "china"){
-        truck.style.left = "60px";
-    }
-
-    if(status === "way"){
-        truck.style.left = "45%";
-    }
-
-    if(status === "office"){
-        truck.style.left = "70%";
-    }
-
-    if(status === "issued"){
-        truck.style.left = "calc(100% - 80px)";
-    }
-}
-
-/* ===== LOAD ===== */
-function loadClient(){
-
-    const tg_id = getTG();
     if(!tg_id) return;
 
-    fetch(API_URL + "?action=profile&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(data => {
-
-        if(!data || data.status !== "ok") return;
-
-        document.querySelector(".header").innerHTML = "👤 Имя: " + (data.name || "-");
-        document.querySelector(".phone").innerHTML = "📱 Телефон: " + (data.phone || "нет данных");
-        document.querySelector(".code").innerText = data.client_code || "---";
-
-        document.getElementById("warehouseText").innerText =
-`📦 Адрес склада:
-${data.address_warehouse || "нет данных"}`;
-
-        let total = Number(data.total_balance || 0);
-
-        let level = "🥉 Бронза";
-        if(total >= 1000) level = "💎 VIP";
-        else if(total >= 800) level = "🥇 Золото";
-        else if(total >= 600) level = "🥈 Серебро";
-
-        document.getElementById("levelBox").innerHTML = "🏆 " + level;
-    });
-
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(p => {
+    .then(r=>r.json())
+    .then(data=>{
 
-        let all = [];
+        if(data && data.way && data.way.length){
 
-        if(Array.isArray(p.way)){
-            p.way.forEach(i => {
-                let st = getStatus(i.status);
-                all.push({
-                    track: i.track,
-                    status: st,
-                    statusText: i.status,
-                    price: i.price
-                });
-            });
-        }
+            let item = data.way[0];
 
-        let html = "";
+            setStatus(item.status, item.track);
 
-        if(all.length === 0){
-            html = "<p>Нет посылок</p>";
         } else {
-            all.forEach(item => {
 
-                html += `
-                <div class="card">
-                    📦 Трек: ${item.track}<br>
-                    📊 Статус: ${item.statusText}<br>
-                    💰 Цена: ${item.price || 0} сом
-                </div>
-                `;
-
-                // 🚚 двигаем машину по первой посылке
-                moveTruck(item.status);
-            });
+            setStatus("китай", "---");
         }
-
-        document.getElementById("parcelList").innerHTML = html;
+    })
+    .catch(()=>{
+        setStatus("китай", "---");
     });
 }
 
-window.onload = loadClient;
+load();
 
 </script>
 
