@@ -166,7 +166,7 @@ body{
     position:absolute;
     top:5px;
     font-size:26px;
-    transition:all 0.8s ease;
+    transition:all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
 </head>
@@ -184,7 +184,6 @@ body{
 
 <h2>👤 Личный кабинет</h2>
 
-<!-- HOME -->
 <div id="home" class="page active">
 
 <div class="card header">⏳ Загрузка...</div>
@@ -207,7 +206,6 @@ body{
 
 </div>
 
-<!-- PARCELS -->
 <div id="parcels" class="page">
 
 <div class="card">
@@ -222,8 +220,6 @@ body{
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
-
-let currentFilter = "all";
 
 function showPage(id){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -250,6 +246,7 @@ function loadClient(){
 const tg_id = getTG();
 if(!tg_id) return;
 
+/* PROFILE */
 fetch(API_URL + "?action=profile&tg_id=" + tg_id)
 .then(r => r.json())
 .then(data => {
@@ -272,6 +269,7 @@ document.getElementById("levelBox").className="level-box "+cls;
 document.getElementById("levelBox").innerText="🏆 "+level;
 });
 
+/* PARCELS */
 fetch(API_URL + "?action=all&tg_id=" + tg_id)
 .then(r => r.json())
 .then(p => {
@@ -282,10 +280,9 @@ if(Array.isArray(p.way)){
 p.way.forEach(i=>{
 all.push({
 track:i.track,
-status:i.status,
+status:(i.status||"").toLowerCase().trim(),
 price:i.price,
-send:i.date_sent,
-arrive:i.date_arrived
+send:i.date_sent
 });
 });
 }
@@ -297,10 +294,20 @@ all.forEach(item=>{
 let pos="5%";
 let d=["","","",""];
 
-if(item.status=="way"){pos="35%";d[1]="active";}
-if(item.status=="office"){pos="65%";d[2]="active";}
-if(item.status=="issued"){pos="90%";d[3]="active";}
-if(item.status=="china"){pos="5%";d[0]="active";}
+switch(item.status){
+    case "china":
+        pos="5%"; d[0]="active";
+        break;
+    case "way":
+        pos="35%"; d[1]="active";
+        break;
+    case "office":
+        pos="65%"; d[2]="active";
+        break;
+    case "issued":
+        pos="90%"; d[3]="active";
+        break;
+}
 
 html+=`
 <div class="track-box">
