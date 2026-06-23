@@ -87,15 +87,6 @@ body{
     font-weight:bold;
 }
 
-.success{
-    background:#2ecc71;
-    color:#fff;
-    padding:12px;
-    border-radius:12px;
-    margin-bottom:15px;
-    display:none;
-}
-
 .level-box{
     padding:15px;
     border-radius:15px;
@@ -112,6 +103,71 @@ body{
 
 .page{display:none;}
 .page.active{display:block;}
+
+/* ===== TRACK ROAD ===== */
+.track-box{
+    background:#fff;
+    padding:15px;
+    border-radius:15px;
+    margin-top:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.track-title{
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.road-line{
+    position:relative;
+    height:80px;
+}
+
+.line{
+    position:absolute;
+    top:35px;
+    left:0;
+    right:0;
+    height:6px;
+    background:#2c3e50;
+    border-radius:10px;
+}
+
+.dot{
+    position:absolute;
+    top:28px;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#bdc3c7;
+    border:3px solid #fff;
+    box-shadow:0 0 0 2px #ccc;
+}
+
+.dot.active{
+    background:#2ecc71;
+    box-shadow:0 0 0 2px #2ecc71;
+}
+
+.d1{left:5%;}
+.d2{left:35%;}
+.d3{left:65%;}
+.d4{left:90%;}
+
+.label2{
+    position:absolute;
+    top:55px;
+    font-size:11px;
+    color:#555;
+    transform:translateX(-30%);
+}
+
+.truck{
+    position:absolute;
+    top:5px;
+    font-size:26px;
+    transition:all 0.8s ease;
+}
 </style>
 </head>
 
@@ -128,8 +184,6 @@ body{
 
 <h2>👤 Личный кабинет</h2>
 
-<div id="success" class="success"></div>
-
 <!-- HOME -->
 <div id="home" class="page active">
 
@@ -143,11 +197,11 @@ body{
 
 <div class="warehouse">
 <div id="warehouseText">⏳ Загрузка...</div>
-<button class="copy-btn" onclick="copyAddress()">📋 Скопировать адрес</button>
+<button class="copy-btn" onclick="copyAddress()">📋 Скопировать</button>
 </div>
 
-<div class="card bonus">💰 Бонус...</div>
-<div class="card total-bonus">💎 Общий бонус...</div>
+<div class="card bonus"></div>
+<div class="card total-bonus"></div>
 
 <div id="levelBox" class="level-box">⏳ Уровень...</div>
 
@@ -155,14 +209,6 @@ body{
 
 <!-- PARCELS -->
 <div id="parcels" class="page">
-
-<div class="topbar">
-    <button onclick="setFilter('all')">Все</button>
-    <button onclick="setFilter('china')">🇨🇳 Китай</button>
-    <button onclick="setFilter('way')">🚚 В пути</button>
-    <button onclick="setFilter('office')">🏢 Офис</button>
-    <button onclick="setFilter('issued')">✅ Выдано</button>
-</div>
 
 <div class="card">
     <h3>📦 Мои посылки</h3>
@@ -177,7 +223,6 @@ body{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
-let lastHash = "";
 let currentFilter = "all";
 
 function showPage(id){
@@ -185,175 +230,115 @@ function showPage(id){
     document.getElementById(id).classList.add('active');
 }
 
-function setFilter(type){
-    currentFilter = type;
-    loadClient();
-}
-
 function getTG(){
     try{
         if(window.Telegram && Telegram.WebApp){
             Telegram.WebApp.ready();
-            const user = Telegram.WebApp.initDataUnsafe?.user;
-            if(user && user.id) return user.id.toString();
+            return Telegram.WebApp.initDataUnsafe?.user?.id;
         }
     }catch(e){}
-    return new URLSearchParams(window.location.search).get("tg_id");
+    return new URLSearchParams(location.search).get("tg_id");
 }
 
 function copyAddress(){
-    const text = document.getElementById("warehouseText").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Скопировано!");
-}
-
-function getStatus(i){
-
-    let status = (i.status || "").toLowerCase().trim();
-
-    if(status === "китай")
-        return {key:"china", text:"🇨🇳 На складе в Китае"};
-
-    if(status === "в путь" || status === "в пути")
-        return {key:"way", text:"🚚 В пути"};
-
-    if(status === "офис")
-        return {key:"office", text:"🏢 В офисе"};
-
-    if(status === "выдано")
-        return {key:"issued", text:"✅ Выдано"};
-
-    return {key:"other", text:"⏳ Обработка"};
+    navigator.clipboard.writeText(document.getElementById("warehouseText").innerText);
+    alert("Скопировано");
 }
 
 function loadClient(){
 
-    const tg_id = getTG();
-    if(!tg_id) return;
+const tg_id = getTG();
+if(!tg_id) return;
 
-    fetch(API_URL + "?action=profile&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(data => {
+fetch(API_URL + "?action=profile&tg_id=" + tg_id)
+.then(r => r.json())
+.then(data => {
 
-        if(!data || data.status !== "ok") return;
+document.querySelector(".header").innerHTML = "👤 Имя: " + data.name;
+document.querySelector(".phone").innerHTML = "📱 Телефон: " + data.phone;
+document.querySelector(".bonus").innerHTML = "💰 Бонус: " + data.balance;
+document.querySelector(".total-bonus").innerHTML = "💎 Общий бонус: " + data.total_balance;
+document.querySelector(".code").innerText = data.client_code;
 
-        document.querySelector(".header").innerHTML = "👤 Имя: " + (data.name || "-");
-        document.querySelector(".phone").innerHTML = "📱 Телефон: " + (data.phone || "нет данных");
-        document.querySelector(".bonus").innerHTML = "💰 Бонус: " + (data.balance || 0) + " сом";
-        document.querySelector(".total-bonus").innerHTML = "💎 Общий бонус: " + (data.total_balance || 0) + " сом";
-        document.querySelector(".code").innerText = data.client_code || "---";
+document.getElementById("warehouseText").innerText =
+"📦 Адрес склада:\n" + data.address_warehouse;
 
-        document.getElementById("warehouseText").innerText =
-`📦 Адрес склада:
-${data.address_warehouse || "нет данных"}`;
+let level="🥉 Бронза", cls="newbie";
+if(data.total_balance>=1000){level="💎 VIP";cls="vip";}
+else if(data.total_balance>=800){level="🥇 Золото";cls="gold";}
+else if(data.total_balance>=600){level="🥈 Серебро";cls="silver";}
 
-        let total = Number(data.total_balance || 0);
+document.getElementById("levelBox").className="level-box "+cls;
+document.getElementById("levelBox").innerText="🏆 "+level;
+});
 
-        let level = "🥉 Бронза";
-        let levelClass = "newbie";
+fetch(API_URL + "?action=all&tg_id=" + tg_id)
+.then(r => r.json())
+.then(p => {
 
-        if(total >= 1000){
-            level = "💎 VIP 👑"; levelClass = "vip";
-        } else if(total >= 800){
-            level = "🥇 Золото"; levelClass = "gold";
-        } else if(total >= 600){
-            level = "🥈 Серебро"; levelClass = "silver";
-        }
+let all=[];
 
-        document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML = "🏆 Уровень: " + level;
-    });
-
-    fetch(API_URL + "?action=all&tg_id=" + tg_id)
-    .then(r => r.json())
-    .then(p => {
-
-        let all = [];
-
-        if(Array.isArray(p.office)){
-            p.office.forEach(i => {
-                all.push({
-                    track: i.track,
-                    status: "office",
-                    statusText: "🏢 В офисе",
-                    price: i.price,
-                    send_date: i.date_sent,
-                    expected: i.date_arrived
-                });
-            });
-        }
-
-        if(Array.isArray(p.way)){
-            p.way.forEach(i => {
-                let st = getStatus(i);
-                all.push({
-                    track: i.track,
-                    status: st.key,
-                    statusText: st.text,
-                    price: i.price,
-                    send_date: i.date_sent,
-                    expected: i.date_arrived
-                });
-            });
-        }
-
-        let filtered = all.filter(i => {
-            if(currentFilter === "all") return true;
-            return i.status === currentFilter;
-        });
-
-        let html = "";
-
-        if(filtered.length === 0){
-            html = "<p>Нет посылок</p>";
-        } else {
-            filtered.forEach(item => {
-               let truckPos = 0;
-let dots = ["", "", "", ""];
-
-if(item.status === "china") { truckPos = "5%"; dots[0] = "active"; }
-if(item.status === "way") { truckPos = "35%"; dots[1] = "active"; }
-if(item.status === "office") { truckPos = "65%"; dots[2] = "active"; }
-if(item.status === "issued") { truckPos = "90%"; dots[3] = "active"; }
-
-html += `
-<div class="track-box">
-
-    <div class="track-title">📦 Трек: ${item.track}</div>
-
-    <div class="road-line">
-
-        <div class="truck" style="left:${truckPos}">🚚</div>
-
-        <div class="line"></div>
-
-        <div class="dot ${dots[0]} d1"></div>
-        <div class="dot ${dots[1]} d2"></div>
-        <div class="dot ${dots[2]} d3"></div>
-        <div class="dot ${dots[3]} d4"></div>
-
-        <div class="label2" style="left:5%">Китай</div>
-        <div class="label2" style="left:35%">В пути</div>
-        <div class="label2" style="left:65%">Офис</div>
-        <div class="label2" style="left:90%">Выдано</div>
-
-    </div>
-
-    📊 ${item.statusText}<br>
-    💰 Цена: ${item.price || 0} сом<br>
-    📅 Отправка: ${item.send_date || "-"}<br>
-    ⏳ Прибытие: ${item.expected || "-"}
-</div>
-`;
-            });
-        }
-
-        document.getElementById("parcelList").innerHTML = html;
-    });
+if(Array.isArray(p.way)){
+p.way.forEach(i=>{
+all.push({
+track:i.track,
+status:i.status,
+price:i.price,
+send:i.date_sent,
+arrive:i.date_arrived
+});
+});
 }
 
-window.onload = loadClient;
+let html="";
+
+all.forEach(item=>{
+
+let pos="5%";
+let d=["","","",""];
+
+if(item.status=="way"){pos="35%";d[1]="active";}
+if(item.status=="office"){pos="65%";d[2]="active";}
+if(item.status=="issued"){pos="90%";d[3]="active";}
+if(item.status=="china"){pos="5%";d[0]="active";}
+
+html+=`
+<div class="track-box">
+
+<div class="track-title">📦 ${item.track}</div>
+
+<div class="road-line">
+
+<div class="truck" style="left:${pos}">🚚</div>
+<div class="line"></div>
+
+<div class="dot ${d[0]} d1"></div>
+<div class="dot ${d[1]} d2"></div>
+<div class="dot ${d[2]} d3"></div>
+<div class="dot ${d[3]} d4"></div>
+
+<div class="label2" style="left:5%">Китай</div>
+<div class="label2" style="left:35%">В пути</div>
+<div class="label2" style="left:65%">Офис</div>
+<div class="label2" style="left:90%">Выдано</div>
+
+</div>
+
+📊 ${item.status}<br>
+💰 ${item.price} сом<br>
+📅 ${item.send}
+</div>
+`;
+});
+
+document.getElementById("parcelList").innerHTML=html;
+
+});
+}
+
+window.onload=loadClient;
 
 </script>
+
 </body>
 </html>
