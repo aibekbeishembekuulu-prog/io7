@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Личный кабинет</title>
+<title>Трек посылки</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
@@ -12,341 +12,141 @@ body{
     font-family: Arial;
     background:#eef1f6;
     margin:0;
+    padding:20px;
 }
 
-.logo{
-    width:120px;
-    display:block;
-    margin:15px auto 5px auto;
-}
-
-.topbar{
-    background:#fff;
-    padding:10px;
-    display:flex;
-    gap:8px;
-    justify-content:center;
-    flex-wrap:wrap;
-    border-bottom:3px solid #e74c3c;
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-.topbar button{
-    background:#e74c3c;
-    color:#fff;
-    border:none;
-    padding:8px 10px;
-    border-radius:10px;
-    font-weight:bold;
-}
-
-.container{
-    max-width:500px;
-    margin:auto;
-    padding:15px;
-}
-
-.card{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.code-box{
-    background:#e74c3c;
-    color:#fff;
-    padding:15px;
-    border-radius:15px;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.code{font-size:22px;font-weight:bold;}
-
-.warehouse{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    border-left:5px solid #e74c3c;
-    margin-bottom:15px;
-    white-space:pre-line;
-}
-
-.copy-btn{
-    margin-top:10px;
-    background:#2ecc71;
-    color:#fff;
-    border:none;
-    padding:10px;
-    border-radius:10px;
-    width:100%;
-    font-weight:bold;
-}
-
-.level-box{
-    padding:15px;
-    border-radius:15px;
-    color:#fff;
-    font-weight:bold;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
-.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
-.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
-.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
-
-.page{display:none;}
-.page.active{display:block;}
-
-/* TRACK */
 .track-box{
     background:#fff;
-    padding:15px;
-    border-radius:15px;
-    margin-top:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-.track-title{
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-.road-line{
+.road{
     position:relative;
-    height:80px;
+    height:90px;
+    margin-top:20px;
 }
 
 .line{
     position:absolute;
-    top:35px;
+    top:40px;
     left:0;
     right:0;
     height:6px;
-    background:#2c3e50;
+    background:#ddd;
     border-radius:10px;
 }
 
-.dot{
+.progress{
+    position:absolute;
+    top:40px;
+    left:0;
+    height:6px;
+    width:0%;
+    border-radius:10px;
+    transition:0.6s ease;
+}
+
+.point{
     position:absolute;
     top:28px;
-    width:16px;
-    height:16px;
+    width:30px;
+    height:30px;
     border-radius:50%;
-    background:#bdc3c7;
-    border:3px solid #fff;
-    box-shadow:0 0 0 2px #ccc;
+    background:#ccc;
+    z-index:2;
+    transition:0.3s;
 }
 
-.dot.active{
-    background:#2ecc71;
-    box-shadow:0 0 0 2px #2ecc71;
-}
-
-.d1{left:5%;}
-.d2{left:35%;}
-.d3{left:65%;}
-.d4{left:90%;}
-
-.label2{
+.label{
     position:absolute;
-    top:55px;
-    font-size:11px;
-    color:#555;
-    transform:translateX(-30%);
+    top:65px;
+    font-size:12px;
+    width:80px;
+    text-align:center;
+    transform:translateX(-25px);
 }
 
-.truck{
+.car{
     position:absolute;
-    top:5px;
-    font-size:26px;
-    transition:all 1s ease;
+    top:10px;
+    width:40px;
+    transition:0.6s ease;
 }
 </style>
 </head>
 
 <body>
 
-<img src="logo.jpg" class="logo">
+<div class="track-box">
 
-<div class="topbar">
-    <button onclick="showPage('home')">Главная</button>
-    <button onclick="showPage('parcels')">Мои посылки</button>
-</div>
+<h3>📦 Трек: JT5493852193937</h3>
+<p id="statusText">Статус: ...</p>
 
-<div class="container">
+<div class="road">
 
-<h2>👤 Личный кабинет</h2>
+    <div class="line"></div>
+    <div id="progress" class="progress"></div>
 
-<div id="home" class="page active">
+    <div class="point" id="p1" style="left:0%"></div>
+    <div class="point" id="p2" style="left:33%"></div>
+    <div class="point" id="p3" style="left:66%"></div>
+    <div class="point" id="p4" style="left:100%"></div>
 
-<div class="card header">⏳ Загрузка...</div>
-<div class="card phone">📱 Телефон...</div>
+    <div class="label" style="left:0%">Китай</div>
+    <div class="label" style="left:33%">В пути</div>
+    <div class="label" style="left:66%">Офис</div>
+    <div class="label" style="left:100%">Выдано</div>
 
-<div class="code-box">
-Ваш клиентский код<br>
-<div class="code">---</div>
-</div>
-
-<div class="warehouse">
-<div id="warehouseText">⏳ Загрузка...</div>
-<button class="copy-btn" onclick="copyAddress()">📋 Скопировать</button>
-</div>
-
-<div class="card bonus"></div>
-<div class="card total-bonus"></div>
-
-<div id="levelBox" class="level-box">⏳ Уровень...</div>
+    <img id="car" class="car" src="https://cdn-icons-png.flaticon.com/512/741/741407.png">
 
 </div>
-
-<div id="parcels" class="page">
-
-<div class="card">
-    <h3>📦 Мои посылки</h3>
-    <div id="parcelList">Загрузка...</div>
-</div>
-
-</div>
-
 </div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
+// ====== СТАТУС (меняешь только тут) ======
+let status = "Китай"; // Китай / В пути / Офис / Выдано
 
-function showPage(id){
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+// ====== КАРТА СТАТУСОВ ======
+const map = {
+    "Китай": {pos: 0, color:"#e74c3c"},
+    "В пути": {pos: 33, color:"#3498db"},
+    "Офис": {pos: 66, color:"#2ecc71"},
+    "Выдано": {pos: 100, color:"#f39c12"}
+};
+
+// если статус неправильный
+if(!map[status]){
+    status = "Китай";
 }
 
-function getTG(){
-    try{
-        if(window.Telegram && Telegram.WebApp){
-            Telegram.WebApp.ready();
-            return Telegram.WebApp.initDataUnsafe?.user?.id;
-        }
-    }catch(e){}
-    return new URLSearchParams(location.search).get("tg_id");
+const data = map[status];
+
+// текст
+document.getElementById("statusText").innerText = "Статус: " + status;
+
+// прогресс линия
+const progress = document.getElementById("progress");
+progress.style.width = data.pos + "%";
+progress.style.background = data.color;
+
+// машина
+const car = document.getElementById("car");
+car.style.left = `calc(${data.pos}% - 20px)`;
+
+// точки
+function setPoint(id, color, active){
+    const el = document.getElementById(id);
+    el.style.background = color;
+    el.style.transform = active ? "scale(1.3)" : "scale(1)";
 }
 
-function copyAddress(){
-    navigator.clipboard.writeText(document.getElementById("warehouseText").innerText);
-    alert("Скопировано");
-}
-
-function loadClient(){
-
-const tg_id = getTG();
-if(!tg_id) return;
-
-/* PROFILE */
-fetch(API_URL + "?action=profile&tg_id=" + tg_id)
-.then(r => r.json())
-.then(data => {
-
-document.querySelector(".header").innerHTML = "👤 Имя: " + data.name;
-document.querySelector(".phone").innerHTML = "📱 Телефон: " + data.phone;
-document.querySelector(".bonus").innerHTML = "💰 Бонус: " + data.balance;
-document.querySelector(".total-bonus").innerHTML = "💎 Общий бонус: " + data.total_balance;
-document.querySelector(".code").innerText = data.client_code;
-
-document.getElementById("warehouseText").innerText =
-"📦 Адрес склада:\n" + data.address_warehouse;
-
-let level="🥉 Бронза", cls="newbie";
-if(data.total_balance>=1000){level="💎 VIP";cls="vip";}
-else if(data.total_balance>=800){level="🥇 Золото";cls="gold";}
-else if(data.total_balance>=600){level="🥈 Серебро";cls="silver";}
-
-document.getElementById("levelBox").className="level-box "+cls;
-document.getElementById("levelBox").innerText="🏆 "+level;
-});
-
-/* PARCELS */
-fetch(API_URL + "?action=all&tg_id=" + tg_id)
-.then(r => r.json())
-.then(p => {
-
-let all=[];
-
-if(Array.isArray(p.way)){
-p.way.forEach(i=>{
-all.push({
-track:i.track,
-status:i.status,
-price:i.price,
-send:i.date_sent
-});
-});
-}
-
-let html="";
-
-all.forEach(item=>{
-
-let status = (item.status || "").toString().toLowerCase();
-
-if(status.includes("китай")) status="china";
-else if(status.includes("в пути") || status.includes("way")) status="way";
-else if(status.includes("офис")) status="office";
-else if(status.includes("выдан")) status="issued";
-
-let pos="5%";
-let d=["","","",""];
-
-switch(status){
-    case "china":
-        pos="5%"; d[0]="active"; break;
-    case "way":
-        pos="35%"; d[1]="active"; break;
-    case "office":
-        pos="65%"; d[2]="active"; break;
-    case "issued":
-        pos="90%"; d[3]="active"; break;
-}
-
-html+=`
-<div class="track-box">
-
-<div class="track-title">📦 ${item.track}</div>
-
-<div class="road-line">
-
-<div class="truck" style="left:${pos}">🚚</div>
-<div class="line"></div>
-
-<div class="dot ${d[0]} d1"></div>
-<div class="dot ${d[1]} d2"></div>
-<div class="dot ${d[2]} d3"></div>
-<div class="dot ${d[3]} d4"></div>
-
-<div class="label2" style="left:5%">Китай</div>
-<div class="label2" style="left:35%">В пути</div>
-<div class="label2" style="left:65%">Офис</div>
-<div class="label2" style="left:90%">Выдано</div>
-
-</div>
-
-📊 ${item.status}<br>
-💰 ${item.price} сом<br>
-📅 ${item.send}
-</div>
-`;
-});
-
-document.getElementById("parcelList").innerHTML=html;
-
-});
-}
-
-window.onload=loadClient;
+setPoint("p1", map["Китай"].color, status === "Китай");
+setPoint("p2", map["В пути"].color, status === "В пути");
+setPoint("p3", map["Офис"].color, status === "Офис");
+setPoint("p4", map["Выдано"].color, status === "Выдано");
 
 </script>
 
