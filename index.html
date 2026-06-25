@@ -149,8 +149,37 @@ body{
 <div class="card bonus">💰 Бонус...</div>
 <div class="card total-bonus">💎 Общий бонус...</div>
 
-<div id="levelBox" class="level-box">⏳ Уровень...</div>
+<div class="card">
+    <h3>📊 Статистика посылок</h3>
 
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+
+        <div style="background:#3498db;color:#fff;padding:15px;border-radius:12px;text-align:center;">
+            🇨🇳<br>
+            <b id="countChina">0</b><br>
+            Китай
+        </div>
+
+        <div style="background:#f39c12;color:#fff;padding:15px;border-radius:12px;text-align:center;">
+            🚚<br>
+            <b id="countWay">0</b><br>
+            В пути
+        </div>
+
+        <div style="background:#2ecc71;color:#fff;padding:15px;border-radius:12px;text-align:center;">
+            🏢<br>
+            <b id="countOffice">0</b><br>
+            В офисе
+        </div>
+
+        <div style="background:#9b59b6;color:#fff;padding:15px;border-radius:12px;text-align:center;">
+            📦<br>
+            <b id="countAll">0</b><br>
+            Всего
+        </div>
+
+    </div>
+</div>
 </div>
 
 <!-- PARCELS -->
@@ -297,10 +326,15 @@ ${data.address_warehouse || "нет данных"}`;
             });
         }
 
-        let filtered = all.filter(i => {
-            if(currentFilter === "all") return true;
-            return i.status === currentFilter;
-        });
+       // Статистика
+const chinaCount = all.filter(i => i.status === "china").length;
+const wayCount = all.filter(i => i.status === "way").length;
+const officeCount = all.filter(i => i.status === "office").length;
+
+document.getElementById("countChina").innerText = chinaCount;
+document.getElementById("countWay").innerText = wayCount;
+document.getElementById("countOffice").innerText = officeCount;
+document.getElementById("countAll").innerText = all.length;
 
         let html = "";
 
