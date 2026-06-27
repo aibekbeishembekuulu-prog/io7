@@ -9,86 +9,112 @@
 
 <style>
 body{
-    font-family: Arial;
-    background:#eef1f6;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+    background: linear-gradient(180deg,#f5f7fb,#eef1f6);
     margin:0;
+    color:#1f2937;
 }
 
+/* LOGO */
 .logo{
-    width:120px;
+    width:110px;
     display:block;
-    margin:15px auto 5px auto;
+    margin:15px auto 8px auto;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
 
+/* TOPBAR */
 .topbar{
-    background:#fff;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
     padding:10px;
     display:flex;
     gap:8px;
     justify-content:center;
     flex-wrap:wrap;
-    border-bottom:3px solid #e74c3c;
     position:sticky;
     top:0;
     z-index:10;
+    border-bottom:1px solid rgba(0,0,0,0.05);
 }
 
 .topbar button{
-    background:#e74c3c;
+    background: linear-gradient(135deg,#e74c3c,#ff6b6b);
     color:#fff;
     border:none;
-    padding:8px 10px;
-    border-radius:10px;
-    font-weight:bold;
+    padding:10px 14px;
+    border-radius:12px;
+    font-weight:600;
+    font-size:13px;
+    box-shadow:0 5px 12px rgba(231,76,60,0.25);
 }
 
+/* CONTAINER */
 .container{
-    max-width:500px;
+    max-width:520px;
     margin:auto;
     padding:15px;
 }
 
+/* CARD */
 .card{
     background:#fff;
     padding:15px;
-    border-radius:15px;
+    border-radius:18px;
     margin-bottom:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    border:1px solid rgba(0,0,0,0.04);
+    transition:0.2s;
 }
 
+.card:active{
+    transform:scale(0.99);
+}
+
+/* CODE */
 .code-box{
-    background:#e74c3c;
+    background: linear-gradient(135deg,#e74c3c,#ff7675);
     color:#fff;
-    padding:15px;
-    border-radius:15px;
+    padding:18px;
+    border-radius:18px;
     text-align:center;
     margin-bottom:15px;
+    box-shadow:0 10px 25px rgba(231,76,60,0.25);
 }
 
-.code{font-size:22px;font-weight:bold;}
+.code{
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:2px;
+}
 
+/* WAREHOUSE */
 .warehouse{
-    background:#fff;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(10px);
     padding:15px;
-    border-radius:15px;
+    border-radius:18px;
     border-left:5px solid #e74c3c;
     margin-bottom:15px;
-    white-space:pre-line;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
 }
 
+/* BUTTON */
 .copy-btn{
-    margin-top:10px;
-    background:#2ecc71;
+    margin-top:12px;
+    background: linear-gradient(135deg,#2ecc71,#27ae60);
     color:#fff;
     border:none;
-    padding:10px;
-    border-radius:10px;
+    padding:12px;
+    border-radius:12px;
     width:100%;
-    font-weight:bold;
+    font-weight:700;
 }
 
+/* SUCCESS */
 .success{
-    background:#2ecc71;
+    background: linear-gradient(135deg,#2ecc71,#27ae60);
     color:#fff;
     padding:12px;
     border-radius:12px;
@@ -96,13 +122,15 @@ body{
     display:none;
 }
 
+/* LEVEL */
 .level-box{
-    padding:15px;
-    border-radius:15px;
+    padding:16px;
+    border-radius:18px;
     color:#fff;
-    font-weight:bold;
+    font-weight:700;
     text-align:center;
     margin-bottom:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
 .vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
@@ -110,8 +138,15 @@ body{
 .silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
 .newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
 
+/* PAGE */
 .page{display:none;}
 .page.active{display:block;}
+
+h2{
+    font-size:18px;
+    text-align:center;
+    margin:10px 0 15px;
+}
 </style>
 </head>
 
@@ -121,7 +156,7 @@ body{
 
 <div class="topbar">
     <button onclick="showPage('home')">Главная</button>
-    <button onclick="showPage('parcels')">Мои посылки</button>
+    <button onclick="showPage('parcels')">Посылки</button>
 </div>
 
 <div class="container">
@@ -177,7 +212,6 @@ body{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
-let lastHash = "";
 let currentFilter = "all";
 
 function showPage(id){
@@ -211,17 +245,10 @@ function getStatus(i){
 
     let status = (i.status || "").toLowerCase().trim();
 
-    if(status === "китай")
-        return {key:"china", text:"🇨🇳 На складе в Китае"};
-
-    if(status === "в путь" || status === "в пути")
-        return {key:"way", text:"🚚 В пути"};
-
-    if(status === "офис")
-        return {key:"office", text:"🏢 В офисе"};
-
-    if(status === "выдано")
-        return {key:"issued", text:"✅ Выдано"};
+    if(status === "китай") return {key:"china", text:"🇨🇳 Китай"};
+    if(status === "в путь" || status === "в пути") return {key:"way", text:"🚚 В пути"};
+    if(status === "офис") return {key:"office", text:"🏢 Офис"};
+    if(status === "выдано") return {key:"issued", text:"✅ Выдано"};
 
     return {key:"other", text:"⏳ Обработка"};
 }
@@ -237,10 +264,10 @@ function loadClient(){
 
         if(!data || data.status !== "ok") return;
 
-        document.querySelector(".header").innerHTML = "👤 Имя: " + (data.name || "-");
-        document.querySelector(".phone").innerHTML = "📱 Телефон: " + (data.phone || "нет данных");
+        document.querySelector(".header").innerHTML = "👤 " + (data.name || "-");
+        document.querySelector(".phone").innerHTML = "📱 " + (data.phone || "-");
         document.querySelector(".bonus").innerHTML = "💰 Бонус: " + (data.balance || 0) + " сом";
-        document.querySelector(".total-bonus").innerHTML = "💎 Общий бонус: " + (data.total_balance || 0) + " сом";
+        document.querySelector(".total-bonus").innerHTML = "💎 Всего: " + (data.total_balance || 0) + " сом";
         document.querySelector(".code").innerText = data.client_code || "---";
 
         document.getElementById("warehouseText").innerText =
@@ -250,18 +277,14 @@ ${data.address_warehouse || "нет данных"}`;
         let total = Number(data.total_balance || 0);
 
         let level = "🥉 Бронза";
-        let levelClass = "newbie";
+        let cls = "newbie";
 
-        if(total >= 1000){
-            level = "💎 VIP 👑"; levelClass = "vip";
-        } else if(total >= 800){
-            level = "🥇 Золото"; levelClass = "gold";
-        } else if(total >= 600){
-            level = "🥈 Серебро"; levelClass = "silver";
-        }
+        if(total >= 1000){ level="💎 VIP"; cls="vip"; }
+        else if(total >= 800){ level="🥇 Золото"; cls="gold"; }
+        else if(total >= 600){ level="🥈 Серебро"; cls="silver"; }
 
-        document.getElementById("levelBox").className = "level-box " + levelClass;
-        document.getElementById("levelBox").innerHTML = "🏆 Уровень: " + level;
+        document.getElementById("levelBox").className = "level-box " + cls;
+        document.getElementById("levelBox").innerHTML = "🏆 " + level;
     });
 
     fetch(API_URL + "?action=all&tg_id=" + tg_id)
@@ -273,12 +296,12 @@ ${data.address_warehouse || "нет данных"}`;
         if(Array.isArray(p.office)){
             p.office.forEach(i => {
                 all.push({
-                    track: i.track,
-                    status: "office",
-                    statusText: "🏢 В офисе",
-                    price: i.price,
-                    send_date: i.date_sent,
-                    expected: i.date_arrived
+                    track:i.track,
+                    status:"office",
+                    statusText:"🏢 Офис",
+                    price:i.price,
+                    send_date:i.date_sent,
+                    expected:i.date_arrived
                 });
             });
         }
@@ -287,34 +310,30 @@ ${data.address_warehouse || "нет данных"}`;
             p.way.forEach(i => {
                 let st = getStatus(i);
                 all.push({
-                    track: i.track,
-                    status: st.key,
-                    statusText: st.text,
-                    price: i.price,
-                    send_date: i.date_sent,
-                    expected: i.date_arrived
+                    track:i.track,
+                    status:st.key,
+                    statusText:st.text,
+                    price:i.price,
+                    send_date:i.date_sent,
+                    expected:i.date_arrived
                 });
             });
         }
 
-        let filtered = all.filter(i => {
-            if(currentFilter === "all") return true;
-            return i.status === currentFilter;
-        });
+        let filtered = all.filter(i => currentFilter==="all" ? true : i.status===currentFilter);
 
         let html = "";
 
         if(filtered.length === 0){
             html = "<p>Нет посылок</p>";
         } else {
-            filtered.forEach(item => {
+            filtered.forEach(i=>{
                 html += `
                 <div class="card">
-                    📦 Трек: ${item.track}<br>
-                    📊 Статус: ${item.statusText}<br>
-                    💰 Цена: ${item.price || 0} сом<br>
-                    📅 Дата отправки: ${item.send_date || "-"}<br>
-                    ⏳ Ожидаемое прибытие: ${item.expected || "-"}
+                    📦 ${i.track}<br>
+                    📊 ${i.statusText}<br>
+                    💰 ${i.price} сом<br>
+                    📅 ${i.send_date || "-"} → ${i.expected || "-"}
                 </div>`;
             });
         }
@@ -326,5 +345,6 @@ ${data.address_warehouse || "нет данных"}`;
 window.onload = loadClient;
 
 </script>
+
 </body>
 </html>
