@@ -8,110 +8,139 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{
-    font-family: Arial;
-    background:#eef1f6;
-    margin:0;
-}
-
-.logo{
-    width:120px;
-    display:block;
-    margin:15px auto 5px auto;
-}
-
-.topbar{
-    background:#fff;
-    padding:10px;
-    display:flex;
-    gap:8px;
-    justify-content:center;
-    flex-wrap:wrap;
-    border-bottom:3px solid #e74c3c;
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-.topbar button{
-    background:#e74c3c;
-    color:#fff;
-    border:none;
-    padding:8px 10px;
-    border-radius:10px;
-    font-weight:bold;
-}
-
-.container{
-    max-width:500px;
-    margin:auto;
-    padding:15px;
-}
-
-.card{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-.code-box{
-    background:#e74c3c;
-    color:#fff;
-    padding:15px;
-    border-radius:15px;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.code{font-size:22px;font-weight:bold;}
-
-.warehouse{
-    background:#fff;
-    padding:15px;
-    border-radius:15px;
-    border-left:5px solid #e74c3c;
-    margin-bottom:15px;
-    white-space:pre-line;
-}
-
-.copy-btn{
-    margin-top:10px;
-    background:#2ecc71;
-    color:#fff;
-    border:none;
-    padding:10px;
-    border-radius:10px;
-    width:100%;
-    font-weight:bold;
-}
-
-.success{
-    background:#2ecc71;
-    color:#fff;
-    padding:12px;
-    border-radius:12px;
-    margin-bottom:15px;
-    display:none;
-}
-
-.level-box{
-    padding:15px;
-    border-radius:15px;
-    color:#fff;
-    font-weight:bold;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.vip{background:linear-gradient(135deg,#8e44ad,#6c5ce7);}
-.gold{background:linear-gradient(135deg,#f1c40f,#f39c12); color:#000;}
-.silver{background:linear-gradient(135deg,#bdc3c7,#95a5a6); color:#000;}
-.newbie{background:linear-gradient(135deg,#2ecc71,#27ae60);}
-
-.page{display:none;}
-.page.active{display:block;}
+body{  
+    font-family: Arial;  
+    margin:0;  
+    background: linear-gradient(135deg, #f7f1e3, #fffaf0);  
+}  
+  
+/* LOGO */  
+.logo{  
+    width:120px;  
+    display:block;  
+    margin:15px auto 5px auto;  
+}  
+  
+/* TOP BAR */  
+.topbar{  
+    background: #ffffff;  
+    padding:10px;  
+    display:flex;  
+    gap:8px;  
+    justify-content:center;  
+    flex-wrap:wrap;  
+    border-bottom:3px solid #d4af37;  
+    position:sticky;  
+    top:0;  
+    z-index:10;  
+}  
+  
+.topbar button{  
+    background: linear-gradient(135deg, #d4af37, #f5d76e);  
+    color:#2c2c2c;  
+    border:none;  
+    padding:8px 12px;  
+    border-radius:10px;  
+    font-weight:bold;  
+    box-shadow:0 3px 8px rgba(0,0,0,0.15);  
+}  
+  
+/* CONTAINER */  
+.container{  
+    max-width:500px;  
+    margin:auto;  
+    padding:15px;  
+}  
+  
+/* CARDS */  
+.card{  
+    background:#fff;  
+    padding:15px;  
+    border-radius:15px;  
+    margin-bottom:12px;  
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);  
+    border-left:5px solid #d4af37;  
+}  
+  
+/* CODE BOX */  
+.code-box{  
+    background: linear-gradient(135deg, #d4af37, #f5d76e);  
+    color:#2c2c2c;  
+    padding:15px;  
+    border-radius:15px;  
+    text-align:center;  
+    margin-bottom:15px;  
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);  
+}  
+  
+.code{  
+    font-size:22px;  
+    font-weight:bold;  
+}  
+  
+/* WAREHOUSE */  
+.warehouse{  
+    background:#fff;  
+    padding:15px;  
+    border-radius:15px;  
+    border-left:5px solid #d4af37;  
+    margin-bottom:15px;  
+    white-space:pre-line;  
+}  
+  
+/* BUTTON */  
+.copy-btn{  
+    margin-top:10px;  
+    background: linear-gradient(135deg, #d4af37, #f5d76e);  
+    color:#2c2c2c;  
+    border:none;  
+    padding:10px;  
+    border-radius:10px;  
+    width:100%;  
+    font-weight:bold;  
+}  
+  
+/* SUCCESS */  
+.success{  
+    background:#27ae60;  
+    color:#fff;  
+    padding:12px;  
+    border-radius:12px;  
+    margin-bottom:15px;  
+    display:none;  
+}  
+  
+/* LEVEL BOX */  
+.level-box{  
+    padding:15px;  
+    border-radius:15px;  
+    color:#2c2c2c;  
+    font-weight:bold;  
+    text-align:center;  
+    margin-bottom:15px;  
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);  
+}  
+  
+.vip{  
+    background: linear-gradient(135deg,#fff3b0,#d4af37);  
+}  
+  
+.gold{  
+    background: linear-gradient(135deg,#f9e79f,#d4af37);  
+}  
+  
+.silver{  
+    background: linear-gradient(135deg,#f0e6c8,#c0c0c0);  
+}  
+  
+.newbie{  
+    background: linear-gradient(135deg,#f7f1e3,#e0c97f);  
+}  
+  
+/* PAGES */  
+.page{display:none;}  
+.page.active{display:block;}  
+</style>
 </style>
 </head>
 
