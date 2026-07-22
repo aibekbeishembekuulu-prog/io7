@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="ru">
-<head><meta charset="UTF-8"><meta name="viewport"
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <title>Личный кабинет Tez Kargo</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>
@@ -22,7 +21,7 @@ body{
 
 
 /* =========================
-   LOGO
+   ЛОГО
 ========================= */
 
 .logo{
@@ -37,7 +36,7 @@ body{
 ========================= */
 
 .topbar{
-    background:#fff;
+    background:#ffffff;
     padding:10px 6px;
     display:flex;
     gap:6px;
@@ -45,7 +44,8 @@ body{
     border-bottom:3px solid #d4af37;
     position:sticky;
     top:0;
-    z-index:10;
+    z-index:100;
+    width:100%;
 }
 
 .topbar button{
@@ -68,7 +68,7 @@ body{
 
 
 /* =========================
-   CONTAINER
+   КОНТЕЙНЕР
 ========================= */
 
 .container{
@@ -96,7 +96,7 @@ body{
 ========================= */
 
 .card{
-    background:#fff;
+    background:#ffffff;
     padding:15px;
     border-radius:15px;
     margin-bottom:12px;
@@ -131,7 +131,7 @@ body{
 ========================= */
 
 .warehouse{
-    background:#fff;
+    background:#ffffff;
     padding:15px;
     border-radius:15px;
     border-left:5px solid #d4af37;
@@ -146,12 +146,12 @@ body{
 
 .copy-btn,
 .delivery-btn,
-.route-btn{
+.route-btn,
+.confirm-pickup-btn{
 
     margin-top:10px;
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #d4af37,
         #f5d76e
@@ -171,33 +171,59 @@ body{
 
     cursor:pointer;
 
+    font-size:14px;
+
 }
 
 
 .delivery-btn{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #27ae60,
         #58d68d
     );
 
-    color:#fff;
+    color:#ffffff;
 
 }
 
 
 .route-btn{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #3498db,
         #85c1e9
     );
 
-    color:#fff;
+    color:#ffffff;
+
+}
+
+
+.confirm-pickup-btn{
+
+    background:linear-gradient(
+        135deg,
+        #27ae60,
+        #58d68d
+    );
+
+    color:#ffffff;
+
+    font-size:16px;
+
+    padding:15px;
+
+}
+
+
+.confirm-pickup-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
 
 }
 
@@ -210,7 +236,7 @@ body{
 
     background:#27ae60;
 
-    color:#fff;
+    color:#ffffff;
 
     padding:12px;
 
@@ -219,6 +245,10 @@ body{
     margin-bottom:15px;
 
     display:none;
+
+    text-align:center;
+
+    font-weight:bold;
 
 }
 
@@ -250,8 +280,7 @@ body{
 
 .vip{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #fff3b0,
         #d4af37
@@ -262,8 +291,7 @@ body{
 
 .gold{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #f9e79f,
         #d4af37
@@ -274,8 +302,7 @@ body{
 
 .silver{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #f0e6c8,
         #c0c0c0
@@ -286,8 +313,7 @@ body{
 
 .newbie{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #f7f1e3,
         #e0c97f
@@ -308,8 +334,7 @@ body{
 
     overflow-x:auto;
 
-    padding:
-    5px 0 10px;
+    padding:5px 0 10px;
 
 }
 
@@ -320,12 +345,11 @@ body{
 
     border:none;
 
-    padding:
-    9px 12px;
+    padding:9px 12px;
 
     border-radius:10px;
 
-    background:#fff;
+    background:#ffffff;
 
     font-weight:bold;
 
@@ -347,7 +371,7 @@ body{
 
 .parcel{
 
-    background:#fff;
+    background:#ffffff;
 
     padding:15px;
 
@@ -359,8 +383,7 @@ body{
     0 5px 15px
     rgba(0,0,0,.08);
 
-    border-left:
-    5px solid #d4af37;
+    border-left:5px solid #d4af37;
 
 }
 
@@ -378,8 +401,7 @@ body{
 
 .ready-box{
 
-    background:
-    linear-gradient(
+    background:linear-gradient(
         135deg,
         #d4af37,
         #f5d76e
@@ -426,7 +448,7 @@ body{
 
 .delivery-info{
 
-    background:#fff;
+    background:#ffffff;
 
     padding:15px;
 
@@ -434,8 +456,41 @@ body{
 
     margin-bottom:15px;
 
-    border-left:
-    5px solid #27ae60;
+    border-left:5px solid #27ae60;
+
+}
+
+
+/* =========================
+   ПОДТВЕРЖДЕНИЕ
+========================= */
+
+.confirm-box{
+
+    background:#ffffff;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    margin-bottom:15px;
+
+    border-left:5px solid #27ae60;
+
+    box-shadow:
+    0 6px 18px
+    rgba(0,0,0,.08);
+
+}
+
+
+.confirm-title{
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    margin-bottom:8px;
 
 }
 
@@ -469,38 +524,58 @@ body{
 
 }
 
+
+/* =========================
+   МОБИЛЬНЫЙ ЭКРАН
+========================= */
+
+@media(max-width:380px){
+
+    .topbar button{
+
+        font-size:10px;
+
+        padding:9px 3px;
+
+    }
+
+}
+
 </style></head><body><!-- =========================
      ЛОГО
 ========================= --><img
 src="logo.jpg"
 class="logo"
+alt="Tez Kargo"
 
 «»
 
 <!-- =========================
      ГЛАВНОЕ МЕНЮ
 ========================= --><div class="topbar"><button
+type="button"
 onclick="showPage('home')"
+>
+    🏠 Главная
+</button>
 
-«»
 
-🏠 Главная
-
-</button><button
+<button
+type="button"
 onclick="showPage('parcels')"
+>
+    📦 Мои посылки
+</button>
 
-«»
 
-📦 Мои посылки
-
-</button><button
+<button
+type="button"
 onclick="showPage('pickup')"
+>
+    🚚 Еду за посылками
+</button>
 
-«»
-
-🚚 Еду за посылками
-
-</button></div><div class="container"><!-- =========================
+</div><div class="container"><!-- =========================
      ГЛАВНАЯ
 ========================= --><div
 id="home"
@@ -513,111 +588,123 @@ class="success"
 >
 </div><div
 class="card header"
->⏳ Загрузка...
-
+>
+⏳ Загрузка...
 </div><div
 class="card phone"
->📱 Телефон...
-
+>
+📱 Телефон...
 </div><div
 class="code-box"
 >Ваш клиентский код
 
 <div
 class="code"
->---
-
+>
+---
 </div></div><div
 class="warehouse"
 ><div
 id="warehouseText"
->⏳ Загрузка...
-
+>
+⏳ Загрузка...
 </div><button
+type="button"
 class="copy-btn"
 onclick="copyAddress()"
 
 «»
 
 📋 Скопировать адрес склада
+</button>
 
-</button></div><div
+</div><div
 class="card bonus"
->💰 Бонус...
-
+>
+💰 Бонус...
 </div><div
 class="card total-bonus"
->💎 Общий бонус...
-
+>
+💎 Общий бонус...
 </div><div
 id="levelBox"
-class="level-box"
->⏳ Уровень...
-
+class="level-box newbie"
+>
+⏳ Уровень...
 </div></div><!-- =========================
      МОИ ПОСЫЛКИ
 ========================= --><div
 id="parcels"
 class="page"
-><h2>📦 Мои посылки
-
+><h2>
+📦 Мои посылки
 </h2><div
 class="filterbar"
 ><button
+type="button"
 class="active"
 onclick="setFilter('all',this)"
 
 «»
 
 Все
+</button>
 
-</button><button
+<button
+type="button"
 onclick="setFilter('china',this)"
 
 «»
 
 🇨🇳 Китай
+</button>
 
-</button><button
+<button
+type="button"
 onclick="setFilter('way',this)"
 
 «»
 
 🚚 В пути
+</button>
 
-</button><button
+<button
+type="button"
 onclick="setFilter('office',this)"
 
 «»
 
 🏢 Офис
+</button>
 
-</button><button
+<button
+type="button"
 onclick="setFilter('issued',this)"
 
 «»
 
 ✅ Выдано
+</button>
 
-</button></div><div
+</div><div
 id="parcelList"
 ><div
 class="loading"
->⏳ Загрузка посылок...
-
+>
+⏳ Загрузка посылок...
 </div></div></div><!-- =========================
      ЕДУ ЗА ПОСЫЛКАМИ
 ========================= --><div
 id="pickup"
 class="page"
-><h2>🚚 Еду за посылками
-
+><h2>
+🚚 Еду за посылками
 </h2><div
 id="pickupContent"
 ><div
 class="loading"
->⏳ Проверяем ваши посылки...
-
+>
+⏳ Проверяем ваши посылки...
 </div></div></div></div><script>
 
 
@@ -626,15 +713,14 @@ class="loading"
 ========================= */
 
 const API_URL =
-
 "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
 
 let currentFilter = "all";
 
-
 let allParcels = [];
 
+let pickupRequestSent = false;
 
 
 /* =========================
@@ -643,38 +729,35 @@ let allParcels = [];
 
 function showPage(id){
 
+    document
+    .querySelectorAll(".page")
+    .forEach(function(page){
 
-document
+        page.classList.remove("active");
 
-.querySelectorAll(".page")
-
-.forEach(
-
-p =>
-
-p.classList.remove("active")
-
-);
+    });
 
 
-document
-
-.getElementById(id)
-
-.classList.add("active");
+    const selectedPage =
+    document.getElementById(id);
 
 
-window.scrollTo({
+    if(selectedPage){
 
-top:0,
+        selectedPage.classList.add("active");
 
-behavior:"smooth"
+    }
 
-});
 
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
 
 }
-
 
 
 /* =========================
@@ -683,67 +766,45 @@ behavior:"smooth"
 
 function getTG(){
 
+    try{
 
-try{
+        if(
+            window.Telegram &&
+            Telegram.WebApp
+        ){
 
-
-if(
-
-window.Telegram &&
-
-Telegram.WebApp
-
-){
+            Telegram.WebApp.ready();
 
 
-Telegram.WebApp.ready();
+            const user =
+            Telegram.WebApp
+            .initDataUnsafe
+            ?.user;
 
 
-const user =
+            if(
+                user &&
+                user.id
+            ){
 
-Telegram.WebApp
+                return user.id.toString();
 
-.initDataUnsafe
+            }
 
-?.user;
+        }
 
+    }catch(e){
 
-if(
+        console.log(e);
 
-user &&
-
-user.id
-
-){
-
-
-return user.id.toString();
+    }
 
 
-}
-
+    return new URLSearchParams(
+        window.location.search
+    ).get("tg_id");
 
 }
-
-
-}catch(e){
-
-
-console.log(e);
-
-
-}
-
-
-return new URLSearchParams(
-
-window.location.search
-
-).get("tg_id");
-
-
-}
-
 
 
 /* =========================
@@ -752,63 +813,35 @@ window.location.search
 
 function copyAddress(){
 
-
-const text =
-
-document
-
-.getElementById(
-
-"warehouseText"
-
-)
-
-.innerText;
+    const text =
+    document
+    .getElementById("warehouseText")
+    .innerText;
 
 
-if(
+    if(
+        navigator.clipboard
+    ){
 
-navigator.clipboard
+        navigator.clipboard
+        .writeText(text)
+        .then(function(){
 
-){
+            showSuccess(
+                "✅ Адрес успешно скопирован"
+            );
 
+        });
 
-navigator.clipboard
+    }else{
 
-.writeText(text)
+        alert(
+            "Скопируйте адрес вручную"
+        );
 
-.then(
-
-() => {
-
-
-showSuccess(
-
-"✅ Адрес успешно скопирован"
-
-);
-
+    }
 
 }
-
-);
-
-
-}else{
-
-
-alert(
-
-"Скопируйте адрес вручную"
-
-);
-
-
-}
-
-
-}
-
 
 
 /* =========================
@@ -817,411 +850,247 @@ alert(
 
 function showSuccess(text){
 
-
-const box =
-
-document
-
-.getElementById(
-
-"success"
-
-);
+    const box =
+    document
+    .getElementById("success");
 
 
-box.innerText = text;
+    box.innerText = text;
 
 
-box.style.display =
-
-"block";
-
-
-setTimeout(
-
-() => {
+    box.style.display =
+    "block";
 
 
-box.style.display =
+    setTimeout(function(){
 
-"none";
+        box.style.display =
+        "none";
 
-
-},
-
-3000
-
-);
-
+    },4000);
 
 }
 
 
-
 /* =========================
-   СТАТУС
+   СТАТУС ПОСЫЛКИ
 ========================= */
 
 function getStatus(i){
 
-
-let status =
-
-(i.status || "")
-
-.toLowerCase()
-
-.trim();
+    let status =
+    (i.status || "")
+    .toLowerCase()
+    .trim();
 
 
-if(
+    if(
+        status === "китай"
+    ){
 
-status === "китай"
+        return {
 
-){
+            key:"china",
 
+            text:"🇨🇳 На складе в Китае"
 
-return {
+        };
 
-key:"china",
-
-text:"🇨🇳 На складе в Китае"
-
-};
-
-
-}
+    }
 
 
-if(
+    if(
+        status === "в путь" ||
+        status === "в пути"
+    ){
 
-status === "в путь" ||
+        return {
 
-status === "в пути"
+            key:"way",
 
-){
+            text:"🚚 В пути"
 
+        };
 
-return {
-
-key:"way",
-
-text:"🚚 В пути"
-
-};
+    }
 
 
-}
+    if(
+        status === "офис"
+    ){
+
+        return {
+
+            key:"office",
+
+            text:"🏢 В офисе — можно забрать"
+
+        };
+
+    }
 
 
-if(
+    if(
+        status === "выдано"
+    ){
 
-status === "офис"
+        return {
 
-){
+            key:"issued",
 
+            text:"✅ Выдано"
 
-return {
+        };
 
-key:"office",
-
-text:"🏢 В офисе — можно забрать"
-
-};
-
-
-}
+    }
 
 
-if(
+    return {
 
-status === "выдано"
+        key:"other",
 
-){
+        text:"⏳ Обработка"
 
-
-return {
-
-key:"issued",
-
-text:"✅ Выдано"
-
-};
-
+    };
 
 }
-
-
-return {
-
-
-key:"other",
-
-
-text:"⏳ Обработка"
-
-
-};
-
-
-}
-
 
 
 /* =========================
    ФИЛЬТР
 ========================= */
 
-function setFilter(
+function setFilter(type,button){
 
-type,
-
-button
-
-){
+    currentFilter =
+    type;
 
 
-currentFilter = type;
+    document
+    .querySelectorAll(
+        ".filterbar button"
+    )
+    .forEach(function(btn){
+
+        btn.classList.remove(
+            "active"
+        );
+
+    });
 
 
-document
+    if(button){
 
-.querySelectorAll(
+        button.classList.add(
+            "active"
+        );
 
-".filterbar button"
-
-)
-
-.forEach(
-
-btn => {
+    }
 
 
-btn.classList.remove(
-
-"active"
-
-);
-
+    renderParcels();
 
 }
-
-);
-
-
-if(button){
-
-
-button.classList.add(
-
-"active"
-
-);
-
-
-}
-
-
-renderParcels();
-
-
-}
-
 
 
 /* =========================
-   ОТОБРАЖЕНИЕ ПОСЫЛОК
+   ПОКАЗ ПОСЫЛОК
 ========================= */
 
 function renderParcels(){
 
+    let filtered =
+    allParcels.filter(function(item){
 
-let filtered =
+        if(
+            currentFilter ===
+            "all"
+        ){
 
-allParcels
+            return true;
 
-.filter(
-
-item => {
-
-
-if(
-
-currentFilter ===
-
-"all"
-
-){
+        }
 
 
-return true;
+        return (
+            item.status ===
+            currentFilter
+        );
 
+    });
+
+
+    let html = "";
+
+
+    if(
+        filtered.length === 0
+    ){
+
+        html = `
+
+        <div class="card empty">
+
+            📦 Посылок нет
+
+        </div>
+
+        `;
+
+    }else{
+
+
+        filtered.forEach(function(item){
+
+            html += `
+
+            <div class="parcel">
+
+                📦
+                <b>Трек:</b>
+                ${item.track || "-"}
+
+                <br><br>
+
+                📊
+                <b>Статус:</b>
+                ${item.statusText || "-"}
+
+                <br><br>
+
+                💰
+                <b>Цена:</b>
+                ${item.price || 0} сом
+
+                <br><br>
+
+                📅
+                <b>Дата отправки:</b>
+                ${item.send_date || "-"}
+
+                <br><br>
+
+                ⏳
+                <b>Ожидаемое прибытие:</b>
+                ${item.expected || "-"}
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+
+    document
+    .getElementById(
+        "parcelList"
+    )
+    .innerHTML =
+    html;
 
 }
-
-
-return (
-
-item.status ===
-
-currentFilter
-
-);
-
-
-}
-
-);
-
-
-let html = "";
-
-
-if(
-
-filtered.length === 0
-
-){
-
-
-html = `
-
-
-<div
-
-class="card empty"
-
->
-
-
-📦 Посылок нет
-
-
-</div>
-
-
-`;
-
-
-}else{
-
-
-filtered.forEach(
-
-item => {
-
-
-html += `
-
-
-<div
-
-class="parcel"
-
->
-
-
-📦
-
-<b>
-
-Трек:
-
-</b>
-
-
-${item.track || "-"}
-
-
-<br><br>
-
-
-📊
-
-<b>
-
-Статус:
-
-</b>
-
-
-${item.statusText || "-"}
-
-
-<br><br>
-
-
-💰
-
-<b>
-
-Цена:
-
-</b>
-
-
-${item.price || 0}
-
-сом
-
-
-<br><br>
-
-
-📅
-
-<b>
-
-Дата отправки:
-
-</b>
-
-
-${item.send_date || "-"}
-
-
-<br><br>
-
-
-⏳
-
-<b>
-
-Ожидаемое прибытие:
-
-</b>
-
-
-${item.expected || "-"}
-
-
-</div>
-
-
-`;
-
-
-}
-
-);
-
-
-}
-
-
-document
-
-.getElementById(
-
-"parcelList"
-
-)
-
-.innerHTML = html;
-
-
-}
-
 
 
 /* =========================
@@ -1230,979 +1099,443 @@ document
 
 function renderPickup(){
 
+    const officeParcels =
+    allParcels.filter(function(item){
 
-const officeParcels =
+        return item.status ===
+        "office";
 
-allParcels
-
-.filter(
-
-item =>
-
-item.status ===
-
-"office"
-
-);
+    });
 
 
-let total = 0;
+    let total = 0;
 
 
-officeParcels
+    officeParcels.forEach(function(item){
 
-.forEach(
+        total += Number(
+            item.price || 0
+        );
 
-item => {
+    });
 
 
-total +=
+    let html = "";
 
-Number(
 
-item.price || 0
+    /*
+     * НЕТ ГОТОВЫХ ПОСЫЛОК
+     */
 
-);
+    if(
+        officeParcels.length === 0
+    ){
 
+        html = `
+
+        <div class="card empty">
+
+            📦 У вас пока нет посылок,
+            готовых к выдаче.
+
+            <br><br>
+
+            Когда ваша посылка
+            поступит в наш офис,
+            она появится здесь.
+
+        </div>
+
+        `;
+
+    }
+
+
+    /*
+     * ЕСТЬ ГОТОВЫЕ ПОСЫЛКИ
+     */
+
+    else{
+
+
+        html += `
+
+        <div class="ready-box">
+
+            <div>
+                📦 Готово к выдаче
+            </div>
+
+            <div class="ready-number">
+                ${officeParcels.length}
+            </div>
+
+            <div>
+                посылок
+            </div>
+
+            <div class="total-price">
+                💰 ${total} сом
+            </div>
+
+        </div>
+
+        `;
+
+
+        officeParcels.forEach(function(item){
+
+            html += `
+
+            <div class="parcel">
+
+                📦
+                <b>Трек:</b>
+                ${item.track || "-"}
+
+                <br><br>
+
+                🏢
+                <b>Статус:</b>
+                Готово к получению
+
+                <br><br>
+
+                💰
+                <b>К оплате:</b>
+                ${item.price || 0} сом
+
+            </div>
+
+            `;
+
+        });
+
+
+        /*
+         * КНОПКА ПОДТВЕРЖДЕНИЯ
+         */
+
+        if(!pickupRequestSent){
+
+            html += `
+
+            <div class="confirm-box">
+
+                <div class="confirm-title">
+                    🚚 Едете за посылками?
+                </div>
+
+                <p>
+                    Подтвердите, что вы едете
+                    за посылками. Мы подготовим
+                    их к выдаче.
+                </p>
+
+                <button
+                    type="button"
+                    class="confirm-pickup-btn"
+                    onclick="confirmPickup()"
+                >
+                    ✅ Да, я еду за посылками
+                </button>
+
+            </div>
+
+            `;
+
+        }else{
+
+            html += `
+
+            <div class="card">
+
+                <h3>
+                    ✅ Заявка отправлена
+                </h3>
+
+                <p>
+                    Мы получили вашу заявку
+                    и подготовим посылки
+                    к вашему приезду.
+                </p>
+
+            </div>
+
+            `;
+
+        }
+
+    }
+
+
+    /*
+     * ИНФОРМАЦИЯ О ПУНКТЕ
+     */
+
+    html += `
+
+    <div class="delivery-info">
+
+        <h3>
+            📍 Пункт выдачи Tez Kargo
+        </h3>
+
+        <p>
+            🏢 Наш адрес в Токмоке
+        </p>
+
+        <p>
+            🕘 Время работы:
+            10:00–18:00
+        </p>
+
+        <button
+            type="button"
+            class="route-btn"
+            onclick="openRoute()"
+        >
+            📍 Открыть Tez Kargo в 2GIS
+        </button>
+
+        <button
+            type="button"
+            class="delivery-btn"
+            onclick="requestDelivery()"
+        >
+            🚕 Заказать доставку домой
+        </button>
+
+    </div>
+
+    `;
+
+
+    document
+    .getElementById(
+        "pickupContent"
+    )
+    .innerHTML =
+    html;
 
 }
-
-);
-
-
-let html = "";
-
-
-if(
-
-officeParcels.length === 0
-
-){
-
-
-html = `
-
-
-<div
-
-class="card empty"
-
->
-
-
-📦 У вас пока нет посылок,
-
-готовых к выдаче.
-
-
-<br><br>
-
-
-Когда ваша посылка
-
-поступит в наш офис,
-
-она появится здесь.
-
-
-</div>
-
-
-`;
-
-
-}else{
-
-
-html += `
-
-
-<div
-
-class="ready-box"
-
->
-
-
-<div>
-
-📦 Готово к выдаче
-
-</div>
-
-
-<div
-
-class="ready-number"
-
->
-
-${officeParcels.length}
-
-</div>
-
-
-<div>
-
-посылок
-
-</div>
-
-
-<div
-
-class="total-price"
-
->
-
-💰 ${total} сом
-
-</div>
-
-
-</div>
-
-
-`;
-
-
-officeParcels
-
-.forEach(
-
-item => {
-
-
-html += `
-
-
-<div
-
-class="parcel"
-
->
-
-
-📦
-
-<b>
-
-Трек:
-
-</b>
-
-
-${item.track || "-"}
-
-
-<br><br>
-
-
-🏢
-
-<b>
-
-Статус:
-
-</b>
-
-
-Готово к получению
-
-
-<br><br>
-
-
-💰
-
-<b>
-
-К оплате:
-
-</b>
-
-
-${item.price || 0}
-
-сом
-
-
-</div>
-
-
-`;
-
-
-}
-
-);
-
-
-}
-
-
-html += `
-
-
-<div
-
-class="delivery-info"
-
->
-
-
-<h3>
-
-📍 Пункт выдачи Tez Kargo
-
-</h3>
-
-
-<p>
-
-🏢 Наш адрес в Бишкеке
-
-</p>
-
-
-<p>
-
-🕘 Время работы:
-
-10:00–18:00
-
-</p>
-
-
-<button
-
-class="route-btn"
-
-onclick="openRoute()"
-
->
-
-
-📍 Открыть Tez Kargo в 2GIS
-
-
-</button>
-
-
-<button
-
-class="delivery-btn"
-
-onclick="requestDelivery()"
-
->
-
-
-🚕 Заказать доставку домой
-
-
-</button>
-
-
-</div>
-
-
-`;
-
-
-document
-
-.getElementById(
-
-"pickupContent"
-
-)
-
-.innerHTML = html;
-
-
-}
-
 
 
 /* =========================
-   ОТКРЫТЬ 2GIS
+   ПОДТВЕРЖДЕНИЕ:
+   Я ЕДУ ЗА ПОСЫЛКАМИ
 ========================= */
 
-function openRoute(){
+function confirmPickup(){
 
+    if(pickupRequestSent){
 
-window.open(
+        alert(
+            "✅ Вы уже отправили заявку."
+        );
 
-"https://2gis.kg/bishkek/geo/70000001110377570",
+        return;
 
-"_blank"
+    }
 
-);
 
+    const tg_id =
+    getTG();
 
-}
 
+    if(!tg_id){
 
+        alert(
+            "⚠️ Не удалось определить Telegram ID."
+        );
 
-/* =========================
-   ЗАКАЗАТЬ ДОСТАВКУ
-========================= */
+        return;
 
-function requestDelivery(){
+    }
 
 
-const tg_id =
+    const officeParcels =
+    allParcels.filter(function(item){
 
-getTG();
+        return item.status ===
+        "office";
 
+    });
 
-if(!tg_id){
 
+    if(
+        officeParcels.length === 0
+    ){
 
-alert(
+        alert(
+            "📦 У вас нет посылок, готовых к выдаче."
+        );
 
-"Не удалось определить ваш Telegram ID"
+        return;
 
-);
+    }
 
 
-return;
+    let total = 0;
 
 
-}
+    officeParcels.forEach(function(item){
 
+        total += Number(
+            item.price || 0
+        );
 
-const address =
+    });
 
-prompt(
 
-"📍 Напишите ваш адрес для доставки:"
+    /*
+     * ПЕРЕД ОТПРАВКОЙ
+     * ПОЛУЧАЕМ ПРОФИЛЬ
+     */
 
-);
+    fetch(
 
+        API_URL +
 
-if(
+        "?action=profile&tg_id=" +
 
-!address ||
+        encodeURIComponent(
+            tg_id
+        )
 
-address.trim() === ""
+    )
 
-){
 
+    .then(function(response){
 
-return;
+        return response.json();
 
+    })
 
-}
 
+    .then(function(profile){
 
-const url =
+        if(
+            !profile ||
+            profile.status !==
+            "ok"
+        ){
 
-API_URL +
+            alert(
+                "⚠️ Не удалось получить данные клиента."
+            );
 
-"?action=delivery" +
+            return;
 
-"&tg_id=" +
+        }
 
-encodeURIComponent(tg_id) +
 
-"&address=" +
+        /*
+         * ПОДТВЕРЖДЕНИЕ
+         */
 
-encodeURIComponent(address);
+        const confirmText =
 
+        "🚚 Вы подтверждаете, что едете за посылками?\n\n" +
 
-fetch(url)
+        "👤 Клиент: " +
+        (profile.name || "-") +
 
+        "\n📦 Посылок: " +
+        officeParcels.length +
 
-.then(
+        "\n💰 Сумма: " +
+        total +
+        " сом";
 
-r =>
 
-r.json()
+        const confirmed =
+        confirm(
+            confirmText
+        );
 
-)
 
+        if(!confirmed){
 
-.then(
+            return;
 
-data => {
+        }
 
 
-if(
+        /*
+         * ПОКАЗЫВАЕМ ЗАГРУЗКУ
+         */
 
-data &&
+        const button =
+        document
+        .querySelector(
+            ".confirm-pickup-btn"
+        );
 
-data.status ===
 
-"ok"
+        if(button){
 
-){
+            button.disabled =
+            true;
 
+            button.innerText =
+            "⏳ Отправляем заявку...";
 
-showSuccess(
+        }
 
-"✅ Заявка на доставку отправлена!"
 
-);
+        /*
+         * ФОРМИРУЕМ ЗАПРОС
+         */
 
+        const url =
 
-}else{
+        API_URL +
 
+        "?action=pickup_confirm" +
 
-alert(
+        "&tg_id=" +
 
-"⚠️ Не удалось отправить заявку"
+        encodeURIComponent(
+            tg_id
+        ) +
 
-);
+        "&client_code=" +
 
+        encodeURIComponent(
+            profile.client_code ||
+            ""
+        ) +
 
-}
+        "&name=" +
 
+        encodeURIComponent(
+            profile.name ||
+            ""
+        ) +
 
-}
+        "&phone=" +
 
-)
+        encodeURIComponent(
+            profile.phone ||
+            ""
+        ) +
 
+        "&parcel_count=" +
 
-.catch(
+        encodeURIComponent(
+            officeParcels.length
+        ) +
 
-error => {
+        "&total=" +
 
+        encodeURIComponent(
+            total
+        );
 
-console.log(error);
 
+        /*
+         * ОТПРАВКА
+         */
 
-alert(
-
-"⚠️ Ошибка соединения с сервером"
-
-);
-
-
-}
-
-);
-
-
-}
-
-
-
-/* =========================
-   ЗАГРУЗКА ДАННЫХ
-========================= */
-
-function loadClient(){
-
-
-const tg_id =
-
-getTG();
-
-
-if(!tg_id){
-
-
-alert(
-
-"Telegram ID не найден"
-
-);
-
-
-return;
-
-
-}
-
-
-
-/* =========================
-   ПРОФИЛЬ
-========================= */
-
-fetch(
-
-API_URL +
-
-"?action=profile&tg_id=" +
-
-encodeURIComponent(tg_id)
-
-)
-
-
-.then(
-
-r =>
-
-r.json()
-
-)
-
-
-.then(
-
-data => {
-
-
-if(
-
-!data ||
-
-data.status !==
-
-"ok"
-
-){
-
-
-return;
-
-
-}
-
-
-document
-
-.querySelector(
-
-".header"
-
-)
-
-.innerHTML =
-
-"👤 Имя: " +
-
-(data.name || "-");
-
-
-document
-
-.querySelector(
-
-".phone"
-
-)
-
-.innerHTML =
-
-"📱 Телефон: " +
-
-(data.phone ||
-
-"нет данных");
-
-
-document
-
-.querySelector(
-
-".bonus"
-
-)
-
-.innerHTML =
-
-"💰 Бонус: " +
-
-(data.balance || 0) +
-
-" сом";
-
-
-document
-
-.querySelector(
-
-".total-bonus"
-
-)
-
-.innerHTML =
-
-"💎 Общий бонус: " +
-
-(data.total_balance || 0) +
-
-" сом";
-
-
-document
-
-.querySelector(
-
-".code"
-
-)
-
-.innerText =
-
-data.client_code ||
-
-"---";
-
-
-document
-
-.getElementById(
-
-"warehouseText"
-
-)
-
-.innerText =
-
-
-`📦 Адрес склада:
-
-
-${data.address_warehouse ||
-
-"нет данных"}`;
-
-
-
-/* УРОВЕНЬ */
-
-
-let total =
-
-Number(
-
-data.total_balance || 0
-
-);
-
-
-let level =
-
-"🥉 Бронза";
-
-
-let levelClass =
-
-"newbie";
-
-
-if(
-
-total >= 1000
-
-){
-
-
-level =
-
-"💎 VIP 👑";
-
-
-levelClass =
-
-"vip";
-
-
-}
-
-
-else if(
-
-total >= 800
-
-){
-
-
-level =
-
-"🥇 Золото";
-
-
-levelClass =
-
-"gold";
-
-
-}
-
-
-else if(
-
-total >= 600
-
-){
-
-
-level =
-
-"🥈 Серебро";
-
-
-levelClass =
-
-"silver";
-
-
-}
-
-
-const levelBox =
-
-document
-
-.getElementById(
-
-"levelBox"
-
-);
-
-
-levelBox.className =
-
-"level-box " +
-
-levelClass;
-
-
-levelBox.innerHTML =
-
-"🏆 Уровень: " +
-
-level;
-
-
-}
-
-);
-
-
-
-/* =========================
-   ПОСЫЛКИ
-========================= */
-
-fetch(
-
-API_URL +
-
-"?action=all&tg_id=" +
-
-encodeURIComponent(tg_id)
-
-)
-
-
-.then(
-
-r =>
-
-r.json()
-
-)
-
-
-.then(
-
-p => {
-
-
-allParcels = [];
-
-
-/* OFFICE */
-
-
-if(
-
-Array.isArray(
-
-p.office
-
-)
-
-){
-
-
-p.office.forEach(
-
-i => {
-
-
-allParcels.push({
-
-
-track:
-
-i.track,
-
-
-status:
-
-"office",
-
-
-statusText:
-
-"🏢 В офисе — можно забрать",
-
-
-price:
-
-i.price,
-
-
-send_date:
-
-i.date_sent,
-
-
-expected:
-
-i.date_arrived
-
-
-});
-
-
-}
-
-);
-
-
-}
-
-
-/* WAY */
-
-
-if(
-
-Array.isArray(
-
-p.way
-
-)
-
-){
-
-
-p.way.forEach(
-
-i => {
-
-
-let st =
-
-getStatus(i);
-
-
-allParcels.push({
-
-
-track:
-
-i.track,
-
-
-status:
-
-st.key,
-
-
-statusText:
-
-st.text,
-
-
-price:
-
-i.price,
-
-
-send_date:
-
-i.date_sent,
-
-
-expected:
-
-i.date_arrived
-
-
-});
-
-
-}
-
-);
-
-
-}
-
-
-renderParcels();
-
-
-renderPickup();
-
-
-}
-
-)
-
-
-.catch(
-
-error => {
-
-
-console.log(error);
-
-
-document
-
-.getElementById(
-
-"parcelList"
-
-)
-
-.innerHTML = `
-
-
-<div
-
-class="card"
-
->
-
-
-⚠️ Не удалось загрузить посылки.
-
-
-</div>
-
-
-`;
-
-
-}
-
-);
-
-
-}
-
-
-
-/* =========================
-   ЗАПУСК
-========================= */
-
-window.onload =
-
-loadClient;
-
-
-</script></body></html>
+        fetch(url)
