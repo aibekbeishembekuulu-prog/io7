@@ -405,27 +405,187 @@ body {
 <div id="profileContent"
      style="display:none;">
 
+    <!-- =========================
+         CLIENT INFO
+    ========================= -->
 
-<!-- =========================
-     CLIENT INFO
-========================= -->
+    <div class="card">
 
-<div class="card">
+        <div>
+            👤 <b>Аты-жөнү:</b>
+            <span id="clientName">-</span>
+        </div>
 
-    <div>
-        👤 <b>Имя:</b>
-        <span id="clientName">-</span>
+        <br>
+
+        <div>
+            📅 <b>Регистрация күнү:</b>
+            <span id="registrationDate">-</span>
+        </div>
+
+        <br>
+
+        <div>
+            📱 <b>Телефон:</b>
+            <span id="clientPhone">-</span>
+        </div>
+
+        <br>
+
+        <div>
+            🏠 <b>Дарек:</b>
+            <span id="clientAddress">-</span>
+        </div>
+
+        <br>
+
+        <div>
+            🆔 <b>Telegram ID:</b>
+            <span id="telegramId">-</span>
+        </div>
+
     </div>
 
-    <br>
 
-    <div>
-        📱 <b>Телефон:</b>
-        <span id="clientPhone">-</span>
+    <!-- =========================
+         CLIENT CODE
+    ========================= -->
+
+    <div class="code-box">
+
+        <div>
+            Сиздин кардар кодуңуз
+        </div>
+
+        <div id="clientCode"
+             class="code">
+
+            ---
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         WAREHOUSE
+    ========================= -->
+
+    <div class="warehouse">
+
+        <div id="warehouseText">
+
+            📦 Складдын дареги:
+            Жүктөлүүдө...
+
+        </div>
+
+        <button class="copy-btn"
+                onclick="copyAddress()">
+
+            📋 Складдын дарегин көчүрүү
+
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         MONTHLY STATISTICS
+    ========================= -->
+
+    <div class="card">
+
+        <div class="stats-title">
+            📊 Ушул айдагы статистика
+        </div>
+
+        <div class="stat-row">
+
+            📦 Заказдар:
+
+            <b id="monthlyOrders">
+                0
+            </b>
+
+        </div>
+
+        <div class="stat-row">
+
+            💰 Төлөнгөн сумма:
+
+            <b id="monthlyPaid">
+                0 сом
+            </b>
+
+        </div>
+
+        <div class="stat-row">
+
+            🏅 Рейтинг:
+
+            <b id="clientRank">
+                —
+            </b>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LEVEL
+    ========================= -->
+
+    <div id="levelBox"
+         class="level-box bronze">
+
+        ⏳ Деңгээл жүктөлүүдө...
+
+    </div>
+
+
+    <!-- =========================
+         ACTIVITY
+    ========================= -->
+
+    <div id="activityBox"
+         class="activity inactive-status">
+
+        ⏳ Активдүүлүк жүктөлүүдө...
+
+    </div>
+
+
+    <!-- =========================
+         BONUS
+    ========================= -->
+
+    <div class="card">
+
+        <div class="stat-row">
+
+            💰 Бонус балансы:
+
+            <b id="bonus">
+                0 сом
+            </b>
+
+        </div>
+
+        <div class="stat-row">
+
+            💎 Жалпы бонус:
+
+            <b id="totalBonus">
+                0 сом
+            </b>
+
+        </div>
+
     </div>
 
 </div>
-
 
 <!-- =========================
      CLIENT CODE
