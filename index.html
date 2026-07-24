@@ -1203,7 +1203,38 @@ function loadProfile() {
                 data.phone ||
                 "Нет данных";
 
+// =========================
+// REGISTRATION DATE
+// =========================
 
+document
+    .getElementById("registrationDate")
+    .innerText =
+    data.registration_date ||
+    "-";
+
+
+// =========================
+// ADDRESS
+// =========================
+
+document
+    .getElementById("clientAddress")
+    .innerText =
+    data.address ||
+    "Нет данных";
+
+
+// =========================
+// TELEGRAM ID
+// =========================
+
+document
+    .getElementById("telegramId")
+    .innerText =
+    data.telegram_id ||
+    tg_id ||
+    "-";
             // =========================
             // CLIENT CODE
             // =========================
