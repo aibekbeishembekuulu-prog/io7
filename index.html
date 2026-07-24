@@ -6,13 +6,17 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Tez Kargo — Личный кабинет</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -23,16 +27,23 @@ body{
     margin:0;
     padding:0;
     font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
     background:#ffffff;
     color:#222;
+
     min-height:100vh;
 }
+
+
+/* =====================================================
+   APP
+===================================================== */
 
 .app{
     max-width:600px;
@@ -42,553 +53,1018 @@ body{
     padding-bottom:30px;
 }
 
+
+/* =====================================================
+   HEADER
+===================================================== */
+
 .header-top{
+
     padding:22px 18px 18px;
-    background:linear-gradient(135deg,#ff3b4d,#ff5b6b);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff3b4d,
+            #ff5b6b
+        );
+
     color:#ffffff;
-    border-radius:0 0 28px 28px;
-    box-shadow:0 8px 25px rgba(255,59,77,0.25);
+
+    border-radius:
+        0 0 28px 28px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(255,59,77,0.25);
 }
+
 
 .header-row{
+
     display:flex;
     align-items:center;
     justify-content:space-between;
+
 }
+
 
 .brand{
+
     display:flex;
     align-items:center;
     gap:10px;
+
 }
+
 
 .brand-icon{
+
     width:45px;
     height:45px;
+
     background:#ffffff;
+
     border-radius:14px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     font-size:23px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.12);
+
+    box-shadow:
+        0 5px 15px
+        rgba(0,0,0,0.12);
+
 }
+
 
 .brand-name{
+
     font-size:20px;
     font-weight:800;
+
 }
+
 
 .brand-sub{
+
     font-size:12px;
     opacity:0.85;
+
     margin-top:2px;
+
 }
+
 
 .header-title{
+
     margin-top:22px;
+
     font-size:25px;
     font-weight:800;
+
 }
+
 
 .header-subtitle{
+
     margin-top:5px;
+
     font-size:14px;
+
     opacity:0.9;
+
 }
+
+
+/* =====================================================
+   MAIN NAVIGATION
+===================================================== */
 
 .main-nav{
+
     display:flex;
+
     gap:8px;
+
     padding:14px 15px;
+
     background:#ffffff;
+
     position:sticky;
+
     top:0;
+
     z-index:20;
-    border-bottom:1px solid #f0f0f0;
+
+    border-bottom:
+        1px solid #f0f0f0;
+
 }
+
 
 .main-nav button{
+
     flex:1;
+
     border:none;
+
     background:#fff1f3;
+
     color:#ff3b4d;
+
     padding:11px 8px;
+
     border-radius:13px;
+
     font-size:13px;
+
     font-weight:700;
+
     cursor:pointer;
+
     transition:0.2s;
+
 }
+
 
 .main-nav button.active{
+
     background:#ff3b4d;
+
     color:#ffffff;
-    box-shadow:0 5px 14px rgba(255,59,77,0.25);
+
+    box-shadow:
+        0 5px 14px
+        rgba(255,59,77,0.25);
+
 }
+
 
 .main-nav button:active{
+
     transform:scale(0.96);
+
 }
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
 
 .container{
-    padding:0 15px 20px;
+
+    padding:
+        0 15px 20px;
+
 }
+
+
+/* =====================================================
+   PAGES
+===================================================== */
 
 .page{
+
     display:none;
+
 }
+
 
 .page.active{
+
     display:block;
+
 }
+
+
+/* =====================================================
+   CARDS
+===================================================== */
 
 .card{
+
     background:#ffffff;
+
     border-radius:18px;
+
     padding:17px;
+
     margin-bottom:13px;
-    border:1px solid #f1f1f1;
-    box-shadow:0 5px 18px rgba(0,0,0,0.06);
+
+    border:
+        1px solid #f1f1f1;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.06);
+
 }
+
 
 .info-card{
+
     display:flex;
+
     align-items:center;
+
     gap:13px;
+
 }
+
 
 .info-icon{
+
     width:44px;
     height:44px;
+
     background:#fff1f3;
+
     border-radius:13px;
+
     display:flex;
+
     align-items:center;
     justify-content:center;
+
     font-size:21px;
+
 }
+
 
 .info-content{
+
     flex:1;
+
 }
+
 
 .info-label{
+
     font-size:12px;
+
     color:#999;
+
     margin-bottom:3px;
+
 }
+
 
 .info-value{
+
     font-size:16px;
+
     font-weight:700;
+
     color:#222;
+
 }
+
+
+/* =====================================================
+   CLIENT CODE
+===================================================== */
 
 .code-box{
-    margin:8px 0 15px;
+
+    margin:
+        8px 0 15px;
+
     padding:22px 15px;
+
     border-radius:20px;
+
     text-align:center;
+
     color:#ffffff;
-    background:linear-gradient(135deg,#ff3b4d,#ff6473);
-    box-shadow:0 10px 25px rgba(255,59,77,0.25);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff3b4d,
+            #ff6473
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(255,59,77,0.25);
+
 }
+
 
 .code-label{
+
     font-size:13px;
+
     opacity:0.9;
+
 }
+
 
 .code{
+
     font-size:30px;
+
     font-weight:900;
+
     letter-spacing:2px;
-    margin:7px 0 13px;
+
+    margin:
+        7px 0 13px;
+
 }
+
 
 .copy-code-btn{
+
     width:100%;
+
     border:none;
+
     background:#ffffff;
+
     color:#ff3b4d;
+
     padding:12px;
+
     border-radius:12px;
+
     font-weight:800;
+
     font-size:14px;
+
     cursor:pointer;
+
 }
+
+
+.copy-code-btn:active{
+
+    transform:scale(0.98);
+
+}
+
+
+/* =====================================================
+   WAREHOUSE
+===================================================== */
 
 .warehouse{
+
     background:#ffffff;
-    border:1px solid #f0f0f0;
-    border-left:5px solid #ff3b4d;
+
+    border:
+        1px solid #f0f0f0;
+
+    border-left:
+        5px solid #ff3b4d;
+
     border-radius:17px;
+
     padding:17px;
+
     margin-bottom:15px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.05);
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.05);
+
 }
+
 
 .warehouse-title{
+
     font-weight:800;
+
     color:#ff3b4d;
+
     margin-bottom:10px;
+
 }
+
 
 .warehouse-address{
+
     background:#fff7f8;
+
     padding:13px;
+
     border-radius:12px;
+
     font-size:14px;
+
     line-height:1.5;
+
     white-space:pre-line;
+
 }
+
 
 .copy-btn{
+
     width:100%;
+
     margin-top:11px;
+
     background:#ff3b4d;
+
     color:#ffffff;
+
     border:none;
+
     padding:12px;
+
     border-radius:12px;
+
     font-size:14px;
+
     font-weight:800;
+
     cursor:pointer;
+
 }
+
+
+.copy-btn:active{
+
+    transform:scale(0.98);
+
+}
+
+
+/* =====================================================
+   BONUS
+===================================================== */
 
 .bonus-grid{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:12px;
+
     margin-bottom:15px;
+
 }
+
 
 .bonus-card{
+
     background:#ffffff;
-    border:1px solid #f0f0f0;
+
+    border:
+        1px solid #f0f0f0;
+
     border-radius:17px;
+
     padding:17px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.05);
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.05);
+
 }
+
 
 .bonus-icon{
+
     font-size:24px;
+
     margin-bottom:8px;
+
 }
+
 
 .bonus-title{
+
     font-size:12px;
+
     color:#999;
+
 }
+
 
 .bonus-value{
+
     color:#ff3b4d;
+
     font-size:20px;
+
     font-weight:900;
+
     margin-top:4px;
+
 }
+
+
+/* =====================================================
+   LEVEL
+===================================================== */
 
 .level-box{
+
     padding:19px;
+
     border-radius:18px;
+
     text-align:center;
+
     margin-bottom:17px;
+
     font-weight:800;
-    box-shadow:0 6px 20px rgba(0,0,0,0.07);
+
+    box-shadow:
+        0 6px 20px
+        rgba(0,0,0,0.07);
+
 }
+
 
 .level-title{
+
     font-size:12px;
+
     opacity:0.7;
+
     margin-bottom:5px;
+
 }
+
 
 .level-value{
+
     font-size:21px;
+
 }
+
 
 .vip{
-    background:linear-gradient(135deg,#ffe5e8,#ff9ca8);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffe5e8,
+            #ff9ca8
+        );
+
     color:#a80016;
+
 }
+
 
 .gold{
-    background:linear-gradient(135deg,#fff1d6,#ffd27a);
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff1d6,
+            #ffd27a
+        );
+
     color:#8a5700;
+
 }
+
 
 .silver{
-    background:linear-gradient(135deg,#f1f1f1,#d3d3d3);
+
+    background:
+        linear-gradient(
+            135deg,
+            #f1f1f1,
+            #d3d3d3
+        );
+
     color:#555;
+
 }
+
 
 .newbie{
-    background:linear-gradient(135deg,#fff1f3,#ffdce0);
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff1f3,
+            #ffdce0
+        );
+
     color:#c42135;
+
 }
+
+
+/* =====================================================
+   PARCELS PAGE
+===================================================== */
 
 .parcel-header{
-    margin:5px 0 14px;
+
+    margin:
+        5px 0 14px;
+
 }
+
 
 .parcel-header h2{
+
     margin:0;
+
     font-size:22px;
+
 }
+
 
 .parcel-header p{
-    margin:5px 0 0;
+
+    margin:
+        5px 0 0;
+
     color:#999;
+
     font-size:13px;
+
 }
 
-/* SEARCH */
 
-.search-box{
-    background:#ffffff;
-    border:1px solid #f0f0f0;
-    border-radius:18px;
-    padding:14px;
-    margin-bottom:15px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.06);
-}
-
-.search-title{
-    font-size:14px;
-    font-weight:800;
-    color:#222;
-    margin-bottom:10px;
-}
-
-.search-row{
-    display:flex;
-    gap:8px;
-}
-
-.search-input{
-    flex:1;
-    min-width:0;
-    border:1px solid #ffd5da;
-    background:#fff7f8;
-    color:#222;
-    padding:12px;
-    border-radius:12px;
-    outline:none;
-    font-size:13px;
-}
-
-.search-input:focus{
-    border-color:#ff3b4d;
-    background:#ffffff;
-}
-
-.search-btn{
-    border:none;
-    background:#ff3b4d;
-    color:#ffffff;
-    padding:0 17px;
-    border-radius:12px;
-    font-size:13px;
-    font-weight:800;
-    cursor:pointer;
-}
-
-.search-btn:active{
-    transform:scale(0.96);
-}
-
-.clear-search{
-    display:none;
-    width:100%;
-    margin-top:8px;
-    border:none;
-    background:#fff1f3;
-    color:#ff3b4d;
-    padding:10px;
-    border-radius:10px;
-    font-size:12px;
-    font-weight:700;
-}
-
-/* FILTERS */
+/* =====================================================
+   FILTERS
+===================================================== */
 
 .filters{
+
     display:flex;
+
     gap:7px;
+
     overflow-x:auto;
-    padding:2px 0 12px;
+
+    padding:
+        2px 0 12px;
+
     scrollbar-width:none;
+
 }
+
 
 .filters::-webkit-scrollbar{
+
     display:none;
+
 }
+
 
 .filter-btn{
+
     flex-shrink:0;
-    border:1px solid #ffd5da;
+
+    border:
+        1px solid #ffd5da;
+
     background:#fff5f6;
+
     color:#ff3b4d;
-    padding:10px 13px;
+
+    padding:
+        10px 13px;
+
     border-radius:12px;
+
     font-size:12px;
+
     font-weight:800;
+
     cursor:pointer;
+
 }
+
 
 .filter-btn.active{
+
     background:#ff3b4d;
+
     color:#ffffff;
+
     border-color:#ff3b4d;
-    box-shadow:0 5px 12px rgba(255,59,77,0.2);
+
+    box-shadow:
+        0 5px 12px
+        rgba(255,59,77,0.2);
+
 }
+
+
+/* =====================================================
+   PARCEL CARD
+===================================================== */
 
 .parcel-card{
+
     background:#ffffff;
-    border:1px solid #eeeeee;
+
+    border:
+        1px solid #eeeeee;
+
     border-radius:18px;
+
     padding:16px;
+
     margin-bottom:12px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.06);
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.06);
+
     position:relative;
+
     overflow:hidden;
+
 }
+
 
 .parcel-card::before{
+
     content:"";
+
     position:absolute;
+
     left:0;
+
     top:0;
+
     bottom:0;
+
     width:5px;
+
     background:#ff3b4d;
+
 }
+
 
 .parcel-top{
+
     display:flex;
+
     justify-content:space-between;
+
     gap:10px;
+
     align-items:center;
+
     margin-bottom:13px;
+
 }
+
 
 .parcel-track{
+
     font-weight:900;
+
     font-size:16px;
+
     word-break:break-all;
+
 }
+
 
 .status-badge{
+
     flex-shrink:0;
+
     background:#fff1f3;
+
     color:#ff3b4d;
-    padding:6px 9px;
+
+    padding:
+        6px 9px;
+
     border-radius:9px;
+
     font-size:11px;
+
     font-weight:800;
+
 }
+
 
 .parcel-info{
+
     display:grid;
-    grid-template-columns:1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap:10px;
+
 }
+
 
 .parcel-info-item{
+
     background:#fafafa;
+
     padding:10px;
+
     border-radius:11px;
+
 }
+
 
 .parcel-info-label{
+
     color:#999;
+
     font-size:10px;
+
     margin-bottom:4px;
+
 }
+
 
 .parcel-info-value{
+
     font-size:13px;
+
     font-weight:700;
+
 }
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
 
 .empty{
+
     text-align:center;
+
     padding:35px 15px;
+
     color:#999;
+
 }
+
 
 .empty-icon{
+
     font-size:40px;
+
     margin-bottom:10px;
+
 }
+
+
+/* =====================================================
+   LOADING
+===================================================== */
 
 .loading{
+
     text-align:center;
+
     padding:35px 10px;
+
     color:#999;
+
 }
+
 
 .spinner{
+
     width:32px;
+
     height:32px;
-    border:3px solid #ffe1e5;
+
+    border:
+        3px solid #ffe1e5;
+
     border-top-color:#ff3b4d;
+
     border-radius:50%;
-    animation:spin 0.8s linear infinite;
-    margin:0 auto 12px;
+
+    animation:
+        spin 0.8s linear infinite;
+
+    margin:
+        0 auto 12px;
+
 }
 
+
 @keyframes spin{
+
     to{
         transform:rotate(360deg);
     }
+
 }
+
+
+/* =====================================================
+   SUCCESS MESSAGE
+===================================================== */
 
 .success{
+
     display:none;
+
     background:#27ae60;
+
     color:#ffffff;
+
     padding:12px 15px;
+
     border-radius:12px;
+
     margin-bottom:13px;
+
     text-align:center;
+
     font-size:14px;
+
     font-weight:700;
+
 }
 
+
+/* =====================================================
+   ERROR
+===================================================== */
+
 .error-box{
+
     display:none;
+
     background:#fff1f3;
+
     color:#d9233e;
+
     padding:14px;
+
     border-radius:13px;
+
     margin-bottom:13px;
+
     text-align:center;
+
     font-size:13px;
+
 }
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:380px){
 
     .main-nav button{
+
         font-size:11px;
-        padding:10px 5px;
+
+        padding:
+            10px 5px;
+
     }
+
 
     .parcel-info{
-        grid-template-columns:1fr;
+
+        grid-template-columns:
+            1fr;
+
     }
+
 
     .bonus-grid{
-        grid-template-columns:1fr;
-    }
 
-    .search-row{
-        flex-direction:column;
-    }
+        grid-template-columns:
+            1fr;
 
-    .search-btn{
-        padding:12px;
     }
 
 }
@@ -597,9 +1073,16 @@ body{
 
 </head>
 
+
 <body>
 
+
 <div class="app">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <div class="header-top">
 
@@ -627,6 +1110,7 @@ body{
 
     </div>
 
+
     <div class="header-title">
         Личный кабинет
     </div>
@@ -636,6 +1120,11 @@ body{
     </div>
 
 </div>
+
+
+<!-- =====================================================
+     MAIN NAV
+===================================================== -->
 
 <div class="main-nav">
 
@@ -648,6 +1137,7 @@ body{
 
     </button>
 
+
     <button
         id="parcelsBtn"
         onclick="showPage('parcels')">
@@ -658,15 +1148,33 @@ body{
 
 </div>
 
+
 <div class="container">
 
-<div id="success" class="success"></div>
 
-<div id="error" class="error-box"></div>
+<!-- SUCCESS -->
 
-<!-- HOME START -->
+<div id="success"
+     class="success">
+</div>
 
-<div id="home" class="page active">
+
+<!-- ERROR -->
+
+<div id="error"
+     class="error-box">
+</div>
+
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<div id="home"
+     class="page active">
+
+
+<!-- NAME -->
 
 <div class="card info-card">
 
@@ -680,13 +1188,19 @@ body{
             Ваше имя
         </div>
 
-        <div class="info-value" id="clientName">
+        <div class="info-value"
+             id="clientName">
+
             Загрузка...
+
         </div>
 
     </div>
 
 </div>
+
+
+<!-- PHONE -->
 
 <div class="card info-card">
 
@@ -700,13 +1214,19 @@ body{
             Телефон
         </div>
 
-        <div class="info-value" id="clientPhone">
+        <div class="info-value"
+             id="clientPhone">
+
             Загрузка...
+
         </div>
 
     </div>
 
 </div>
+
+
+<!-- CLIENT CODE -->
 
 <div class="code-box">
 
@@ -714,8 +1234,11 @@ body{
         Ваш клиентский код
     </div>
 
-    <div class="code" id="clientCode">
+    <div class="code"
+         id="clientCode">
+
         ---
+
     </div>
 
     <button
@@ -728,15 +1251,25 @@ body{
 
 </div>
 
+
+<!-- WAREHOUSE -->
+
 <div class="warehouse">
 
     <div class="warehouse-title">
+
         📦 Адрес склада в Китае
+
     </div>
 
-    <div class="warehouse-address" id="warehouseText">
+
+    <div class="warehouse-address"
+         id="warehouseText">
+
         Загрузка...
+
     </div>
+
 
     <button
         class="copy-btn"
@@ -748,7 +1281,11 @@ body{
 
 </div>
 
+
+<!-- BONUS -->
+
 <div class="bonus-grid">
+
 
     <div class="bonus-card">
 
@@ -760,11 +1297,15 @@ body{
             Текущий бонус
         </div>
 
-        <div class="bonus-value" id="bonusValue">
+        <div class="bonus-value"
+             id="bonusValue">
+
             0 сом
+
         </div>
 
     </div>
+
 
     <div class="bonus-card">
 
@@ -776,34 +1317,51 @@ body{
             Общий бонус
         </div>
 
-        <div class="bonus-value" id="totalBonus">
+        <div class="bonus-value"
+             id="totalBonus">
+
             0 сом
+
         </div>
 
     </div>
 
+
 </div>
 
-<div id="levelBox" class="level-box newbie">
+
+<!-- LEVEL -->
+
+<div id="levelBox"
+     class="level-box newbie">
+
 
     <div class="level-title">
         Ваш уровень
     </div>
 
-    <div class="level-value" id="levelValue">
+
+    <div class="level-value"
+         id="levelValue">
+
         ⏳ Загрузка...
+
     </div>
 
-</div>
 
 </div>
 
-<!-- HOME END -->
+
+</div>
 
 
-<!-- PARCELS START -->
+<!-- =====================================================
+     PARCELS
+===================================================== -->
 
-<div id="parcels" class="page">
+<div id="parcels"
+     class="page">
+
 
 <div class="parcel-header">
 
@@ -817,47 +1375,11 @@ body{
 
 </div>
 
-<!-- SEARCH START -->
 
-<div class="search-box">
-
-    <div class="search-title">
-        🔎 Поиск по трек-коду
-    </div>
-
-    <div class="search-row">
-
-        <input
-            type="text"
-            id="trackSearch"
-            class="search-input"
-            placeholder="Введите трек-код..."
-            autocomplete="off">
-
-        <button
-            class="search-btn"
-            onclick="searchTrack()">
-
-            🔍 Найти
-
-        </button>
-
-    </div>
-
-    <button
-        id="clearSearchBtn"
-        class="clear-search"
-        onclick="clearTrackSearch()">
-
-        ✕ Очистить поиск
-
-    </button>
-
-</div>
-
-<!-- SEARCH END -->
+<!-- FILTERS -->
 
 <div class="filters">
+
 
     <button
         class="filter-btn active"
@@ -868,6 +1390,7 @@ body{
 
     </button>
 
+
     <button
         class="filter-btn"
         data-filter="china"
@@ -876,6 +1399,7 @@ body{
         🇨🇳 Китай
 
     </button>
+
 
     <button
         class="filter-btn"
@@ -886,6 +1410,7 @@ body{
 
     </button>
 
+
     <button
         class="filter-btn"
         data-filter="office"
@@ -894,6 +1419,7 @@ body{
         🏢 Офис
 
     </button>
+
 
     <button
         class="filter-btn"
@@ -904,7 +1430,11 @@ body{
 
     </button>
 
+
 </div>
+
+
+<!-- PARCEL LIST -->
 
 <div id="parcelList">
 
@@ -918,16 +1448,24 @@ body{
 
 </div>
 
-</div>
-
-<!-- PARCELS END -->
 
 </div>
 
+
 </div>
+
+
+</div>
+
 
 <script>
-      const API_URL =
+
+
+/* =====================================================
+   API
+===================================================== */
+
+const API_URL =
 "https://script.google.com/macros/s/AKfycbwVgYyCu8YuPxqhdkOra1F0FfSENe44ys-Ad_wRdQp3CfuR2ISzlWZ4Irt7_IFz3a_2/exec";
 
 
@@ -935,13 +1473,9 @@ let currentFilter = "all";
 
 let allParcels = [];
 
-let currentClient = null;
-
-let searchTrackValue = "";
-
 
 /* =====================================================
-   PAGE NAVIGATION
+   SHOW PAGE
 ===================================================== */
 
 function showPage(id){
@@ -955,15 +1489,9 @@ function showPage(id){
         });
 
 
-    const page =
-        document.getElementById(id);
-
-
-    if(page){
-
-        page.classList.add("active");
-
-    }
+    document
+        .getElementById(id)
+        .classList.add("active");
 
 
     document
@@ -977,30 +1505,58 @@ function showPage(id){
 
     if(id === "home"){
 
-        const btn =
-            document.getElementById("homeBtn");
-
-        if(btn){
-
-            btn.classList.add("active");
-
-        }
+        document
+            .getElementById("homeBtn")
+            .classList.add("active");
 
     }
 
 
     if(id === "parcels"){
 
-        const btn =
-            document.getElementById("parcelsBtn");
-
-        if(btn){
-
-            btn.classList.add("active");
-
-        }
+        document
+            .getElementById("parcelsBtn")
+            .classList.add("active");
 
     }
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function setFilter(type){
+
+    currentFilter = type;
+
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(function(btn){
+
+            btn.classList.remove("active");
+
+        });
+
+
+    const activeBtn =
+        document.querySelector(
+            '.filter-btn[data-filter="' +
+            type +
+            '"]'
+        );
+
+
+    if(activeBtn){
+
+        activeBtn.classList.add("active");
+
+    }
+
+
+    renderParcels();
 
 }
 
@@ -1034,7 +1590,7 @@ function getTG(){
                 user.id
             ){
 
-                return String(user.id);
+                return user.id.toString();
 
             }
 
@@ -1042,720 +1598,19 @@ function getTG(){
 
     }
 
-    catch(error){
+    catch(e){
 
         console.log(
-            "Telegram ID error:",
-            error
+            "Telegram error:",
+            e
         );
 
     }
 
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    return (
-        params.get("tg_id") ||
-        params.get("telegram_id") ||
-        params.get("user_id") ||
-        ""
-    );
-
-}
-
-
-/* =====================================================
-   LOAD DATA
-===================================================== */
-
-async function loadData(){
-
-    const tgId =
-        getTG();
-
-
-    if(!tgId){
-
-        showError(
-            "❌ Telegram ID не найден. Откройте личный кабинет через Telegram."
-        );
-
-        setText(
-            "clientName",
-            "Не найден"
-        );
-
-        setText(
-            "clientPhone",
-            "Не найден"
-        );
-
-        setText(
-            "clientCode",
-            "---"
-        );
-
-        setText(
-            "warehouseText",
-            "Не удалось определить Telegram ID"
-        );
-
-        return;
-
-    }
-
-
-    hideError();
-
-
-    try{
-
-        showLoading();
-
-
-        const url =
-            API_URL +
-            "?tg_id=" +
-            encodeURIComponent(tgId);
-
-
-        console.log(
-            "API URL:",
-            url
-        );
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    method:"GET",
-                    cache:"no-store"
-                }
-            );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-
-        const text =
-            await response.text();
-
-
-        console.log(
-            "API RESPONSE:",
-            text
-        );
-
-
-        let data;
-
-
-        try{
-
-            data =
-                JSON.parse(text);
-
-        }
-
-        catch(error){
-
-            throw new Error(
-                "API вернул неправильный ответ"
-            );
-
-        }
-
-
-        console.log(
-            "PARSED DATA:",
-            data
-        );
-
-
-        processData(data);
-
-    }
-
-    catch(error){
-
-        console.error(
-            "LOAD ERROR:",
-            error
-        );
-
-
-        showError(
-            "❌ Не удалось загрузить данные. Проверьте подключение к интернету."
-        );
-
-    }
-
-    finally{
-
-        hideLoading();
-
-    }
-
-}
-
-
-/* =====================================================
-   PROCESS API DATA
-===================================================== */
-
-function processData(data){
-
-    hideError();
-
-
-    /*
-      Поддерживаем несколько вариантов
-      названий полей API.
-    */
-
-
-    const client =
-        data.client ||
-        data.customer ||
-        data.user ||
-        data.profile ||
-        data;
-
-
-    currentClient =
-        client || {};
-
-
-    /* NAME */
-
-    const name =
-        getFirstValue(
-            client,
-            [
-                "name",
-                "clientName",
-                "fullName",
-                "fio",
-                "имя",
-                "ФИО"
-            ]
-        );
-
-
-    setText(
-        "clientName",
-        name || "Не указано"
-    );
-
-
-    /* PHONE */
-
-    const phone =
-        getFirstValue(
-            client,
-            [
-                "phone",
-                "telephone",
-                "tel",
-                "clientPhone",
-                "телефон"
-            ]
-        );
-
-
-    setText(
-        "clientPhone",
-        phone || "Не указан"
-    );
-
-
-    /* CLIENT CODE */
-
-    const clientCode =
-        getFirstValue(
-            client,
-            [
-                "client_code",
-                "clientCode",
-                "code",
-                "client",
-                "код клиента",
-                "Код клиента"
-            ]
-        );
-
-
-    setText(
-        "clientCode",
-        clientCode || "---"
-    );
-
-
-    /* BONUS */
-
-    const bonus =
-        getFirstValue(
-            client,
-            [
-                "bonus",
-                "currentBonus",
-                "bonusValue",
-                "текущий бонус"
-            ]
-        );
-
-
-    setText(
-        "bonusValue",
-        formatMoney(
-            bonus
-        )
-    );
-
-
-    /* TOTAL BONUS */
-
-    const totalBonus =
-        getFirstValue(
-            client,
-            [
-                "totalBonus",
-                "allBonus",
-                "total_bonus",
-                "общий бонус"
-            ]
-        );
-
-
-    setText(
-        "totalBonus",
-        formatMoney(
-            totalBonus
-        )
-    );
-
-
-    /* LEVEL */
-
-    const level =
-        getFirstValue(
-            client,
-            [
-                "level",
-                "levelName",
-                "status",
-                "уровень"
-            ]
-        );
-
-
-    setLevel(
-        level
-    );
-
-
-    /* WAREHOUSE */
-
-    const warehouse =
-        getFirstValue(
-            data,
-            [
-                "warehouse",
-                "warehouseText",
-                "address",
-                "warehouseAddress",
-                "адрес склада"
-            ]
-        ) ||
-        getFirstValue(
-            client,
-            [
-                "warehouse",
-                "warehouseText",
-                "address",
-                "warehouseAddress",
-                "адрес склада"
-            ]
-        );
-
-
-    setText(
-        "warehouseText",
-        warehouse ||
-        "Адрес склада не указан"
-    );
-
-
-    /* PARCELS */
-
-    let parcels =
-        data.parcels ||
-        data.parcelList ||
-        data.shipments ||
-        data.items ||
-        [];
-
-
-    if(
-        !Array.isArray(parcels)
-    ){
-
-        parcels = [];
-
-    }
-
-
-    allParcels =
-        parcels;
-
-
-    renderParcels();
-
-}
-
-
-/* =====================================================
-   GET FIRST VALUE
-===================================================== */
-
-function getFirstValue(
-    object,
-    keys
-){
-
-    if(
-        !object ||
-        typeof object !== "object"
-    ){
-
-        return "";
-
-    }
-
-
-    for(
-        let i = 0;
-        i < keys.length;
-        i++
-    ){
-
-        const key =
-            keys[i];
-
-
-        if(
-            object[key] !== undefined &&
-            object[key] !== null &&
-            String(object[key]).trim() !== ""
-        ){
-
-            return object[key];
-
-        }
-
-    }
-
-
-    return "";
-
-}
-
-
-/* =====================================================
-   SET TEXT
-===================================================== */
-
-function setText(
-    id,
-    value
-){
-
-    const element =
-        document.getElementById(id);
-
-
-    if(element){
-
-        element.innerText =
-            value === undefined ||
-            value === null
-                ? ""
-                : String(value);
-
-    }
-
-}
-
-
-/* =====================================================
-   MONEY
-===================================================== */
-
-function formatMoney(
-    value
-){
-
-    if(
-        value === undefined ||
-        value === null ||
-        value === ""
-    ){
-
-        return "0 сом";
-
-    }
-
-
-    return (
-        String(value)
-        .replace(
-            /\s*сом\s*/gi,
-            ""
-        )
-        .trim()
-        +
-        " сом"
-    );
-
-}
-
-
-/* =====================================================
-   LEVEL
-===================================================== */
-
-function setLevel(
-    level
-){
-
-    const box =
-        document.getElementById(
-            "levelBox"
-        );
-
-
-    const value =
-        document.getElementById(
-            "levelValue"
-        );
-
-
-    if(!box || !value){
-
-        return;
-
-    }
-
-
-    box.classList.remove(
-        "vip",
-        "gold",
-        "silver",
-        "newbie"
-    );
-
-
-    const text =
-        String(
-            level || "Новый клиент"
-        );
-
-
-    const lower =
-        text.toLowerCase();
-
-
-    if(
-        lower.includes("vip")
-    ){
-
-        box.classList.add(
-            "vip"
-        );
-
-    }
-
-    else if(
-        lower.includes("gold") ||
-        lower.includes("золот")
-    ){
-
-        box.classList.add(
-            "gold"
-        );
-
-    }
-
-    else if(
-        lower.includes("silver") ||
-        lower.includes("сереб")
-    ){
-
-        box.classList.add(
-            "silver"
-        );
-
-    }
-
-    else{
-
-        box.classList.add(
-            "newbie"
-        );
-
-    }
-
-
-    value.innerText =
-        "🏆 " +
-        text;
-
-}
-
-
-/* =====================================================
-   LOADING
-===================================================== */
-
-function showLoading(){
-
-    const list =
-        document.getElementById(
-            "parcelList"
-        );
-
-
-    if(
-        list &&
-        allParcels.length === 0
-    ){
-
-        list.innerHTML = `
-            <div class="loading">
-                <div class="spinner"></div>
-                Загрузка посылок...
-            </div>
-        `;
-
-    }
-
-}
-
-
-function hideLoading(){
-
-    /*
-
-      Здесь специально ничего
-      не делаем.
-
-      Список посылок будет
-      отрисован через renderParcels().
-
-    */
-
-}
-
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-function showError(
-    message
-){
-
-    const box =
-        document.getElementById(
-            "error"
-        );
-
-
-    if(!box){
-
-        return;
-
-    }
-
-
-    box.innerText =
-        message;
-
-
-    box.style.display =
-        "block";
-
-}
-
-
-function hideError(){
-
-    const box =
-        document.getElementById(
-            "error"
-        );
-
-
-    if(box){
-
-        box.style.display =
-            "none";
-
-    }
-
-}
-
-
-/* =====================================================
-   SUCCESS
-===================================================== */
-
-function showSuccess(
-    message
-){
-
-    const box =
-        document.getElementById(
-            "success"
-        );
-
-
-    if(!box){
-
-        return;
-
-    }
-
-
-    box.innerText =
-        message;
-
-
-    box.style.display =
-        "block";
-
-
-    setTimeout(
-        function(){
-
-            box.style.display =
-                "none";
-
-        },
-        2500
-    );
+    return new URLSearchParams(
+        window.location.search
+    ).get("tg_id");
 
 }
 
@@ -1766,27 +1621,31 @@ function showSuccess(
 
 function copyAddress(){
 
-    const element =
-        document.getElementById(
-            "warehouseText"
-        );
-
-
-    if(!element){
-
-        return;
-
-    }
-
-
     const text =
-        element.innerText;
+        document
+        .getElementById(
+            "warehouseText"
+        )
+        .innerText;
 
 
-    copyText(
-        text,
-        "✅ Адрес склада скопирован"
-    );
+    navigator.clipboard
+        .writeText(text)
+        .then(function(){
+
+            showSuccess(
+                "✅ Адрес склада скопирован"
+            );
+
+        })
+
+        .catch(function(){
+
+            alert(
+                text
+            );
+
+        });
 
 }
 
@@ -1797,321 +1656,566 @@ function copyAddress(){
 
 function copyClientCode(){
 
-    const element =
-        document.getElementById(
-            "clientCode"
-        );
-
-
-    if(!element){
-
-        return;
-
-    }
-
-
     const code =
-        element.innerText;
+        document
+        .getElementById(
+            "clientCode"
+        )
+        .innerText;
 
 
-    if(
-        !code ||
-        code === "---"
-    ){
+    navigator.clipboard
+        .writeText(code)
+        .then(function(){
 
-        showError(
-            "❌ Клиентский код ещё не загружен"
-        );
-
-        return;
-
-    }
-
-
-    copyText(
-        code,
-        "✅ Клиентский код скопирован"
-    );
-
-}
-
-
-/* =====================================================
-   COPY TEXT
-===================================================== */
-
-function copyText(
-    text,
-    message
-){
-
-    if(
-        navigator.clipboard &&
-        window.isSecureContext
-    ){
-
-        navigator.clipboard
-            .writeText(text)
-            .then(
-                function(){
-
-                    showSuccess(
-                        message
-                    );
-
-                }
-            )
-            .catch(
-                function(){
-
-                    fallbackCopy(
-                        text,
-                        message
-                    );
-
-                }
+            showSuccess(
+                "✅ Клиентский код скопирован"
             );
-
-    }
-
-    else{
-
-        fallbackCopy(
-            text,
-            message
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   FALLBACK COPY
-===================================================== */
-
-function fallbackCopy(
-    text,
-    message
-){
-
-    const textarea =
-        document.createElement(
-            "textarea"
-        );
-
-
-    textarea.value =
-        text;
-
-
-    textarea.style.position =
-        "fixed";
-
-    textarea.style.left =
-        "-9999px";
-
-
-    document.body.appendChild(
-        textarea
-    );
-
-
-    textarea.focus();
-
-    textarea.select();
-
-
-    try{
-
-        document.execCommand(
-            "copy"
-        );
-
-
-        showSuccess(
-            message
-        );
-
-    }
-
-    catch(error){
-
-        alert(
-            text
-        );
-
-    }
-
-
-    document.body.removeChild(
-        textarea
-    );
-
-}
-
-
-/* =====================================================
-   ENTER KEY SEARCH
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        const input =
-            document.getElementById(
-                "trackSearch"
-            );
-
-
-        if(input){
-
-            input.addEventListener(
-                "keydown",
-                function(event){
-
-                    if(
-                        event.key === "Enter"
-                    ){
-
-                        searchTrack();
-
-                    }
-
-                }
-            );
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        loadData();
-
-    }
-);
-  /* =====================================================
-   FILTER
-===================================================== */
-
-function setFilter(type){
-
-    currentFilter = type;
-
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(function(btn){
-
-            btn.classList.remove("active");
 
         });
 
-    const activeBtn =
-        document.querySelector(
-            '.filter-btn[data-filter="' +
-            type +
-            '"]'
+}
+
+
+/* =====================================================
+   SUCCESS
+===================================================== */
+
+function showSuccess(message){
+
+    const box =
+        document
+        .getElementById(
+            "success"
         );
 
-    if(activeBtn){
 
-        activeBtn.classList.add("active");
+    box.innerText =
+        message;
 
-    }
 
-    renderParcels();
+    box.style.display =
+        "block";
+
+
+    setTimeout(function(){
+
+        box.style.display =
+            "none";
+
+    },3000);
 
 }
 
 
 /* =====================================================
-   SEARCH TRACK
+   ERROR
 ===================================================== */
 
-function searchTrack(){
+function showError(message){
 
-    const input =
-        document.getElementById(
-            "trackSearch"
+    const box =
+        document
+        .getElementById(
+            "error"
         );
 
-    if(!input){
+
+    box.innerText =
+        message;
+
+
+    box.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function getStatus(item){
+
+    const status =
+        String(
+            item.status ||
+            ""
+        )
+        .toLowerCase()
+        .trim();
+
+
+    if(
+        status === "китай" ||
+        status.includes(
+            "кита"
+        )
+    ){
+
+        return {
+
+            key:"china",
+
+            text:
+                "🇨🇳 На складе в Китае"
+
+        };
+
+    }
+
+
+    if(
+        status === "в путь" ||
+        status === "в пути" ||
+        status.includes(
+            "путь"
+        )
+    ){
+
+        return {
+
+            key:"way",
+
+            text:
+                "🚚 В пути"
+
+        };
+
+    }
+
+
+    if(
+        status === "офис" ||
+        status.includes(
+            "офис"
+        )
+    ){
+
+        return {
+
+            key:"office",
+
+            text:
+                "🏢 В офисе"
+
+        };
+
+    }
+
+
+    if(
+        status === "выдано" ||
+        status.includes(
+            "выдан"
+        )
+    ){
+
+        return {
+
+            key:"issued",
+
+            text:
+                "✅ Выдано"
+
+        };
+
+    }
+
+
+    return {
+
+        key:"other",
+
+        text:
+            "⏳ Обработка"
+
+    };
+
+}
+
+
+/* =====================================================
+   LOAD CLIENT
+===================================================== */
+
+function loadClient(){
+
+
+    const tg_id =
+        getTG();
+
+
+    if(!tg_id){
+
+        showError(
+            "⚠️ Telegram ID не найден. Откройте личный кабинет через Telegram."
+        );
 
         return;
 
     }
 
-    const value =
-        input.value
-        .trim()
-        .toLowerCase();
 
-    searchTrackValue =
-        value;
+    /* =================================================
+       PROFILE
+    ================================================= */
 
-    const clearBtn =
-        document.getElementById(
-            "clearSearchBtn"
+
+    fetch(
+        API_URL +
+        "?action=profile&tg_id=" +
+        encodeURIComponent(
+            tg_id
+        )
+    )
+
+
+    .then(function(response){
+
+        return response.json();
+
+    })
+
+
+    .then(function(data){
+
+
+        if(
+            !data ||
+            data.status !== "ok"
+        ){
+
+            showError(
+                "❌ Данные клиента не найдены."
+            );
+
+            return;
+
+        }
+
+
+        /* NAME */
+
+        document
+            .getElementById(
+                "clientName"
+            )
+            .innerText =
+            data.name ||
+            "-";
+
+
+        /* PHONE */
+
+        document
+            .getElementById(
+                "clientPhone"
+            )
+            .innerText =
+            data.phone ||
+            "Нет данных";
+
+
+        /* CLIENT CODE */
+
+        document
+            .getElementById(
+                "clientCode"
+            )
+            .innerText =
+            data.client_code ||
+            "---";
+
+
+        /* BONUS */
+
+        document
+            .getElementById(
+                "bonusValue"
+            )
+            .innerText =
+            (
+                data.balance ||
+                0
+            ) +
+            " сом";
+
+
+        /* TOTAL BONUS */
+
+        document
+            .getElementById(
+                "totalBonus"
+            )
+            .innerText =
+            (
+                data.total_balance ||
+                0
+            ) +
+            " сом";
+
+
+        /* WAREHOUSE */
+
+        document
+            .getElementById(
+                "warehouseText"
+            )
+            .innerText =
+
+            data.address_warehouse ||
+            "Нет данных";
+
+
+        /* LEVEL */
+
+        let total =
+            Number(
+                data.total_balance ||
+                0
+            );
+
+
+        let level =
+            data.level ||
+            "🥉 Бронза";
+
+
+        let levelClass =
+            "newbie";
+
+
+        if(
+            total >= 200
+        ){
+
+            levelClass =
+                "vip";
+
+        }
+
+        else if(
+            total >= 100
+        ){
+
+            levelClass =
+                "gold";
+
+        }
+
+        else if(
+            total >= 60
+        ){
+
+            levelClass =
+                "silver";
+
+        }
+
+
+        const levelBox =
+            document
+            .getElementById(
+                "levelBox"
+            );
+
+
+        levelBox.className =
+            "level-box " +
+            levelClass;
+
+
+        document
+            .getElementById(
+                "levelValue"
+            )
+            .innerText =
+            level;
+
+
+    })
+
+
+    .catch(function(error){
+
+        console.log(
+            error
         );
 
-    if(clearBtn){
-
-        clearBtn.style.display =
-            value
-                ? "block"
-                : "none";
-
-    }
-
-    renderParcels();
-
-}
-
-
-/* =====================================================
-   CLEAR SEARCH
-===================================================== */
-
-function clearTrackSearch(){
-
-    const input =
-        document.getElementById(
-            "trackSearch"
+        showError(
+            "❌ Не удалось загрузить данные клиента."
         );
 
-    if(input){
+    });
 
-        input.value =
-            "";
 
-    }
 
-    searchTrackValue =
-        "";
+    /* =================================================
+       PARCELS
+    ================================================= */
 
-    const clearBtn =
-        document.getElementById(
-            "clearSearchBtn"
+
+    fetch(
+        API_URL +
+        "?action=all&tg_id=" +
+        encodeURIComponent(
+            tg_id
+        )
+    )
+
+
+    .then(function(response){
+
+        return response.json();
+
+    })
+
+
+    .then(function(data){
+
+
+        if(
+            !data ||
+            data.status !== "ok"
+        ){
+
+            document
+                .getElementById(
+                    "parcelList"
+                )
+                .innerHTML =
+
+                '<div class="empty">' +
+
+                '<div class="empty-icon">📦</div>' +
+
+                '<div>Посылки не найдены</div>' +
+
+                '</div>';
+
+            return;
+
+        }
+
+
+        allParcels = [];
+
+
+        /* =================================================
+           OFFICE
+        ================================================= */
+
+        if(
+            Array.isArray(
+                data.office
+            )
+        ){
+
+            data.office
+            .forEach(function(item){
+
+                allParcels.push({
+
+                    track:
+                        item.track,
+
+                    status:
+                        "office",
+
+                    statusText:
+                        "🏢 В офисе",
+
+                    price:
+                        item.price,
+
+                    send_date:
+                        item.date_sent,
+
+                    expected:
+                        item.date_arrived
+
+                });
+
+            });
+
+        }
+
+
+        /* =================================================
+           WAY
+        ================================================= */
+
+        if(
+            Array.isArray(
+                data.way
+            )
+        ){
+
+            data.way
+            .forEach(function(item){
+
+                const st =
+                    getStatus(
+                        item
+                    );
+
+
+                allParcels.push({
+
+                    track:
+                        item.track,
+
+                    status:
+                        st.key,
+
+                    statusText:
+                        st.text,
+
+                    price:
+                        item.price,
+
+                    send_date:
+                        item.date_sent,
+
+                    expected:
+                        item.date_arrived
+
+                });
+
+            });
+
+        }
+
+
+        renderParcels();
+
+
+    })
+
+
+    .catch(function(error){
+
+        console.log(
+            error
         );
 
-    if(clearBtn){
 
-        clearBtn.style.display =
-            "none";
+        document
+            .getElementById(
+                "parcelList"
+            )
+            .innerHTML =
 
-    }
+            '<div class="empty">' +
 
-    renderParcels();
+            '<div class="empty-icon">⚠️</div>' +
+
+            '<div>Ошибка загрузки посылок</div>' +
+
+            '</div>';
+
+    });
 
 }
 
@@ -2122,325 +2226,192 @@ function clearTrackSearch(){
 
 function renderParcels(){
 
-    const list =
-        document.getElementById(
-            "parcelList"
-        );
 
-    if(!list){
+    let filtered =
+        allParcels.filter(
+            function(item){
 
-        return;
+                if(
+                    currentFilter ===
+                    "all"
+                ){
 
-    }
-
-
-    let parcels =
-        Array.isArray(allParcels)
-            ? allParcels.slice()
-            : [];
-
-
-    /* =================================================
-       SEARCH BY TRACK CODE
-    ================================================= */
-
-    if(searchTrackValue){
-
-        parcels =
-            parcels.filter(
-                function(parcel){
-
-                    const track =
-                        getParcelTrack(
-                            parcel
-                        )
-                        .toLowerCase();
-
-                    return track.includes(
-                        searchTrackValue
-                    );
+                    return true;
 
                 }
-            );
-
-    }
 
 
-    /* =================================================
-       FILTER BY STATUS
-    ================================================= */
-
-    if(
-        currentFilter !== "all"
-    ){
-
-        parcels =
-            parcels.filter(
-                function(parcel){
-
-                    return matchesFilter(
-                        parcel,
-                        currentFilter
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* =================================================
-       EMPTY
-    ================================================= */
-
-    if(
-        parcels.length === 0
-    ){
-
-        let message =
-            "Посылки не найдены";
-
-
-        if(searchTrackValue){
-
-            message =
-                "По этому трек-коду посылка не найдена";
-
-        }
-
-
-        list.innerHTML = `
-
-            <div class="empty">
-
-                <div class="empty-icon">
-                    📦
-                </div>
-
-                <div>
-                    ${escapeHtml(message)}
-                </div>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    /* =================================================
-       RENDER
-    ================================================= */
-
-    list.innerHTML =
-        parcels
-        .map(
-            function(parcel){
-
-                return createParcelCard(
-                    parcel
+                return (
+                    item.status ===
+                    currentFilter
                 );
 
             }
+        );
+
+
+    let html =
+        "";
+
+
+    if(
+        filtered.length ===
+        0
+    ){
+
+        html =
+
+        '<div class="empty">' +
+
+        '<div class="empty-icon">📦</div>' +
+
+        '<div>Нет посылок</div>' +
+
+        '</div>';
+
+
+    }
+
+    else{
+
+
+        filtered
+        .forEach(
+            function(item){
+
+
+                html +=
+
+                '<div class="parcel-card">' +
+
+
+                '<div class="parcel-top">' +
+
+                '<div class="parcel-track">' +
+
+                '📦 ' +
+
+                (
+                    item.track ||
+                    "-"
+                ) +
+
+                '</div>' +
+
+
+                '<div class="status-badge">' +
+
+                (
+                    item.statusText ||
+                    "⏳ Обработка"
+                ) +
+
+                '</div>' +
+
+                '</div>' +
+
+
+                '<div class="parcel-info">' +
+
+
+                '<div class="parcel-info-item">' +
+
+                '<div class="parcel-info-label">' +
+
+                '💰 Стоимость' +
+
+                '</div>' +
+
+                '<div class="parcel-info-value">' +
+
+                (
+                    item.price ||
+                    0
+                ) +
+
+                ' сом' +
+
+                '</div>' +
+
+                '</div>' +
+
+
+                '<div class="parcel-info-item">' +
+
+                '<div class="parcel-info-label">' +
+
+                '📅 Дата отправки' +
+
+                '</div>' +
+
+                '<div class="parcel-info-value">' +
+
+                (
+                    item.send_date ||
+                    "-"
+                ) +
+
+                '</div>' +
+
+                '</div>' +
+
+
+                '<div class="parcel-info-item">' +
+
+                '<div class="parcel-info-label">' +
+
+                '⏳ Ожидаемое прибытие' +
+
+                '</div>' +
+
+                '<div class="parcel-info-value">' +
+
+                (
+                    item.expected ||
+                    "-"
+                ) +
+
+                '</div>' +
+
+                '</div>' +
+
+
+                '</div>' +
+
+
+                '</div>';
+
+            }
+        );
+
+    }
+
+
+    document
+        .getElementById(
+            "parcelList"
         )
-        .join("");
+        .innerHTML =
+        html;
 
 }
 
 
 /* =====================================================
-   GET TRACK CODE
+   START
 ===================================================== */
 
-function getParcelTrack(
-    parcel
-){
+window.onload =
+    function(){
 
-    return String(
-        getFirstValue(
-            parcel,
-            [
-                "track_code",
-                "trackCode",
-                "tracking",
-                "trackingCode",
-                "track",
-                "трек-код",
-                "трек код",
-                "Трек-код",
-                "Трек код",
-                "A"
-            ]
-        ) || ""
-    );
+        loadClient();
 
-}
+    };
 
 
-/* =====================================================
-   GET STATUS
-===================================================== */
-
-function getParcelStatus(
-    parcel
-){
-
-    return String(
-        getFirstValue(
-            parcel,
-            [
-                "status",
-                "parcelStatus",
-                "state",
-                "статус",
-                "Статус",
-                "D"
-            ]
-        ) || ""
-    );
-
-}
+</script>
 
 
-/* =====================================================
-   FILTER MATCH
-===================================================== */
+</body>
 
-function matchesFilter(
-    parcel,
-    filter
-){
-
-    const status =
-        getParcelStatus(
-            parcel
-        )
-        .toLowerCase()
-        .trim();
-
-
-    if(
-        filter === "china"
-    ){
-
-        return (
-            status.includes("кита") ||
-            status.includes("china") ||
-            status.includes("китай")
-        );
-
-    }
-
-
-    if(
-        filter === "way"
-    ){
-
-        return (
-            status.includes("пути") ||
-            status.includes("дорог") ||
-            status.includes("отправ") ||
-            status.includes("транзит") ||
-            status.includes("transit") ||
-            status.includes("way")
-        );
-
-    }
-
-
-    if(
-        filter === "office"
-    ){
-
-        return (
-            status.includes("офис") ||
-            status.includes("office") ||
-            status.includes("пришел") ||
-            status.includes("пришла") ||
-            status.includes("склад")
-        );
-
-    }
-
-
-    if(
-        filter === "issued"
-    ){
-
-        return (
-            status.includes("выдан") ||
-            status.includes("выда") ||
-            status.includes("получ") ||
-            status.includes("issued")
-        );
-
-    }
-
-
-    return true;
-
-}
-
-
-/* =====================================================
-   CREATE PARCEL CARD
-===================================================== */
-
-function createParcelCard(
-    parcel
-){
-
-    const track =
-        getParcelTrack(
-            parcel
-        ) ||
-        "Без трек-кода";
-
-
-    const status =
-        getParcelStatus(
-            parcel
-        ) ||
-        "Не указан";
-
-
-    const price =
-        getFirstValue(
-            parcel,
-            [
-                "price",
-                "cost",
-                "sum",
-                "amount",
-                "стоимость",
-                "цена",
-                "C"
-            ]
-        );
-
-
-    const dateSent =
-        getFirstValue(
-            parcel,
-            [
-                "date_sent",
-                "dateSent",
-                "sentDate",
-                "date",
-                "дата отправки",
-                "Дата отправки",
-                "E"
-            ]
-        );
-
-
-    const dateArrived =
-        getFirstValue(
-            parcel,
-            [
-                "date_arrived",
-                "dateArrived",
-                "arrivalDate",
-                "дата прибытия",    
+</html>
