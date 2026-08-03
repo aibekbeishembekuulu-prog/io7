@@ -1,19 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<html lang="ru">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Tez Kargo — Личный кабинет</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<style>
+<title>Tez Kargo — Личный кабинет</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>
 
 *{
     box-sizing:border-box;
@@ -23,13 +11,7 @@
 body{
     margin:0;
     padding:0;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     background:#ffffff;
     color:#222;
     min-height:100vh;
@@ -519,6 +501,19 @@ body{
     font-size:13px;
 }
 
+/* DEBUG */
+
+.debug-box{
+    display:none;
+    background:#222;
+    color:#00ff88;
+    padding:10px;
+    margin-bottom:12px;
+    border-radius:10px;
+    font-size:11px;
+    word-break:break-all;
+}
+
 @media(max-width:380px){
 
     .main-nav button{
@@ -536,342 +531,135 @@ body{
 
 }
 
-</style>
+</style></head><body><div class="app"><!-- HEADER --><div class="header-top"><div class="header-row"><div class="brand"><div class="brand-icon">
+📦
+</div><div><div class="brand-name">
+TEZ KARGO
+</div><div class="brand-sub">
+Быстрая доставка из Китая
+</div></div></div></div><div class="header-title">
+Личный кабинет
+</div><div class="header-subtitle">
+Управляйте своими посылками и бонусами
+</div></div><!-- NAV --><div class="main-nav"><button
+id="homeBtn"
+class="active"
+onclick="showPage('home')">
+
+🏠 Главная
+
+</button><button
+id="parcelsBtn"
+onclick="showPage('parcels')">
+
+📦 Мои посылки
+
+</button></div><div class="container"><div id="success"
+class="success">
+</div><div id="error"
+class="error-box">
+</div><div id="debug"
+class="debug-box">
+</div><!-- HOME --><div id="home"
+class="page active"><div class="card info-card"><div class="info-icon">
+👤
+</div><div class="info-content"><div class="info-label">
+Ваше имя
+</div><div class="info-value"
+id="clientName">Загрузка...
+
+</div></div></div><div class="card info-card"><div class="info-icon">
+📱
+</div><div class="info-content"><div class="info-label">
+Телефон
+</div><div class="info-value"
+id="clientPhone">Загрузка...
+
+</div></div></div><div class="code-box"><div class="code-label">
+Ваш клиентский код
+</div><div class="code"
+id="clientCode">---
+
+</div><button
+class="copy-code-btn"
+onclick="copyClientCode()">
+
+📋 Скопировать клиентский код
+
+</button></div><div class="warehouse"><div class="warehouse-title">
+📦 Адрес склада в Китае
+</div><div class="warehouse-address"
+id="warehouseText">Загрузка...
+
+</div><button
+class="copy-btn"
+onclick="copyAddress()">
+
+📋 Скопировать адрес склада
+
+</button></div><div class="bonus-grid"><div class="bonus-card"><div class="bonus-icon">
+💰
+</div><div class="bonus-title">
+Текущий бонус
+</div><div class="bonus-value"
+id="bonusValue">0 сом
+
+</div></div><div class="bonus-card"><div class="bonus-icon">
+💎
+</div><div class="bonus-title">
+Общий бонус
+</div><div class="bonus-value"
+id="totalBonus">0 сом
+
+</div></div></div><div id="levelBox"
+class="level-box newbie"><div class="level-title">
+Ваш уровень
+</div><div class="level-value"
+id="levelValue">⏳ Загрузка...
+
+</div></div></div><!-- PARCELS --><div id="parcels"
+class="page"><div class="parcel-header"><h2>
+📦 Мои посылки
+</h2><p>
+Здесь отображаются все ваши отправления
+</p></div><div class="filters"><button
+class="filter-btn active"
+data-filter="all"
+onclick="setFilter('all')">
+
+Все
+
+</button><button
+class="filter-btn"
+data-filter="china"
+onclick="setFilter('china')">
 
-</head>
+🇨🇳 Китай
 
-<body>
+</button><button
+class="filter-btn"
+data-filter="way"
+onclick="setFilter('way')">
 
-<div class="app">
+🚚 В пути
 
-<!-- HEADER -->
+</button><button
+class="filter-btn"
+data-filter="office"
+onclick="setFilter('office')">
 
-<div class="header-top">
+🏢 Офис
 
-<div class="header-row">
+</button><button
+class="filter-btn"
+data-filter="issued"
+onclick="setFilter('issued')">
 
-    <div class="brand">
+✅ Выдано
 
-        <div class="brand-icon">
-            📦
-        </div>
+</button></div><div id="parcelList"><div class="loading"><div class="spinner"></div>Загрузка посылок...
 
-        <div>
-
-            <div class="brand-name">
-                TEZ KARGO
-            </div>
-
-            <div class="brand-sub">
-                Быстрая доставка из Китая
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<div class="header-title">
-    Личный кабинет
-</div>
-
-<div class="header-subtitle">
-    Управляйте своими посылками и бонусами
-</div>
-
-</div>
-
-<!-- NAV -->
-
-<div class="main-nav">
-
-<button
-    id="homeBtn"
-    class="active"
-    onclick="showPage('home')">
-
-    🏠 Главная
-
-</button>
-
-<button
-    id="parcelsBtn"
-    onclick="showPage('parcels')">
-
-    📦 Мои посылки
-
-</button>
-
-</div>
-
-<div class="container">
-
-<div id="success"
-     class="success">
-</div>
-
-<div id="error"
-     class="error-box">
-</div>
-
-<!-- HOME -->
-
-<div id="home"
-     class="page active">
-
-<!-- NAME -->
-
-<div class="card info-card">
-
-<div class="info-icon">
-    👤
-</div>
-
-<div class="info-content">
-
-    <div class="info-label">
-        Ваше имя
-    </div>
-
-    <div class="info-value"
-         id="clientName">
-
-        Загрузка...
-
-    </div>
-
-</div>
-
-</div>
-
-<!-- PHONE -->
-
-<div class="card info-card">
-
-<div class="info-icon">
-    📱
-</div>
-
-<div class="info-content">
-
-    <div class="info-label">
-        Телефон
-    </div>
-
-    <div class="info-value"
-         id="clientPhone">
-
-        Загрузка...
-
-    </div>
-
-</div>
-
-</div>
-
-<!-- CLIENT CODE -->
-
-<div class="code-box">
-
-<div class="code-label">
-    Ваш клиентский код
-</div>
-
-<div class="code"
-     id="clientCode">
-
-    ---
-
-</div>
-
-<button
-    class="copy-code-btn"
-    onclick="copyClientCode()">
-
-    📋 Скопировать клиентский код
-
-</button>
-
-</div>
-
-<!-- WAREHOUSE -->
-
-<div class="warehouse">
-
-<div class="warehouse-title">
-    📦 Адрес склада в Китае
-</div>
-
-<div class="warehouse-address"
-     id="warehouseText">
-
-    Загрузка...
-
-</div>
-
-<button
-    class="copy-btn"
-    onclick="copyAddress()">
-
-    📋 Скопировать адрес склада
-
-</button>
-
-</div>
-
-<!-- BONUS -->
-
-<div class="bonus-grid">
-
-<div class="bonus-card">
-
-    <div class="bonus-icon">
-        💰
-    </div>
-
-    <div class="bonus-title">
-        Текущий бонус
-    </div>
-
-    <div class="bonus-value"
-         id="bonusValue">
-
-        0 сом
-
-    </div>
-
-</div>
-
-
-<div class="bonus-card">
-
-    <div class="bonus-icon">
-        💎
-    </div>
-
-    <div class="bonus-title">
-        Общий бонус
-    </div>
-
-    <div class="bonus-value"
-         id="totalBonus">
-
-        0 сом
-
-    </div>
-
-</div>
-
-</div>
-
-<!-- LEVEL -->
-
-<div id="levelBox"
-     class="level-box newbie">
-
-<div class="level-title">
-    Ваш уровень
-</div>
-
-<div class="level-value"
-     id="levelValue">
-
-    ⏳ Загрузка...
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PARCELS -->
-
-<div id="parcels"
-     class="page">
-
-<div class="parcel-header">
-
-    <h2>
-        📦 Мои посылки
-    </h2>
-
-    <p>
-        Здесь отображаются все ваши отправления
-    </p>
-
-</div>
-
-
-<div class="filters">
-
-    <button
-        class="filter-btn active"
-        data-filter="all"
-        onclick="setFilter('all')">
-
-        Все
-
-    </button>
-
-    <button
-        class="filter-btn"
-        data-filter="china"
-        onclick="setFilter('china')">
-
-        🇨🇳 Китай
-
-    </button>
-
-    <button
-        class="filter-btn"
-        data-filter="way"
-        onclick="setFilter('way')">
-
-        🚚 В пути
-
-    </button>
-
-    <button
-        class="filter-btn"
-        data-filter="office"
-        onclick="setFilter('office')">
-
-        🏢 Офис
-
-    </button>
-
-    <button
-        class="filter-btn"
-        data-filter="issued"
-        onclick="setFilter('issued')">
-
-        ✅ Выдано
-
-    </button>
-
-</div>
-
-
-<div id="parcelList">
-
-    <div class="loading">
-
-        <div class="spinner"></div>
-
-        Загрузка посылок...
-
-    </div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
+</div></div></div></div></div><script>
 
 /* =====================================================
    API
@@ -892,49 +680,51 @@ let allParcels = [];
 
 function showPage(id){
 
-    document
-        .querySelectorAll(".page")
-        .forEach(function(page){
+document
+.querySelectorAll(".page")
+.forEach(function(page){
 
-            page.classList.remove("active");
+page.classList.remove("active");
 
-        });
-
-
-    const page =
-        document.getElementById(id);
+});
 
 
-    if(page){
-        page.classList.add("active");
-    }
+const page =
+document.getElementById(id);
 
 
-    document
-        .querySelectorAll(".main-nav button")
-        .forEach(function(btn){
+if(page){
 
-            btn.classList.remove("active");
+page.classList.add("active");
 
-        });
+}
 
 
-    if(id === "home"){
+document
+.querySelectorAll(".main-nav button")
+.forEach(function(btn){
 
-        document
-            .getElementById("homeBtn")
-            .classList.add("active");
+btn.classList.remove("active");
 
-    }
+});
 
 
-    if(id === "parcels"){
+if(id === "home"){
 
-        document
-            .getElementById("parcelsBtn")
-            .classList.add("active");
+document
+.getElementById("homeBtn")
+.classList.add("active");
 
-    }
+}
+
+
+if(id === "parcels"){
+
+document
+.getElementById("parcelsBtn")
+.classList.add("active");
+
+}
 
 }
 
@@ -945,88 +735,136 @@ function showPage(id){
 
 function setFilter(type){
 
-    currentFilter = type;
+currentFilter = type;
 
 
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(function(btn){
+document
+.querySelectorAll(".filter-btn")
+.forEach(function(btn){
 
-            btn.classList.remove("active");
+btn.classList.remove("active");
 
-        });
-
-
-    const activeBtn =
-        document.querySelector(
-            '.filter-btn[data-filter="' +
-            type +
-            '"]'
-        );
+});
 
 
-    if(activeBtn){
+const activeBtn =
+document.querySelector(
+'.filter-btn[data-filter="' +
+type +
+'"]'
+);
 
-        activeBtn.classList.add("active");
 
-    }
+if(activeBtn){
+
+activeBtn.classList.add("active");
+
+}
 
 
-    renderParcels();
+renderParcels();
 
 }
 
 
 /* =====================================================
-   TELEGRAM ID
+   GET TELEGRAM ID
 ===================================================== */
 
 function getTG(){
 
-    try{
+try{
 
-        if(
-            window.Telegram &&
-            Telegram.WebApp
-        ){
+if(
+window.Telegram &&
+Telegram.WebApp
+){
 
-            Telegram.WebApp.ready();
+Telegram.WebApp.ready();
 
-            Telegram.WebApp.expand();
-
-
-            const user =
-                Telegram.WebApp
-                .initDataUnsafe
-                ?.user;
+Telegram.WebApp.expand();
 
 
-            if(
-                user &&
-                user.id
-            ){
-
-                return user.id.toString();
-
-            }
-
-        }
-
-    }
-
-    catch(e){
-
-        console.log(
-            "Telegram error:",
-            e
-        );
-
-    }
+const user =
+Telegram.WebApp
+.initDataUnsafe
+?.user;
 
 
-    return new URLSearchParams(
-        window.location.search
-    ).get("tg_id");
+if(
+user &&
+user.id
+){
+
+return String(
+user.id
+);
+
+}
+
+}
+
+}
+
+catch(error){
+
+console.error(
+"Telegram error:",
+error
+);
+
+}
+
+
+/* URL PARAMETER FALLBACK */
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const urlTG =
+params.get("tg_id");
+
+
+if(urlTG){
+
+return String(
+urlTG
+).trim();
+
+}
+
+
+return null;
+
+}
+
+
+/* =====================================================
+   DEBUG
+===================================================== */
+
+function showDebug(message){
+
+console.log(
+message
+);
+
+const box =
+document.getElementById(
+"debug"
+);
+
+if(box){
+
+box.innerText =
+message;
+
+box.style.display =
+"block";
+
+}
 
 }
 
@@ -1037,54 +875,65 @@ function getTG(){
 
 function copyText(text){
 
-    if(
-        navigator.clipboard &&
-        window.isSecureContext
-    ){
+if(
+navigator.clipboard &&
+window.isSecureContext
+){
 
-        return navigator.clipboard
-            .writeText(text);
+return navigator.clipboard
+.writeText(text);
 
-    }
-
-
-    return new Promise(function(resolve,reject){
-
-        const textarea =
-            document.createElement("textarea");
-
-        textarea.value = text;
-
-        textarea.style.position = "fixed";
-
-        textarea.style.opacity = "0";
-
-        document.body.appendChild(textarea);
-
-        textarea.focus();
-
-        textarea.select();
+}
 
 
-        try{
+return new Promise(function(resolve,reject){
 
-            document.execCommand("copy");
+const textarea =
+document.createElement("textarea");
 
-            document.body.removeChild(textarea);
+textarea.value =
+text;
 
-            resolve();
+textarea.style.position =
+"fixed";
 
-        }
+textarea.style.opacity =
+"0";
 
-        catch(error){
+document.body.appendChild(
+textarea
+);
 
-            document.body.removeChild(textarea);
+textarea.focus();
 
-            reject(error);
+textarea.select();
 
-        }
 
-    });
+try{
+
+document.execCommand(
+"copy"
+);
+
+document.body.removeChild(
+textarea
+);
+
+resolve();
+
+}
+
+catch(error){
+
+document.body.removeChild(
+textarea
+);
+
+reject(error);
+
+}
+
+});
 
 }
 
@@ -1095,44 +944,48 @@ function copyText(text){
 
 function copyAddress(){
 
-    const element =
-        document.getElementById(
-            "warehouseText"
-        );
+const element =
+document.getElementById(
+"warehouseText"
+);
 
 
-    const text =
-        element
-        ? element.innerText.trim()
-        : "";
+const text =
+element
+? element.innerText.trim()
+: "";
 
 
-    if(!text){
+if(
+!text ||
+text === "Загрузка..." ||
+text === "Нет данных"
+){
 
-        showError(
-            "⚠️ Адрес склада отсутствует."
-        );
+showError(
+"⚠️ Адрес склада отсутствует."
+);
 
-        return;
+return;
 
-    }
+}
 
 
-    copyText(text)
+copyText(text)
 
-    .then(function(){
+.then(function(){
 
-        showSuccess(
-            "✅ Адрес склада скопирован"
-        );
+showSuccess(
+"✅ Адрес склада скопирован"
+);
 
-    })
+})
 
-    .catch(function(){
+.catch(function(){
 
-        alert(text);
+alert(text);
 
-    });
+});
 
 }
 
@@ -1143,47 +996,48 @@ function copyAddress(){
 
 function copyClientCode(){
 
-    const element =
-        document.getElementById(
-            "clientCode"
-        );
+const element =
+document.getElementById(
+"clientCode"
+);
 
 
-    const code =
-        element
-        ? element.innerText.trim()
-        : "";
+const code =
+element
+? element.innerText.trim()
+: "";
 
 
-    if(
-        !code ||
-        code === "---"
-    ){
+if(
+!code ||
+code === "---" ||
+code === "Загрузка..."
+){
 
-        showError(
-            "⚠️ Клиентский код ещё не загружен."
-        );
+showError(
+"⚠️ Клиентский код ещё не загружен."
+);
 
-        return;
+return;
 
-    }
+}
 
 
-    copyText(code)
+copyText(code)
 
-    .then(function(){
+.then(function(){
 
-        showSuccess(
-            "✅ Клиентский код скопирован"
-        );
+showSuccess(
+"✅ Клиентский код скопирован"
+);
 
-    })
+})
 
-    .catch(function(){
+.catch(function(){
 
-        alert(code);
+alert(code);
 
-    });
+});
 
 }
 
@@ -1194,31 +1048,32 @@ function copyClientCode(){
 
 function showSuccess(message){
 
-    const box =
-        document.getElementById(
-            "success"
-        );
+const box =
+document.getElementById(
+"success"
+);
 
 
-    if(!box){
-        return;
-    }
+if(!box){
+
+return;
+
+}
 
 
-    box.innerText =
-        message;
+box.innerText =
+message;
+
+box.style.display =
+"block";
 
 
-    box.style.display =
-        "block";
+setTimeout(function(){
 
+box.style.display =
+"none";
 
-    setTimeout(function(){
-
-        box.style.display =
-            "none";
-
-    },3000);
+},3000);
 
 }
 
@@ -1229,25 +1084,27 @@ function showSuccess(message){
 
 function showError(message){
 
-    const box =
-        document.getElementById(
-            "error"
-        );
+const box =
+document.getElementById(
+"error"
+);
 
 
-    if(!box){
-        return;
-    }
+if(!box){
 
-
-    box.innerText =
-        message;
-
-
-    box.style.display =
-        "block";
+return;
 
 }
+
+
+box.innerText =
+message;
+
+box.style.display =
+"block";
+
+}
+
 
 /* =====================================================
    STATUS
@@ -1255,69 +1112,69 @@ function showError(message){
 
 function getStatus(item){
 
-    const status =
-        String(
-            item.status ||
-            ""
-        )
-        .toLowerCase()
-        .trim();
+const status =
+String(
+item.status ||
+""
+)
+.toLowerCase()
+.trim();
 
 
-    if(
-        status.includes("кита") ||
-        status.includes("китай")
-    ){
+if(
+status.includes("кита") ||
+status.includes("китай")
+){
 
-        return {
-            key:"china",
-            text:"🇨🇳 На складе в Китае"
-        };
+return {
+key:"china",
+text:"🇨🇳 На складе в Китае"
+};
 
-    }
-
-
-    if(
-        status.includes("путь") ||
-        status.includes("пути")
-    ){
-
-        return {
-            key:"way",
-            text:"🚚 В пути"
-        };
-
-    }
+}
 
 
-    if(
-        status.includes("офис")
-    ){
+if(
+status.includes("путь") ||
+status.includes("пути")
+){
 
-        return {
-            key:"office",
-            text:"🏢 В офисе"
-        };
+return {
+key:"way",
+text:"🚚 В пути"
+};
 
-    }
-
-
-    if(
-        status.includes("выдан")
-    ){
-
-        return {
-            key:"issued",
-            text:"✅ Выдано"
-        };
-
-    }
+}
 
 
-    return {
-        key:"other",
-        text:"⏳ Обработка"
-    };
+if(
+status.includes("офис")
+){
+
+return {
+key:"office",
+text:"🏢 В офисе"
+};
+
+}
+
+
+if(
+status.includes("выдан")
+){
+
+return {
+key:"issued",
+text:"✅ Выдано"
+};
+
+}
+
+
+return {
+key:"other",
+text:"⏳ Обработка"
+};
 
 }
 
@@ -1328,193 +1185,219 @@ function getStatus(item){
 
 function loadClient(){
 
-    const tg_id =
-        getTG();
+const tg_id =
+getTG();
 
 
-    if(!tg_id){
-
-        showError(
-            "⚠️ Telegram ID не найден. Откройте личный кабинет через Telegram."
-        );
-
-        return;
-
-    }
+showDebug(
+"Telegram ID: " +
+(tg_id || "НЕ НАЙДЕН")
+);
 
 
-    /* =================================================
-       LOAD PROFILE
-    ================================================= */
+if(!tg_id){
 
-    fetch(
-        API_URL +
-        "?action=profile&tg_id=" +
-        encodeURIComponent(tg_id)
-    )
+showError(
+"⚠️ Telegram ID не найден. Откройте личный кабинет через Telegram."
+);
 
-    .then(function(response){
+return;
 
-        if(!response.ok){
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-        return response.json();
-
-    })
-
-    .then(function(data){
-
-        console.log(
-            "PROFILE:",
-            data
-        );
+}
 
 
-        if(
-            !data ||
-            data.status !== "ok"
-        ){
-
-            showError(
-                "❌ Данные клиента не найдены."
-            );
-
-            return;
-
-        }
+const url =
+API_URL +
+"?action=profile&tg_id=" +
+encodeURIComponent(
+tg_id
+);
 
 
-        /* NAME */
-
-        document
-            .getElementById(
-                "clientName"
-            )
-            .innerText =
-            data.name ||
-            "-";
+console.log(
+"PROFILE URL:",
+url
+);
 
 
-        /* PHONE */
+fetch(url)
 
-        document
-            .getElementById(
-                "clientPhone"
-            )
-            .innerText =
-            data.phone ||
-            "Нет данных";
+.then(function(response){
 
+if(!response.ok){
 
-        /* CLIENT CODE */
+throw new Error(
+"HTTP " +
+response.status
+);
 
-        document
-            .getElementById(
-                "clientCode"
-            )
-            .innerText =
-            data.client_code ||
-            "---";
+}
 
+return response.text();
 
-        /* CURRENT BONUS */
+})
 
-        document
-            .getElementById(
-                "bonusValue"
-            )
-            .innerText =
-            (
-                Number(
-                    data.balance
-                ) || 0
-            ) +
-            " сом";
+.then(function(text){
+
+console.log(
+"PROFILE RAW:",
+text
+);
 
 
-        /* TOTAL BONUS */
+let data;
 
-        document
-            .getElementById(
-                "totalBonus"
-            )
-            .innerText =
-            (
-                Number(
-                    data.total_referral_bonus
-                ) || 0
-            ) +
-            " сом";
+try{
 
+data =
+JSON.parse(
+text
+);
 
-        /* WAREHOUSE ADDRESS */
+}
 
-        const warehouse =
-            data.address_warehouse;
+catch(error){
 
+throw new Error(
+"API вернул неправильный JSON: " +
+text
+);
 
-        document
-            .getElementById(
-                "warehouseText"
-            )
-            .innerText =
-
-            warehouse &&
-            String(
-                warehouse
-            ).trim()
-
-            ?
-
-            warehouse
-
-            :
-
-            "Нет данных";
+}
 
 
-        /* LEVEL */
-
-        const level =
-            data.referral_level ||
-            "🥉 Бронза";
-
-
-        document
-            .getElementById(
-                "levelValue"
-            )
-            .innerText =
-            level;
+console.log(
+"PROFILE DATA:",
+data
+);
 
 
-        /* LOAD PARCELS */
+if(
+!data ||
+data.status !== "ok"
+){
 
-        loadParcels(
-            tg_id
-        );
+throw new Error(
+"Клиент не найден. API ответ: " +
+JSON.stringify(
+data
+)
+);
 
-    })
-
-    .catch(function(error){
-
-        console.error(
-            "PROFILE ERROR:",
-            error
-        );
+}
 
 
-        showError(
-            "❌ Не удалось загрузить данные клиента."
-        );
+/* NAME */
 
-    });
+document
+.getElementById(
+"clientName"
+)
+.innerText =
+data.name ||
+"-";
+
+
+/* PHONE */
+
+document
+.getElementById(
+"clientPhone"
+)
+.innerText =
+data.phone ||
+"Нет данных";
+
+
+/* CLIENT CODE */
+
+document
+.getElementById(
+"clientCode"
+)
+.innerText =
+data.client_code ||
+"---";
+
+
+/* CURRENT BONUS */
+
+document
+.getElementById(
+"bonusValue"
+)
+.innerText =
+(
+Number(
+data.balance
+) || 0
+) +
+" сом";
+
+
+/* TOTAL BONUS */
+
+document
+.getElementById(
+"totalBonus"
+)
+.innerText =
+(
+Number(
+data.total_referral_bonus
+) || 0
+) +
+" сом";
+
+
+/* WAREHOUSE */
+
+document
+.getElementById(
+"warehouseText"
+)
+.innerText =
+data.address_warehouse ||
+"Нет данных";
+
+
+/* LEVEL */
+
+const level =
+data.referral_level ||
+"🥉 Бронза";
+
+
+document
+.getElementById(
+"levelValue"
+)
+.innerText =
+level;
+
+
+/* LOAD PARCELS */
+
+loadParcels(
+tg_id
+);
+
+})
+
+.catch(function(error){
+
+console.error(
+"PROFILE ERROR:",
+error
+);
+
+
+showError(
+"❌ " +
+error.message
+);
+
+});
 
 }
 
@@ -1525,154 +1408,190 @@ function loadClient(){
 
 function loadParcels(tg_id){
 
-    fetch(
-        API_URL +
-        "?action=all&tg_id=" +
-        encodeURIComponent(tg_id)
-    )
-
-    .then(function(response){
-
-        if(!response.ok){
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-        return response.json();
-
-    })
-
-    .then(function(data){
-
-        console.log(
-            "PARCELS:",
-            data
-        );
+const url =
+API_URL +
+"?action=all&tg_id=" +
+encodeURIComponent(
+tg_id
+);
 
 
-        if(
-            !data ||
-            data.status !== "ok"
-        ){
-
-            allParcels = [];
-
-            renderParcels();
-
-            return;
-
-        }
+console.log(
+"PARCEL URL:",
+url
+);
 
 
-        allParcels = [];
+fetch(url)
 
+.then(function(response){
 
-        /* OFFICE */
+if(!response.ok){
 
-        if(
-            Array.isArray(
-                data.office
-            )
-        ){
-
-            data.office
-                .forEach(function(item){
-
-                    allParcels.push({
-
-                        track:
-                            item.track,
-
-                        status:
-                            "office",
-
-                        statusText:
-                            "🏢 В офисе",
-
-                        price:
-                            item.price,
-
-                        send_date:
-                            item.date_sent,
-
-                        expected:
-                            item.date_arrived
-
-                    });
-
-                });
-
-        }
-
-
-        /* WAY */
-
-        if(
-            Array.isArray(
-                data.way
-            )
-        ){
-
-            data.way
-                .forEach(function(item){
-
-                    const st =
-                        getStatus(
-                            item
-                        );
-
-
-                    allParcels.push({
-
-                        track:
-                            item.track,
-
-                        status:
-                            st.key,
-
-                        statusText:
-                            st.text,
-
-                        price:
-                            item.price,
-
-                        send_date:
-                            item.date_sent,
-
-                        expected:
-                            item.date_arrived
-
-                    });
-
-                });
-
-        }
-
-
-        renderParcels();
-
-    })
-
-    .catch(function(error){
-
-        console.error(
-            "PARCEL ERROR:",
-            error
-        );
-
-
-        allParcels = [];
-
-        renderParcels();
-
-    });
+throw new Error(
+"HTTP " +
+response.status
+);
 
 }
 
+return response.text();
+
+})
+
+.then(function(text){
+
+console.log(
+"PARCEL RAW:",
+text
+);
+
+
+let data;
+
+try{
+
+data =
+JSON.parse(
+text
+);
+
+}
+
+catch(error){
+
+throw new Error(
+"Неверный JSON посылок: " +
+text
+);
+
+}
+
+
+console.log(
+"PARCEL DATA:",
+data
+);
+
+
+if(
+!data ||
+data.status !== "ok"
+){
+
+allParcels = [];
+
+renderParcels();
+
+return;
+
+}
+
+
+allParcels = [];
+
+
+/* OFFICE */
+
+if(
+Array.isArray(
+data.office
+)
+){
+
+data.office.forEach(
+function(item){
+
+allParcels.push({
+
+track:
+item.track,
+
+status:
+"office",
+
+statusText:
+"🏢 В офисе",
+
+price:
+item.price,
+
+send_date:
+item.date_sent,
+
+expected:
+item.date_arrived
+
+});
+
+});
+
+}
+
+
+/* WAY */
+
+if(
+Array.isArray(
+data.way
+)
+){
+
+data.way.forEach(
+function(item){
+
+const st =
+getStatus(
+item
+);
+
+
+allParcels.push({
+
+track:
+item.track,
+
+status:
+st.key,
+
+statusText:
+st.text,
+
+price:
+item.price,
+
+send_date:
+item.date_sent,
+
+expected:
+item.date_arrived
+
+});
+
+});
+
+}
+
+
+renderParcels();
+
+})
+
+.catch(function(error){
+
+console.error(
+"PARCEL ERROR:",
+error
+);
+
+allParcels = [];
+
+renderParcels();
+
+});
+
+
+}
 
 /* =====================================================
    RENDER PARCELS
@@ -1680,163 +1599,163 @@ function loadParcels(tg_id){
 
 function renderParcels(){
 
-    const container =
-        document.getElementById(
-            "parcelList"
-        );
+const container =
+document.getElementById(
+"parcelList"
+);
 
 
-    if(!container){
+if(!container){
 
-        return;
+return;
 
-    }
-
-
-    const filtered =
-        allParcels.filter(
-            function(item){
-
-                if(
-                    currentFilter ===
-                    "all"
-                ){
-
-                    return true;
-
-                }
+}
 
 
-                return (
-                    item.status ===
-                    currentFilter
-                );
+const filtered =
+allParcels.filter(
+function(item){
 
-            }
-        );
+if(
+currentFilter ===
+"all"
+){
 
+return true;
 
-    if(
-        filtered.length ===
-        0
-    ){
-
-        container.innerHTML =
-
-            '<div class="empty">' +
-
-            '<div class="empty-icon">📦</div>' +
-
-            '<div>Нет посылок</div>' +
-
-            '</div>';
-
-        return;
-
-    }
+}
 
 
-    let html = "";
+return (
+item.status ===
+currentFilter
+);
+
+}
+);
 
 
-    filtered.forEach(
-        function(item){
+if(
+filtered.length ===
+0
+){
 
-            html +=
+container.innerHTML =
 
-                '<div class="parcel-card">' +
+'<div class="empty">' +
 
-                '<div class="parcel-top">' +
+'<div class="empty-icon">📦</div>' +
 
-                '<div class="parcel-track">' +
+'<div>Нет посылок</div>' +
 
-                '📦 ' +
+'</div>';
 
-                escapeHtml(
-                    item.track ||
-                    "-"
-                ) +
+return;
 
-                '</div>' +
-
-                '<div class="status-badge">' +
-
-                escapeHtml(
-                    item.statusText ||
-                    "⏳ Обработка"
-                ) +
-
-                '</div>' +
-
-                '</div>' +
-
-                '<div class="parcel-info">' +
-
-                '<div class="parcel-info-item">' +
-
-                '<div class="parcel-info-label">' +
-                '💰 Стоимость' +
-                '</div>' +
-
-                '<div class="parcel-info-value">' +
-
-                escapeHtml(
-                    String(
-                        item.price ||
-                        0
-                    )
-                ) +
-
-                ' сом' +
-
-                '</div>' +
-
-                '</div>' +
-
-                '<div class="parcel-info-item">' +
-
-                '<div class="parcel-info-label">' +
-                '📅 Дата отправки' +
-                '</div>' +
-
-                '<div class="parcel-info-value">' +
-
-                escapeHtml(
-                    item.send_date ||
-                    "-"
-                ) +
-
-                '</div>' +
-
-                '</div>' +
-
-                '<div class="parcel-info-item">' +
-
-                '<div class="parcel-info-label">' +
-                '⏳ Ожидаемое прибытие' +
-                '</div>' +
-
-                '<div class="parcel-info-value">' +
-
-                escapeHtml(
-                    item.expected ||
-                    "-"
-                ) +
-
-                '</div>' +
-
-                '</div>' +
-
-                '</div>' +
-
-                '</div>';
-
-        }
-    );
+}
 
 
-    container.innerHTML =
-        html;
+let html = "";
+
+
+filtered.forEach(
+function(item){
+
+html +=
+
+'<div class="parcel-card">' +
+
+'<div class="parcel-top">' +
+
+'<div class="parcel-track">' +
+
+'📦 ' +
+
+escapeHtml(
+item.track ||
+"-"
+) +
+
+'</div>' +
+
+'<div class="status-badge">' +
+
+escapeHtml(
+item.statusText ||
+"⏳ Обработка"
+) +
+
+'</div>' +
+
+'</div>' +
+
+'<div class="parcel-info">' +
+
+'<div class="parcel-info-item">' +
+
+'<div class="parcel-info-label">' +
+'💰 Стоимость' +
+'</div>' +
+
+'<div class="parcel-info-value">' +
+
+escapeHtml(
+String(
+item.price ||
+0
+)
+) +
+
+' сом' +
+
+'</div>' +
+
+'</div>' +
+
+'<div class="parcel-info-item">' +
+
+'<div class="parcel-info-label">' +
+'📅 Дата отправки' +
+'</div>' +
+
+'<div class="parcel-info-value">' +
+
+escapeHtml(
+item.send_date ||
+"-"
+) +
+
+'</div>' +
+
+'</div>' +
+
+'<div class="parcel-info-item">' +
+
+'<div class="parcel-info-label">' +
+'⏳ Ожидаемое прибытие' +
+'</div>' +
+
+'<div class="parcel-info-value">' +
+
+escapeHtml(
+item.expected ||
+"-"
+) +
+
+'</div>' +
+
+'</div>' +
+
+'</div>' +
+
+'</div>';
+
+}
+);
+
+
+container.innerHTML =
+html;
 
 }
 
@@ -1847,34 +1766,34 @@ function renderParcels(){
 
 function escapeHtml(value){
 
-    return String(
-        value
-    )
+return String(
+value
+)
 
-    .replace(
-        /&/g,
-        "&amp;"
-    )
+.replace(
+/&/g,
+"&amp;"
+)
 
-    .replace(
-        /</g,
-        "&lt;"
-    )
+.replace(
+/</g,
+"&lt;"
+)
 
-    .replace(
-        />/g,
-        "&gt;"
-    )
+.replace(
+/>/g,
+"&gt;"
+)
 
-    .replace(
-        /"/g,
-        "&quot;"
-    )
+.replace(
+/"/g,
+"&quot;"
+)
 
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
 
@@ -1884,10 +1803,22 @@ function escapeHtml(value){
 ===================================================== */
 
 window.addEventListener(
-    "load",
-    function(){
+"load",
+function(){
 
-        loadClient();
+setTimeout(
+function(){
 
-    }
+loadClient();
+
+},
+300
 );
+
+});
+
+</script>
+
+</body>
+
+</html>
