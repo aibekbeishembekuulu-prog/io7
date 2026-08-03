@@ -1249,7 +1249,6 @@ function showError(message){
 
 }
 
-
 /* =====================================================
    STATUS
 ===================================================== */
@@ -1329,7 +1328,9 @@ function getStatus(item){
 
 function loadClient(){
 
-    const tg_id = getTG();
+    const tg_id =
+        getTG();
+
 
     if(!tg_id){
 
@@ -1338,16 +1339,13 @@ function loadClient(){
         );
 
         return;
+
     }
 
-    // Андан ары Google Apps Script API аркылуу
-    // кардардын маалыматтарын алуу керек
 
-}
-=================================================
-       PROFILE
+    /* =================================================
+       LOAD PROFILE
     ================================================= */
-
 
     fetch(
         API_URL +
@@ -1455,10 +1453,7 @@ function loadClient(){
             " сом";
 
 
-        /* =================================================
-           J COLUMN — ADDRESS CKLADA
-           API DATA: data[i][9]
-        ================================================= */
+        /* WAREHOUSE ADDRESS */
 
         const warehouse =
             data.address_warehouse;
@@ -1471,59 +1466,24 @@ function loadClient(){
             .innerText =
 
             warehouse &&
-            String(warehouse).trim()
-                ? warehouse
-                : "Нет данных";
+            String(
+                warehouse
+            ).trim()
+
+            ?
+
+            warehouse
+
+            :
+
+            "Нет данных";
 
 
         /* LEVEL */
 
-        const total =
-            Number(
-                data.total_referral_bonus
-            ) || 0;
-
-
-        let level =
+        const level =
             data.referral_level ||
             "🥉 Бронза";
-
-
-        let levelClass =
-            "newbie";
-
-
-        if(total >= 200){
-
-            levelClass =
-                "vip";
-
-        }
-
-        else if(total >= 100){
-
-            levelClass =
-                "gold";
-
-        }
-
-        else if(total >= 60){
-
-            levelClass =
-                "silver";
-
-        }
-
-
-        const levelBox =
-            document.getElementById(
-                "levelBox"
-            );
-
-
-        levelBox.className =
-            "level-box " +
-            levelClass;
 
 
         document
@@ -1533,15 +1493,22 @@ function loadClient(){
             .innerText =
             level;
 
-    })
 
+        /* LOAD PARCELS */
+
+        loadParcels(
+            tg_id
+        );
+
+    })
 
     .catch(function(error){
 
-        console.log(
+        console.error(
             "PROFILE ERROR:",
             error
         );
+
 
         showError(
             "❌ Не удалось загрузить данные клиента."
@@ -1549,11 +1516,14 @@ function loadClient(){
 
     });
 
+}
 
-    /* =================================================
-       PARCELS
-    ================================================= */
 
+/* =====================================================
+   LOAD PARCELS
+===================================================== */
+
+function loadParcels(tg_id){
 
     fetch(
         API_URL +
@@ -1610,36 +1580,36 @@ function loadClient(){
         ){
 
             data.office
-            .forEach(function(item){
+                .forEach(function(item){
 
-                allParcels.push({
+                    allParcels.push({
 
-                    track:
-                        item.track,
+                        track:
+                            item.track,
 
-                    status:
-                        "office",
+                        status:
+                            "office",
 
-                    statusText:
-                        "🏢 В офисе",
+                        statusText:
+                            "🏢 В офисе",
 
-                    price:
-                        item.price,
+                        price:
+                            item.price,
 
-                    send_date:
-                        item.date_sent,
+                        send_date:
+                            item.date_sent,
 
-                    expected:
-                        item.date_arrived
+                        expected:
+                            item.date_arrived
+
+                    });
 
                 });
-
-            });
 
         }
 
 
-        /* WAY / OTHER */
+        /* WAY */
 
         if(
             Array.isArray(
@@ -1648,35 +1618,37 @@ function loadClient(){
         ){
 
             data.way
-            .forEach(function(item){
+                .forEach(function(item){
 
-                const st =
-                    getStatus(item);
+                    const st =
+                        getStatus(
+                            item
+                        );
 
 
-                allParcels.push({
+                    allParcels.push({
 
-                    track:
-                        item.track,
+                        track:
+                            item.track,
 
-                    status:
-                        st.key,
+                        status:
+                            st.key,
 
-                    statusText:
-                        st.text,
+                        statusText:
+                            st.text,
 
-                    price:
-                        item.price,
+                        price:
+                            item.price,
 
-                    send_date:
-                        item.date_sent,
+                        send_date:
+                            item.date_sent,
 
-                    expected:
-                        item.date_arrived
+                        expected:
+                            item.date_arrived
+
+                    });
 
                 });
-
-            });
 
         }
 
@@ -1685,28 +1657,17 @@ function loadClient(){
 
     })
 
-
     .catch(function(error){
 
-        console.log(
+        console.error(
             "PARCEL ERROR:",
             error
         );
 
 
-        document
-            .getElementById(
-                "parcelList"
-            )
-            .innerHTML =
+        allParcels = [];
 
-            '<div class="empty">' +
-
-            '<div class="empty-icon">⚠️</div>' +
-
-            '<div>Ошибка загрузки посылок</div>' +
-
-            '</div>';
+        renderParcels();
 
     });
 
@@ -1718,6 +1679,19 @@ function loadClient(){
 ===================================================== */
 
 function renderParcels(){
+
+    const container =
+        document.getElementById(
+            "parcelList"
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
 
     const filtered =
         allParcels.filter(
@@ -1742,33 +1716,33 @@ function renderParcels(){
         );
 
 
-    let html =
-        "";
-
-
     if(
         filtered.length ===
         0
     ){
 
-        html =
+        container.innerHTML =
 
-        '<div class="empty">' +
+            '<div class="empty">' +
 
-        '<div class="empty-icon">📦</div>' +
+            '<div class="empty-icon">📦</div>' +
 
-        '<div>Нет посылок</div>' +
+            '<div>Нет посылок</div>' +
 
-        '</div>';
+            '</div>';
+
+        return;
 
     }
 
-    else{
 
-        filtered.forEach(
-            function(item){
+    let html = "";
 
-                html +=
+
+    filtered.forEach(
+        function(item){
+
+            html +=
 
                 '<div class="parcel-card">' +
 
@@ -1857,17 +1831,11 @@ function renderParcels(){
 
                 '</div>';
 
-            }
-        );
-
-    }
+        }
+    );
 
 
-    document
-        .getElementById(
-            "parcelList"
-        )
-        .innerHTML =
+    container.innerHTML =
         html;
 
 }
@@ -1879,18 +1847,40 @@ function renderParcels(){
 
 function escapeHtml(value){
 
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    return String(
+        value
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
 
 /* =====================================================
-   START
+   START APP
 ===================================================== */
 
 window.addEventListener(
@@ -1901,10 +1891,3 @@ window.addEventListener(
 
     }
 );
-
-</script>
-
-</body>
-
-</html>
-   
