@@ -1847,7 +1847,131 @@ loadClient();
 300
 );
 
+});/* =====================================================
+SHOW REFERRALS — МОИ РЕФЕРАЛЫ
+===================================================== */
+
+function showReferrals(){
+
+const tg_id = getTG();
+
+if(!tg_id){
+
+    showError(
+        "⚠️ Telegram ID не найден."
+    );
+
+    return;
+
+}
+
+const url =
+    API_URL +
+    "?action=referrals&tg_id=" +
+    encodeURIComponent(tg_id);
+
+
+fetch(url)
+
+.then(function(response){
+
+    if(!response.ok){
+
+        throw new Error(
+            "HTTP " +
+            response.status
+        );
+
+    }
+
+    return response.json();
+
+})
+
+.then(function(data){
+
+    if(
+        !data ||
+        data.status !== "ok"
+    ){
+
+        throw new Error(
+            "Рефералы не найдены"
+        );
+
+    }
+
+
+    if(
+        !data.referrals ||
+        data.referrals.length === 0
+    ){
+
+        alert(
+            "👥 У вас пока нет приглашённых клиентов."
+        );
+
+        return;
+
+    }
+
+
+    let text =
+        "👥 Мои рефералы\n\n" +
+
+        "Всего приглашено: " +
+        data.count +
+        "\n\n";
+
+
+    data.referrals.forEach(
+        function(referral, index){
+
+            text +=
+
+                (index + 1) +
+                ". " +
+
+                (referral.name ||
+                "Без имени") +
+
+                "\n📱 " +
+
+                (referral.phone ||
+                "Нет телефона") +
+
+                "\n🆔 Код: " +
+
+                (referral.client_code ||
+                "---") +
+
+                "\n\n";
+
+        }
+    );
+
+
+    alert(
+        text
+    );
+
+})
+
+.catch(function(error){
+
+    console.error(
+        "REFERRALS ERROR:",
+        error
+    );
+
+    showError(
+        "❌ " +
+        error.message
+    );
+
 });
+
+}
 
 </script>
 
