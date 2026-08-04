@@ -1344,21 +1344,6 @@ data.client_code ||
 "---";
 
 
-/* CURRENT BONUS */
-
-document
-.getElementById(
-"bonusValue"
-)
-.innerText =
-(
-Number(
-data.balance
-) || 0
-) +
-" сом";
-
-
 /* ОБЩИЙ ЗАРАБОТАННЫЙ БОНУС — G */
 
 document
@@ -1372,7 +1357,22 @@ data.balance
 ) || 0
 ) +
 " сом";
-/* REFERRAL COUNT */
+
+/* ТЕКУЩИЙ БОНУС — H */
+
+document
+.getElementById(
+"bonusValue"
+)
+.innerText =
+(
+Number(
+data.referral_bonus
+) || 0
+) +
+" сом";
+
+/* МОИ РЕФЕРАЛЫ — N */
 
 document
 .getElementById(
@@ -1382,21 +1382,6 @@ document
 Number(
 data.referral_count
 ) || 0;
-
-/* TOTAL REFERRAL BONUS */
-
-document
-.getElementById(
-"totalReferralBonus"
-)
-.innerText =
-(
-Number(
-data.total_referral_bonus
-) || 0
-) +
-" сом";
-
 /* WAREHOUSE */
 
 document
