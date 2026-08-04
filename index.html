@@ -1383,6 +1383,30 @@ data.total_referral_bonus
 ) +
 " сом";
 
+/* REFERRAL COUNT */
+
+document
+.getElementById(
+"referralCount"
+)
+.innerText =
+Number(
+data.referral_count
+) || 0;
+
+/* TOTAL REFERRAL BONUS */
+
+document
+.getElementById(
+"totalReferralBonus"
+)
+.innerText =
+(
+Number(
+data.total_referral_bonus
+) || 0
+) +
+" сом";
 
 /* WAREHOUSE */
 
