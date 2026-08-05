@@ -1420,7 +1420,33 @@ document
 "levelValue"
 )
 .innerText =
-level;
+level;document
+.getElementById(
+"discountValue"
+)
+.innerText =
+"🎁 Ваша скидка: " +
+(data.discount_percent || 0) +
+"%";
+
+
+document
+.getElementById(
+"monthPurchase"
+)
+.innerText =
+"📊 Прошлый месяц: " +
+(data.monthly_purchase || 0) +
+" сом";
+
+
+document
+.getElementById(
+"activeReferrals"
+)
+.innerText =
+"👥 Активные клиенты: " +
+(data.qualified_referrals || 0);
 document
 .getElementById(
 "discountValue"
