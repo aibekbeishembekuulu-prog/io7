@@ -1420,7 +1420,51 @@ document
 "levelValue"
 )
 .innerText =
-level;document
+level;
+
+
+/* DISCOUNT */
+
+document
+.getElementById(
+"discountValue"
+)
+.innerText =
+"🎁 Ваша скидка: " +
+(Number(data.discount_percent) || 0)
++
+"%";
+
+
+/* MONTH PURCHASE */
+
+document
+.getElementById(
+"monthPurchase"
+)
+.innerText =
+"📊 Прошлый месяц: " +
+(Number(data.monthly_purchase) || 0)
++
+" сом";
+
+
+/* ACTIVE REFERRALS */
+
+document
+.getElementById(
+"activeReferrals"
+)
+.innerText =
+"👥 Активные клиенты: " +
+(Number(data.qualified_referrals) || 0);
+
+
+/* LOAD PARCELS */
+
+loadParcels(
+tg_id
+);document
 .getElementById(
 "discountValue"
 )
@@ -1441,31 +1485,6 @@ document
 +
 " сом";
 
-
-document
-.getElementById(
-"activeReferrals"
-)
-.innerText =
-"👥 Активные клиенты: " +
-(Number(data.qualified_referrals) || 0);document
-.getElementById(
-"discountValue"
-)
-.innerText =
-"🎁 Ваша скидка: " +
-(data.discount_percent || 0) +
-"%";
-
-
-document
-.getElementById(
-"monthPurchase"
-)
-.innerText =
-"📊 Прошлый месяц: " +
-(data.monthly_purchase || 0) +
-" сом";
 
 
 document
