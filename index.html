@@ -529,23 +529,100 @@ body{
         grid-template-columns:1fr;
     }
 
+}@media(max-width:380px){
+
+    .main-nav button{
+        font-size:11px;
+        padding:10px 5px;
+    }
+
+    .parcel-info{
+        grid-template-columns:1fr;
+    }
+
+    .bonus-grid{
+        grid-template-columns:1fr;
+    }
+
 }
 
-</style></head><body><div class="app"><!-- HEADER --><div class="header-top"><div class="header-row"><div class="brand"><div class="brand-icon">
+/* HEADER LOGO ОҢ ЖАКТА */
+
+.header-logo{
+    width:52px;
+    height:52px;
+    background:#ffffff;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    flex-shrink:0;
+    box-shadow:0 4px 12px rgba(0,0,0,0.12);
+}
+
+.header-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+}
+
+</style>
+</style></head><body><div class="app">
+
+<!-- HEADER -->
+
+<div class="header-top">
+
+<div class="header-row">
+
+<div class="brand">
+
+<div class="brand-icon">
 📦
-</div><div><div class="brand-name">
+</div>
+
+<div>
+
+<div class="brand-name">
 TEZ KARGO
-</div><div class="brand-sub">
+</div>
+
+<div class="brand-sub">
 Быстрая доставка из Китая
-</div></div></div></div><div class="header-title">
+</div>
+
+</div>
+
+</div>
+
+<!-- ЛОГОТИП ОҢ ЖАКТА -->
+
+<div class="header-logo">
+<img src="logo.jpg" alt="Tez Kargo">
+</div>
+
+</div>
+
+<div class="header-title">
 Личный кабинет
-</div><div class="header-subtitle">
+</div>
+
+<div class="header-subtitle">
 Управляйте своими посылками и бонусами
-</div></div><!-- NAV --><div class="main-nav"><button
+</div>
+
+</div>
+
+<!-- NAV -->
+
+<div class="main-nav">
+
+<button
 id="homeBtn"
 class="active"
 onclick="showPage('home')">
-
 🏠 Главная
 
 </button><button
