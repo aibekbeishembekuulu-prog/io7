@@ -625,7 +625,16 @@ class="active"
 onclick="showPage('home')">
 🏠 Главная
 
-</button><button
+</button>
+
+<button
+id="mapBtn"
+onclick="showPage('map')">
+🗺️ Грузы на карте
+
+</button>
+
+<button
 id="parcelsBtn"
 onclick="showPage('parcels')">
 
@@ -735,6 +744,40 @@ onclick="copyAddress()">
 </div>
 
 </div>
+<!-- MAP -->
+
+<div id="map" class="page">
+
+    <div class="parcel-header">
+        <h2>🗺️ Грузы на карте</h2>
+
+        <p>
+            Отслеживание движения грузов
+        </p>
+    </div>
+
+    <div class="map-box">
+
+        <div class="map-icon">
+            🚚
+        </div>
+
+        <div class="map-title">
+            Грузы на карте
+        </div>
+
+        <div class="map-text">
+            Здесь будет отображаться местоположение
+            и движение ваших грузов.
+        </div>
+
+        <div class="map-status">
+            🚚 Система отслеживания готова
+        </div>
+
+    </div>
+
+</div>
 
 <!-- PARCELS -->
 
@@ -829,21 +872,29 @@ btn.classList.remove("active");
 
 });
 
-
 if(id === "home"){
 
-document
-.getElementById("homeBtn")
-.classList.add("active");
+    document
+    .getElementById("homeBtn")
+    .classList.add("active");
+
+}
+
+
+if(id === "map"){
+
+    document
+    .getElementById("mapBtn")
+    .classList.add("active");
 
 }
 
 
 if(id === "parcels"){
 
-document
-.getElementById("parcelsBtn")
-.classList.add("active");
+    document
+    .getElementById("parcelsBtn")
+    .classList.add("active");
 
 }
 
