@@ -1,8 +1,20 @@
 <!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Tez Kargo — Личный кабинет</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>
+<title>Tez Kargo — Личный кабинет</title>
 
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -566,123 +578,72 @@ body{
     height:100%;
     object-fit:contain;
     display:block;
-}/* CARGO MAP */
+}
+/* =====================================================
+   REAL CARGO MAP
+===================================================== */
 
 .cargo-map{
     position:relative;
-    height:360px;
+    height:430px;
     margin-top:15px;
     border-radius:22px;
     overflow:hidden;
-    background:linear-gradient(135deg,#eef6ff,#f8fbff);
     border:1px solid #e1e8f0;
-    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    box-shadow:0 6px 20px rgba(0,0,0,0.10);
+    background:#eaf2f8;
 }
 
-/* маршрут */
-
-.route-line{
-    position:absolute;
-    left:20%;
-    right:20%;
-    top:50%;
-    height:5px;
-    background:#ff3b4d;
-    border-radius:10px;
+#cargoRealMap{
+    width:100%;
+    height:100%;
 }
 
-/* Китай */
-
-.location{
+.cargo-map-info{
     position:absolute;
+    z-index:1000;
+    left:12px;
+    right:12px;
+    bottom:12px;
+    background:rgba(255,255,255,0.96);
+    border-radius:15px;
+    padding:12px 14px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.15);
     text-align:center;
-    z-index:3;
-}
-
-.china{
-    left:8%;
-    top:39%;
-}
-
-.kyrgyzstan{
-    right:7%;
-    top:39%;
-}
-
-.location-icon{
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    background:#ffffff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:30px;
-    margin:auto;
-    box-shadow:0 5px 15px rgba(0,0,0,0.12);
-}
-
-.location-title{
-    margin-top:7px;
-    font-size:15px;
-    font-weight:900;
-}
-
-.location-text{
-    margin-top:2px;
-    color:#999;
-    font-size:12px;
-}
-
-/* машина */
-
-.truck{
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    width:58px;
-    height:58px;
-    background:#ff3b4d;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:28px;
-    z-index:5;
-    box-shadow:0 7px 18px rgba(255,59,77,0.35);
-    animation:truckMove 2s ease-in-out infinite alternate;
-}
-
-/* статус */
-
-.cargo-status{
-    position:absolute;
-    left:15px;
-    right:15px;
-    bottom:18px;
-    background:#ffffff;
-    padding:13px;
-    border-radius:14px;
-    text-align:center;
-    color:#ff3b4d;
     font-size:13px;
     font-weight:800;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    color:#333;
 }
 
-@keyframes truckMove{
-
-    from{
-        margin-left:-35px;
-    }
-
-    to{
-        margin-left:35px;
-    }
-
+.cargo-map-info strong{
+    color:#ff3b4d;
 }
 
+.cargo-marker{
+    background:#ffffff;
+    border-radius:50%;
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:23px;
+    border:3px solid #ff3b4d;
+    box-shadow:0 4px 12px rgba(0,0,0,0.25);
+}
+
+.cargo-truck-marker{
+    background:#ff3b4d;
+    border:3px solid #ffffff;
+    border-radius:50%;
+    width:46px;
+    height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    box-shadow:0 5px 16px rgba(255,59,77,0.45);
+}
 </style></head><body><div class="app">
 
 <!-- HEADER -->
@@ -864,33 +825,24 @@ onclick="copyAddress()">
 <div id="map" class="page">
 
     <div class="parcel-header">
+
         <h2>🗺️ Грузы на карте</h2>
 
-        <p>Отслеживание движения грузов</p>
+        <p>
+            🚚 Движение грузов Китай → Бишкек → Токмок
+        </p>
+
     </div>
 
     <div class="cargo-map">
 
-        <div class="route-line"></div>
+        <div id="cargoRealMap"></div>
 
-        <div class="location china">
-            <div class="location-icon">🇨🇳</div>
-            <div class="location-title">Китай</div>
-            <div class="location-text">Склад</div>
-        </div>
-
-        <div class="truck">
-            🚚
-        </div>
-
-        <div class="location kyrgyzstan">
-            <div class="location-icon">🇰🇬</div>
-            <div class="location-title">Кыргызстан</div>
-            <div class="location-text">Бишкек</div>
-        </div>
-
-        <div class="cargo-status">
-            🚚 Ваш груз находится в пути
+        <div
+            class="cargo-map-info"
+            id="cargoMapInfo"
+        >
+            🚚 Загрузка маршрута...
         </div>
 
     </div>
@@ -1993,6 +1945,479 @@ renderParcels();
 }
 
 /* =====================================================
+   REAL CARGO MAP
+===================================================== */
+
+let cargoMapInstance = null;
+let cargoTruckMarkers = [];
+let cargoAnimationTimer = null;
+
+
+/* Гуанчжоу */
+
+const GUANGZHOU = [
+    23.1291,
+    113.2644
+];
+
+
+/* Бишкек */
+
+const BISHKEK = [
+    42.8746,
+    74.5698
+];
+
+
+/* Токмок */
+
+const TOKMOK = [
+    42.8419,
+    75.3015
+];
+
+
+/* =====================================================
+   RENDER CARGO MAP
+===================================================== */
+
+function renderCargoMap(){
+
+    const mapElement =
+        document.getElementById("cargoRealMap");
+
+    if(!mapElement){
+        return;
+    }
+
+    if(typeof L === "undefined"){
+
+        console.error(
+            "Leaflet не загружен"
+        );
+
+        return;
+    }
+
+
+    if(cargoMapInstance){
+
+        cargoMapInstance.remove();
+
+        cargoMapInstance = null;
+
+    }
+
+
+    mapElement.innerHTML = "";
+
+
+    cargoMapInstance =
+        L.map(
+            "cargoRealMap"
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom:19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(
+        cargoMapInstance
+    );
+
+
+    const routePoints = [
+
+        GUANGZHOU,
+
+        [24.5,109.0],
+
+        [28.5,105.0],
+
+        [32.5,102.0],
+
+        [36.0,99.0],
+
+        [39.5,91.0],
+
+        [40.5,85.0],
+
+        [42.0,80.0],
+
+        [42.5,76.0],
+
+        BISHKEK,
+
+        TOKMOK
+
+    ];
+
+
+    const route =
+        L.polyline(
+            routePoints,
+            {
+                color:"#ff3b4d",
+                weight:5,
+                opacity:0.85,
+                dashArray:"10 8"
+            }
+        ).addTo(
+            cargoMapInstance
+        );
+
+
+    cargoMapInstance.fitBounds(
+        route.getBounds(),
+        {
+            padding:[25,25]
+        }
+    );
+
+
+    addCargoLocation(
+        GUANGZHOU,
+        "🇨🇳",
+        "Гуанчжоу",
+        "Склад"
+    );
+
+
+    addCargoLocation(
+        BISHKEK,
+        "🇰🇬",
+        "Бишкек",
+        "Основной склад"
+    );
+
+
+    addCargoLocation(
+        TOKMOK,
+        "📍",
+        "Токмок",
+        "Пункт выдачи"
+    );
+
+
+    const wayParcels =
+        allParcels.filter(
+            function(item){
+
+                return item.status === "way";
+
+            }
+        );
+
+
+    if(
+        wayParcels.length > 0
+    ){
+
+        animateCargoTrucks(
+            wayParcels,
+            routePoints
+        );
+
+    }
+
+
+    const info =
+        document.getElementById(
+            "cargoMapInfo"
+        );
+
+
+    if(info){
+
+        if(
+            wayParcels.length > 0
+        ){
+
+            info.innerHTML =
+                "🚚 В пути: <strong>" +
+                wayParcels.length +
+                "</strong> отправлений";
+
+        }else{
+
+            info.innerHTML =
+                "📦 Сейчас грузов в пути нет";
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   LOCATION
+===================================================== */
+
+function addCargoLocation(
+    position,
+    emoji,
+    title,
+    text
+){
+
+    const icon =
+        L.divIcon({
+
+            className:"",
+
+            html:
+                '<div class="cargo-marker">' +
+                emoji +
+                '</div>',
+
+            iconSize:[42,42],
+
+            iconAnchor:[21,21]
+
+        });
+
+
+    L.marker(
+        position,
+        {
+            icon:icon
+        }
+    )
+    .addTo(
+        cargoMapInstance
+    )
+    .bindPopup(
+        "<b>" +
+        title +
+        "</b><br>" +
+        text
+    );
+
+}
+
+
+/* =====================================================
+   TRUCK ANIMATION
+===================================================== */
+
+function animateCargoTrucks(
+    parcels,
+    routePoints
+){
+
+    cargoTruckMarkers.forEach(
+        function(marker){
+
+            marker.remove();
+
+        }
+    );
+
+
+    cargoTruckMarkers = [];
+
+
+    if(cargoAnimationTimer){
+
+        clearInterval(
+            cargoAnimationTimer
+        );
+
+    }
+
+
+    parcels.forEach(
+        function(parcel,index){
+
+            const icon =
+                L.divIcon({
+
+                    className:"",
+
+                    html:
+                        '<div class="cargo-truck-marker">' +
+                        '🚚' +
+                        '</div>',
+
+                    iconSize:[46,46],
+
+                    iconAnchor:[23,23]
+
+                });
+
+
+            const marker =
+                L.marker(
+                    routePoints[0],
+                    {
+                        icon:icon,
+                        zIndexOffset:
+                            1000 + index
+                    }
+                )
+                .addTo(
+                    cargoMapInstance
+                );
+
+
+            marker.bindTooltip(
+                "📦 " +
+                (parcel.track || "Груз") +
+                "<br>📅 " +
+                (parcel.send_date || "-"),
+                {
+                    direction:"top",
+                    offset:[0,-20]
+                }
+            );
+
+
+            cargoTruckMarkers.push(
+                marker
+            );
+
+        }
+    );
+
+
+    let progress = 0;
+
+
+    function moveTrucks(){
+
+        progress += 0.002;
+
+
+        if(progress > 1){
+
+            progress = 0;
+
+        }
+
+
+        cargoTruckMarkers.forEach(
+            function(marker,index){
+
+                let individualProgress =
+                    progress +
+                    (index * 0.08);
+
+
+                if(
+                    individualProgress > 1
+                ){
+
+                    individualProgress -= 1;
+
+                }
+
+
+                const position =
+                    getPositionOnRoute(
+                        routePoints,
+                        individualProgress
+                    );
+
+
+                marker.setLatLng(
+                    position
+                );
+
+            }
+        );
+
+    }
+
+
+    cargoAnimationTimer =
+        setInterval(
+            moveTrucks,
+            80
+        );
+
+}
+
+
+/* =====================================================
+   POSITION
+===================================================== */
+
+function getPositionOnRoute(
+    points,
+    progress
+){
+
+    const totalSegments =
+        points.length - 1;
+
+
+    const exact =
+        progress *
+        totalSegments;
+
+
+    let segment =
+        Math.floor(
+            exact
+        );
+
+
+    if(
+        segment >= totalSegments
+    ){
+
+        segment =
+            totalSegments - 1;
+
+    }
+
+
+    const localProgress =
+        exact -
+        segment;
+
+
+    const start =
+        points[segment];
+
+
+    const end =
+        points[segment + 1];
+
+
+    const lat =
+        start[0] +
+        (
+            end[0] -
+            start[0]
+        ) *
+        localProgress;
+
+
+    const lng =
+        start[1] +
+        (
+            end[1] -
+            start[1]
+        ) *
+        localProgress;
+
+
+    return [
+        lat,
+        lng
+    ];
+
+}
+
+
+/* =====================================================
    RENDER PARCELS
 ===================================================== */
 
@@ -2350,181 +2775,6 @@ function showReferrals(){
 }
 
 
-/* =====================================================
-   CARGO MAP
-===================================================== */
-
-function renderCargoMap(){
-
-    const map =
-        document.getElementById("map");
-
-    if(!map){
-        return;
-    }
-
-    const cargoMap =
-        map.querySelector(".cargo-map");
-
-    if(!cargoMap){
-        return;
-    }
-
-    const wayParcels =
-        allParcels.filter(function(item){
-
-            return item.status === "way";
-
-        });
-
-    const dates = [];
-
-    wayParcels.forEach(function(item){
-
-        const date =
-            String(item.send_date || "").trim();
-
-        if(
-            date &&
-            date !== "-" &&
-            !dates.includes(date)
-        ){
-
-            dates.push(date);
-
-        }
-
-    });
-
-    dates.sort(function(a,b){
-
-        return parseDate(a) - parseDate(b);
-
-    });
-
-
-    if(dates.length === 0){
-
-        cargoMap.innerHTML =
-
-        '<div style="padding:40px;text-align:center;">' +
-
-        '<div style="font-size:40px;">📦</div>' +
-
-        '<div style="font-weight:800;margin-top:10px;">' +
-
-        'В пути грузов нет' +
-
-        '</div>' +
-
-        '</div>';
-
-        return;
-
-    }
-
-
-    let html =
-
-    '<div class="route-line"></div>' +
-
-    '<div class="location china">' +
-
-        '<div class="location-icon">🇨🇳</div>' +
-
-        '<div class="location-title">Китай</div>' +
-
-        '<div class="location-text">Склад</div>' +
-
-    '</div>' +
-
-    '<div class="location kyrgyzstan">' +
-
-        '<div class="location-icon">🇰🇬</div>' +
-
-        '<div class="location-title">Кыргызстан</div>' +
-
-        '<div class="location-text">Бишкек</div>' +
-
-    '</div>';
-
-
-    dates.forEach(function(date,index){
-
-        const total = dates.length;
-
-        let position;
-
-        if(total === 1){
-
-            position = 50;
-
-        }else{
-
-            position =
-                20 +
-                (index / (total - 1)) * 60;
-
-        }
-
-
-        html +=
-
-        '<div class="cargo-truck" ' +
-
-        'style="left:' + position + '%;">' +
-
-            '<div class="cargo-truck-icon">🚚</div>' +
-
-            '<div class="cargo-date">' +
-
-                escapeHtml(date) +
-
-            '</div>' +
-
-        '</div>';
-
-    });
-
-
-    html +=
-
-    '<div class="cargo-status">' +
-
-        '🚚 Отправок: ' +
-
-        dates.length +
-
-    '</div>';
-
-
-    cargoMap.innerHTML = html;
-
-}
-
-
-/* Датаны сорттоо */
-
-function parseDate(date){
-
-    const parts =
-        String(date).split(".");
-
-    if(parts.length !== 3){
-
-        return 0;
-
-    }
-
-    return new Date(
-
-        Number(parts[2]),
-        Number(parts[1]) - 1,
-        Number(parts[0])
-
-    ).getTime();
-
-}
 
 
 </script>
