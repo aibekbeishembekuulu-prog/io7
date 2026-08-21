@@ -2033,29 +2033,49 @@ function renderCargoMap(){
 
     const routePoints = [
 
-        GUANGZHOU,
+    GUANGZHOU,
 
-        [24.5,109.0],
+    [23.35,113.05],
+    [24.10,112.80],
+    [24.85,112.50],
+    [25.60,111.95],
+    [26.35,111.30],
+    [27.10,110.65],
+    [27.85,109.95],
+    [28.60,109.20],
+    [29.35,108.45],
+    [30.10,107.65],
+    [30.85,106.85],
+    [31.60,106.00],
+    [32.35,105.15],
+    [33.10,104.25],
+    [33.85,103.35],
+    [34.60,102.45],
+    [35.35,101.50],
+    [36.10,100.50],
+    [36.85,99.50],
+    [37.55,98.45],
+    [38.20,97.35],
+    [38.80,96.15],
+    [39.35,94.90],
+    [39.80,93.55],
+    [40.20,92.10],
+    [40.55,90.55],
+    [40.85,88.90],
+    [41.10,87.20],
+    [41.35,85.50],
+    [41.60,83.80],
+    [41.85,82.10],
+    [42.05,80.60],
+    [42.25,79.10],
+    [42.45,77.60],
+    [42.60,76.10],
 
-        [28.5,105.0],
+    BISHKEK,
 
-        [32.5,102.0],
+    TOKMOK
 
-        [36.0,99.0],
-
-        [39.5,91.0],
-
-        [40.5,85.0],
-
-        [42.0,80.0],
-
-        [42.5,76.0],
-
-        BISHKEK,
-
-        TOKMOK
-
-    ];
+];
 
 
     const route =
@@ -2201,145 +2221,107 @@ function addCargoLocation(
 
 }
 
-
 /* =====================================================
-   TRUCK ANIMATION
+   REALISTIC TRUCK MOVEMENT
 ===================================================== */
 
-function animateCargoTrucks(
-    parcels,
-    routePoints
-){
+function animateCargoTrucks(parcels, routePoints){
 
-    cargoTruckMarkers.forEach(
-        function(marker){
-
-            marker.remove();
-
-        }
-    );
-
+    cargoTruckMarkers.forEach(function(marker){
+        marker.remove();
+    });
 
     cargoTruckMarkers = [];
 
-
     if(cargoAnimationTimer){
-
-        clearInterval(
-            cargoAnimationTimer
-        );
-
+        clearInterval(cargoAnimationTimer);
     }
 
+    if(!parcels || parcels.length === 0){
+        return;
+    }
 
-    parcels.forEach(
-        function(parcel,index){
+    parcels.forEach(function(parcel, index){
 
-            const icon =
-                L.divIcon({
+        const icon = L.divIcon({
+            className:"",
+            html:
+                '<div class="cargo-truck-marker">🚚</div>',
+            iconSize:[46,46],
+            iconAnchor:[23,23]
+        });
 
-                    className:"",
+        const marker = L.marker(
+            routePoints[0],
+            {
+                icon:icon,
+                zIndexOffset:1000 + index
+            }
+        ).addTo(cargoMapInstance);
 
-                    html:
-                        '<div class="cargo-truck-marker">' +
-                        '🚚' +
-                        '</div>',
-
-                    iconSize:[46,46],
-
-                    iconAnchor:[23,23]
-
-                });
-
-
-            const marker =
-                L.marker(
-                    routePoints[0],
-                    {
-                        icon:icon,
-                        zIndexOffset:
-                            1000 + index
-                    }
-                )
-                .addTo(
-                    cargoMapInstance
-                );
-
-
-            marker.bindTooltip(
-                "📦 " +
-                (parcel.track || "Груз") +
-                "<br>📅 " +
-                (parcel.send_date || "-"),
-                {
-                    direction:"top",
-                    offset:[0,-20]
-                }
-            );
-
-
-            cargoTruckMarkers.push(
-                marker
-            );
-
-        }
-    );
-
-
-    let progress = 0;
-
-
-    function moveTrucks(){
-
-        progress += 0.002;
-
-
-        if(progress > 1){
-
-            progress = 0;
-
-        }
-
-
-        cargoTruckMarkers.forEach(
-            function(marker,index){
-
-                let individualProgress =
-                    progress +
-                    (index * 0.08);
-
-
-                if(
-                    individualProgress > 1
-                ){
-
-                    individualProgress -= 1;
-
-                }
-
-
-                const position =
-                    getPositionOnRoute(
-                        routePoints,
-                        individualProgress
-                    );
-
-
-                marker.setLatLng(
-                    position
-                );
-
+        marker.bindTooltip(
+            "📦 " +
+            (parcel.track || "Груз") +
+            "<br>📅 " +
+            (parcel.send_date || "-"),
+            {
+                direction:"top",
+                offset:[0,-20]
             }
         );
 
+        cargoTruckMarkers.push(marker);
+
+    });
+
+
+    /*
+       Ар бир машина ар башка жерден башталат.
+       Кыймыл жай жана үзгүлтүксүз болот.
+    */
+
+    let progress = 0;
+
+    function moveTrucks(){
+
+        progress += 0.0007;
+
+        if(progress >= 1){
+            progress = 0;
+        }
+
+        cargoTruckMarkers.forEach(function(marker,index){
+
+            let individualProgress =
+                progress + (index * 0.035);
+
+            if(individualProgress >= 1){
+                individualProgress -= 1;
+            }
+
+            const position =
+                getPositionOnRoute(
+                    routePoints,
+                    individualProgress
+                );
+
+            marker.setLatLng(position);
+
+        });
+
     }
 
 
-    cargoAnimationTimer =
-        setInterval(
-            moveTrucks,
-            80
-        );
+    moveTrucks();
+
+    cargoAnimationTimer = setInterval(
+        moveTrucks,
+        50
+    );
+
+}
+
+                       
 
 }
 
