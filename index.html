@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Tez Kargo — Личный кабинет</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<style>
+<title>Tez Kargo — Личный кабинет</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>
 
 *{
     box-sizing:border-box;
@@ -22,7 +12,7 @@ body{
     margin:0;
     padding:0;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:#fff;
+    background:#ffffff;
     color:#222;
     min-height:100vh;
 }
@@ -31,18 +21,18 @@ body{
     max-width:600px;
     margin:0 auto;
     min-height:100vh;
-    background:#fff;
+    background:#ffffff;
     padding-bottom:30px;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 
 .header-top{
     padding:22px 18px 18px;
     background:linear-gradient(135deg,#ff3b4d,#ff5b6b);
-    color:#fff;
+    color:#ffffff;
     border-radius:0 0 28px 28px;
-    box-shadow:0 8px 25px rgba(255,59,77,.25);
+    box-shadow:0 8px 25px rgba(255,59,77,0.25);
 }
 
 .header-row{
@@ -60,7 +50,7 @@ body{
 .brand-icon{
     width:45px;
     height:45px;
-    background:#fff;
+    background:#ffffff;
     border-radius:14px;
     display:flex;
     align-items:center;
@@ -75,7 +65,7 @@ body{
 
 .brand-sub{
     font-size:12px;
-    opacity:.85;
+    opacity:0.85;
     margin-top:2px;
 }
 
@@ -88,36 +78,16 @@ body{
 .header-subtitle{
     margin-top:5px;
     font-size:14px;
-    opacity:.9;
+    opacity:0.9;
 }
 
-.header-logo{
-    width:80px;
-    height:80px;
-    background:#fff;
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    flex-shrink:0;
-    box-shadow:0 4px 12px rgba(0,0,0,.12);
-}
-
-.header-logo img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    display:block;
-}
-
-/* ================= NAV ================= */
+/* NAV */
 
 .main-nav{
     display:flex;
     gap:8px;
     padding:14px 15px;
-    background:#fff;
+    background:#ffffff;
     position:sticky;
     top:0;
     z-index:20;
@@ -129,20 +99,18 @@ body{
     border:none;
     background:#fff1f3;
     color:#ff3b4d;
-    padding:11px 5px;
+    padding:11px 8px;
     border-radius:13px;
-    font-size:12px;
+    font-size:13px;
     font-weight:700;
     cursor:pointer;
 }
 
 .main-nav button.active{
     background:#ff3b4d;
-    color:#fff;
-    box-shadow:0 5px 14px rgba(255,59,77,.25);
+    color:#ffffff;
+    box-shadow:0 5px 14px rgba(255,59,77,0.25);
 }
-
-/* ================= CONTAINER ================= */
 
 .container{
     padding:0 15px 20px;
@@ -156,15 +124,15 @@ body{
     display:block;
 }
 
-/* ================= CARDS ================= */
+/* CARDS */
 
 .card{
-    background:#fff;
+    background:#ffffff;
     border-radius:18px;
     padding:17px;
     margin-bottom:13px;
     border:1px solid #f1f1f1;
-    box-shadow:0 5px 18px rgba(0,0,0,.06);
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
 }
 
 .info-card{
@@ -197,23 +165,24 @@ body{
 .info-value{
     font-size:16px;
     font-weight:700;
+    color:#222;
 }
 
-/* ================= CLIENT CODE ================= */
+/* CLIENT CODE */
 
 .code-box{
     margin:8px 0 15px;
     padding:22px 15px;
     border-radius:20px;
     text-align:center;
-    color:#fff;
+    color:#ffffff;
     background:linear-gradient(135deg,#ff3b4d,#ff6473);
-    box-shadow:0 10px 25px rgba(255,59,77,.25);
+    box-shadow:0 10px 25px rgba(255,59,77,0.25);
 }
 
 .code-label{
     font-size:13px;
-    opacity:.9;
+    opacity:0.9;
 }
 
 .code{
@@ -226,7 +195,7 @@ body{
 .copy-code-btn{
     width:100%;
     border:none;
-    background:#fff;
+    background:#ffffff;
     color:#ff3b4d;
     padding:12px;
     border-radius:12px;
@@ -235,16 +204,16 @@ body{
     cursor:pointer;
 }
 
-/* ================= WAREHOUSE ================= */
+/* WAREHOUSE */
 
 .warehouse{
-    background:#fff;
+    background:#ffffff;
     border:1px solid #f0f0f0;
     border-left:5px solid #ff3b4d;
     border-radius:17px;
     padding:17px;
     margin-bottom:15px;
-    box-shadow:0 5px 18px rgba(0,0,0,.05);
+    box-shadow:0 5px 18px rgba(0,0,0,0.05);
 }
 
 .warehouse-title{
@@ -267,7 +236,7 @@ body{
     width:100%;
     margin-top:11px;
     background:#ff3b4d;
-    color:#fff;
+    color:#ffffff;
     border:none;
     padding:12px;
     border-radius:12px;
@@ -276,7 +245,7 @@ body{
     cursor:pointer;
 }
 
-/* ================= BONUS ================= */
+/* BONUS */
 
 .bonus-grid{
     display:grid;
@@ -286,11 +255,11 @@ body{
 }
 
 .bonus-card{
-    background:#fff;
+    background:#ffffff;
     border:1px solid #f0f0f0;
     border-radius:17px;
     padding:17px;
-    box-shadow:0 5px 18px rgba(0,0,0,.05);
+    box-shadow:0 5px 18px rgba(0,0,0,0.05);
 }
 
 .bonus-icon{
@@ -310,7 +279,7 @@ body{
     margin-top:4px;
 }
 
-/* ================= LEVEL ================= */
+/* LEVEL */
 
 .level-box{
     padding:19px;
@@ -318,12 +287,12 @@ body{
     text-align:center;
     margin-bottom:17px;
     font-weight:800;
-    box-shadow:0 6px 20px rgba(0,0,0,.07);
+    box-shadow:0 6px 20px rgba(0,0,0,0.07);
 }
 
 .level-title{
     font-size:12px;
-    opacity:.7;
+    opacity:0.7;
     margin-bottom:5px;
 }
 
@@ -351,7 +320,7 @@ body{
     color:#c42135;
 }
 
-/* ================= PARCELS ================= */
+/* PARCELS */
 
 .parcel-header{
     margin:5px 0 14px;
@@ -394,24 +363,24 @@ body{
 
 .filter-btn.active{
     background:#ff3b4d;
-    color:#fff;
+    color:#ffffff;
     border-color:#ff3b4d;
 }
 
-/* ================= PARCEL CARD ================= */
+/* PARCEL CARD */
 
 .parcel-card{
-    background:#fff;
-    border:1px solid #eee;
+    background:#ffffff;
+    border:1px solid #eeeeee;
     border-radius:18px;
     padding:16px;
     margin-bottom:12px;
-    box-shadow:0 5px 18px rgba(0,0,0,.06);
+    box-shadow:0 5px 18px rgba(0,0,0,0.06);
     position:relative;
     overflow:hidden;
 }
 
-.parcel-card:before{
+.parcel-card::before{
     content:"";
     position:absolute;
     left:0;
@@ -468,45 +437,7 @@ body{
     font-weight:700;
 }
 
-/* ================= MAP ================= */
-
-.map-box{
-    margin-top:10px;
-    background:#fff;
-    border:1px solid #eee;
-    border-radius:18px;
-    padding:20px;
-    text-align:center;
-    box-shadow:0 5px 18px rgba(0,0,0,.06);
-}
-
-.map-icon{
-    font-size:55px;
-    margin-bottom:12px;
-}
-
-.map-title{
-    font-size:21px;
-    font-weight:900;
-    margin-bottom:7px;
-}
-
-.map-text{
-    color:#999;
-    font-size:14px;
-    line-height:1.5;
-}
-
-.map-status{
-    margin-top:18px;
-    padding:14px;
-    border-radius:13px;
-    background:#fff1f3;
-    color:#ff3b4d;
-    font-weight:800;
-}
-
-/* ================= EMPTY / LOADING ================= */
+/* EMPTY */
 
 .empty{
     text-align:center;
@@ -518,6 +449,8 @@ body{
     font-size:40px;
     margin-bottom:10px;
 }
+
+/* LOADING */
 
 .loading{
     text-align:center;
@@ -531,7 +464,7 @@ body{
     border:3px solid #ffe1e5;
     border-top-color:#ff3b4d;
     border-radius:50%;
-    animation:spin .8s linear infinite;
+    animation:spin 0.8s linear infinite;
     margin:0 auto 12px;
 }
 
@@ -541,12 +474,12 @@ body{
     }
 }
 
-/* ================= SUCCESS / ERROR ================= */
+/* SUCCESS */
 
 .success{
     display:none;
     background:#27ae60;
-    color:#fff;
+    color:#ffffff;
     padding:12px 15px;
     border-radius:12px;
     margin-bottom:13px;
@@ -554,6 +487,8 @@ body{
     font-size:14px;
     font-weight:700;
 }
+
+/* ERROR */
 
 .error-box{
     display:none;
@@ -566,6 +501,8 @@ body{
     font-size:13px;
 }
 
+/* DEBUG */
+
 .debug-box{
     display:none;
     background:#222;
@@ -577,13 +514,26 @@ body{
     word-break:break-all;
 }
 
-/* ================= MOBILE ================= */
-
 @media(max-width:380px){
 
     .main-nav button{
         font-size:11px;
-        padding:10px 4px;
+        padding:10px 5px;
+    }
+
+    .parcel-info{
+        grid-template-columns:1fr;
+    }
+
+    .bonus-grid{
+        grid-template-columns:1fr;
+    }
+
+}@media(max-width:380px){
+
+    .main-nav button{
+        font-size:11px;
+        padding:10px 5px;
     }
 
     .parcel-info{
@@ -596,14 +546,32 @@ body{
 
 }
 
+/* HEADER LOGO ОҢ ЖАКТА */
+
+.header-logo{
+    width:80px;
+    height:80px;
+    background:#ffffff;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    flex-shrink:0;
+    box-shadow:0 4px 12px rgba(0,0,0,0.12);
+}
+
+.header-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+}
+
 </style>
-</head>
+</style></head><body><div class="app">
 
-<body>
-
-<div class="app">
-
-<!-- ================= HEADER ================= -->
+<!-- HEADER -->
 
 <div class="header-top">
 
@@ -629,6 +597,8 @@ TEZ KARGO
 
 </div>
 
+<!-- ЛОГОТИП ОҢ ЖАКТА -->
+
 <div class="header-logo">
 <img src="logo.jpg" alt="Tez Kargo">
 </div>
@@ -645,8 +615,7 @@ TEZ KARGO
 
 </div>
 
-
-<!-- ================= NAV ================= -->
+<!-- NAV -->
 
 <div class="main-nav">
 
@@ -654,366 +623,164 @@ TEZ KARGO
 id="homeBtn"
 class="active"
 onclick="showPage('home')">
-
 🏠 Главная
 
-</button>
-
-<button
-id="mapBtn"
-onclick="showPage('map')">
-
-🗺️ Грузы
-
-</button>
-
-<button
+</button><button
 id="parcelsBtn"
 onclick="showPage('parcels')">
 
-📦 Посылки
+📦 Мои посылки
 
-</button>
-
-</div>
-
-
-<div class="container">
-
-<div id="success" class="success"></div>
-
-<div id="error" class="error-box"></div>
-
-<div id="debug" class="debug-box"></div>
-
-
-<!-- ================= HOME ================= -->
-
-<div id="home" class="page active">
-
-<div class="card info-card">
-
-<div class="info-icon">
+</button></div><div class="container"><div id="success"
+class="success">
+</div><div id="error"
+class="error-box">
+</div><div id="debug"
+class="debug-box">
+</div><!-- HOME --><div id="home"
+class="page active"><div class="card info-card"><div class="info-icon">
 👤
-</div>
-
-<div class="info-content">
-
-<div class="info-label">
+</div><div class="info-content"><div class="info-label">
 Ваше имя
-</div>
+</div><div class="info-value"
+id="clientName">Загрузка...
 
-<div class="info-value" id="clientName">
-Загрузка...
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card info-card">
-
-<div class="info-icon">
+</div></div></div><div class="card info-card"><div class="info-icon">
 📱
-</div>
-
-<div class="info-content">
-
-<div class="info-label">
+</div><div class="info-content"><div class="info-label">
 Телефон
-</div>
+</div><div class="info-value"
+id="clientPhone">Загрузка...
 
-<div class="info-value" id="clientPhone">
-Загрузка...
-</div>
-
-</div>
-
-</div>
-
-
-<div class="code-box">
-
-<div class="code-label">
+</div></div></div><div class="code-box"><div class="code-label">
 Ваш клиентский код
-</div>
+</div><div class="code"
+id="clientCode">---
 
-<div class="code" id="clientCode">
----
-</div>
-
-<button
+</div><button
 class="copy-code-btn"
 onclick="copyClientCode()">
 
 📋 Скопировать клиентский код
 
-</button>
-
-</div>
-
-
-<div class="warehouse">
-
-<div class="warehouse-title">
+</button></div><div class="warehouse"><div class="warehouse-title">
 📦 Адрес склада в Китае
-</div>
+</div><div class="warehouse-address"
+id="warehouseText">Загрузка...
 
-<div
-class="warehouse-address"
-id="warehouseText">
-
-Загрузка...
-
-</div>
-
-<button
+</div><button
 class="copy-btn"
 onclick="copyAddress()">
 
 📋 Скопировать адрес склада
 
-</button>
-
-</div>
-
-
-<div class="bonus-grid">
+</button></div><div class="bonus-grid">
 
 <div class="bonus-card">
-
-<div class="bonus-icon">
-💎
+    <div class="bonus-icon">
+        💎
+    </div>
+    <div class="bonus-title">
+        Общий заработанный бонус
+    </div>
+    <div class="bonus-value" id="totalBonus">
+        0 сом
+    </div>
 </div>
-
-<div class="bonus-title">
-Общий заработанный бонус
-</div>
-
-<div
-class="bonus-value"
-id="totalBonus">
-
-0 сом
-
-</div>
-
-</div>
-
 
 <div class="bonus-card">
-
-<div class="bonus-icon">
-💰
+    <div class="bonus-icon">
+        💰
+    </div>
+    <div class="bonus-title">
+        🎁 Бонус от рефералов
+    </div>
+    <div class="bonus-value" id="bonusValue">
+        0 сом
+    </div>
 </div>
 
-<div class="bonus-title">
-🎁 Бонус от рефералов
+<div class="bonus-card" onclick="showReferrals()" style="cursor:pointer;">
+    <div class="bonus-icon">
+        👥
+    </div>
+
+    <div class="bonus-title">
+        Мои рефералы
+    </div>
+<div class="bonus-value" id="referralCount">
+    0
 </div>
-
-<div
-class="bonus-value"
-id="bonusValue">
-
-0 сом
-
-</div>
-
-</div>
-
-
-<div
-class="bonus-card"
-onclick="showReferrals()"
-style="cursor:pointer;">
-
-<div class="bonus-icon">
-👥
-</div>
-
-<div class="bonus-title">
-Мои рефералы
-</div>
-
-<div
-class="bonus-value"
-id="referralCount">
-
-0
-
 </div>
 
 </div>
 
-</div>
-
-
-<div
-id="levelBox"
-class="level-box newbie">
-
+<div id="levelBox" class="level-box newbie">
+    
 <div class="level-title">
 💎 Ваш уровень
-</div>
-
-<div
-class="level-value"
-id="levelValue">
-
+</div><div class="level-value" id="levelValue">
 ⏳ Загрузка...
-
 </div>
 
-<div
-style="margin-top:10px;font-size:14px;"
-id="discountValue">
-
+<div style="margin-top:10px;font-size:14px;" id="discountValue">
 </div>
 
-<div
-style="margin-top:5px;font-size:14px;"
-id="monthPurchase">
-
+<div style="margin-top:5px;font-size:14px;" id="monthPurchase">
 </div>
 
-<div
-style="margin-top:5px;font-size:14px;"
-id="activeReferrals">
-
+<div style="margin-top:5px;font-size:14px;" id="activeReferrals">
 </div>
 
 </div>
 
 </div>
 
+<!-- PARCELS -->
 
-<!-- ================= MAP ================= -->
-
-<div id="map" class="page">
-
-<div class="parcel-header">
-
-<h2>
-🗺️ Грузы на карте
-</h2>
-
-<p>
-Отслеживание движения грузов
-</p>
-
-</div>
-
-<div class="map-box">
-
-<div class="map-icon">
-🗺️
-</div>
-
-<div class="map-title">
-Грузы на карте
-</div>
-
-<div class="map-text">
-Здесь будет отображаться местоположение и движение ваших грузов.
-</div>
-
-<div class="map-status">
-🚚 Система отслеживания готова
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ================= PARCELS ================= -->
-
-<div id="parcels" class="page">
-
-<div class="parcel-header">
-
-<h2>
+<div id="parcels"
+class="page"><div class="parcel-header"><h2>
 📦 Мои посылки
-</h2>
-
-<p>
+</h2><p>
 Здесь отображаются все ваши отправления
-</p>
-
-</div>
-
-
-<div class="filters">
-
-<button
+</p></div><div class="filters"><button
 class="filter-btn active"
 data-filter="all"
 onclick="setFilter('all')">
 
 Все
 
-</button>
-
-<button
+</button><button
 class="filter-btn"
 data-filter="china"
 onclick="setFilter('china')">
 
 🇨🇳 Китай
 
-</button>
-
-<button
+</button><button
 class="filter-btn"
 data-filter="way"
 onclick="setFilter('way')">
 
 🚚 В пути
 
-</button>
-
-<button
+</button><button
 class="filter-btn"
 data-filter="office"
 onclick="setFilter('office')">
 
 🏢 Офис
 
-</button>
-
-<button
+</button><button
 class="filter-btn"
 data-filter="issued"
 onclick="setFilter('issued')">
 
 ✅ Выдано
 
-</button>
+</button></div><div id="parcelList"><div class="loading"><div class="spinner"></div>Загрузка посылок...
 
-</div>
-
-
-<div id="parcelList">
-
-<div class="loading">
-
-<div class="spinner"></div>
-
-Загрузка посылок...
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<script>
+</div></div></div></div></div><script>
 
 /* =====================================================
    API
@@ -1046,6 +813,7 @@ page.classList.remove("active");
 const page =
 document.getElementById(id);
 
+
 if(page){
 
 page.classList.add("active");
@@ -1070,13 +838,6 @@ document
 
 }
 
-if(id === "map"){
-
-document
-.getElementById("mapBtn")
-.classList.add("active");
-
-}
 
 if(id === "parcels"){
 
@@ -1128,7 +889,7 @@ renderParcels();
 
 
 /* =====================================================
-   TELEGRAM ID
+   GET TELEGRAM ID
 ===================================================== */
 
 function getTG(){
@@ -1146,7 +907,9 @@ Telegram.WebApp.expand();
 
 
 const user =
-Telegram.WebApp.initDataUnsafe?.user;
+Telegram.WebApp
+.initDataUnsafe
+?.user;
 
 
 if(
@@ -1154,7 +917,9 @@ user &&
 user.id
 ){
 
-return String(user.id);
+return String(
+user.id
+);
 
 }
 
@@ -1172,7 +937,7 @@ error
 }
 
 
-/* URL FALLBACK */
+/* URL PARAMETER FALLBACK */
 
 const params =
 new URLSearchParams(
@@ -1182,11 +947,15 @@ window.location.search
 const urlTG =
 params.get("tg_id");
 
+
 if(urlTG){
 
-return String(urlTG).trim();
+return String(
+urlTG
+).trim();
 
 }
+
 
 return null;
 
@@ -1199,16 +968,22 @@ return null;
 
 function showDebug(message){
 
-console.log(message);
+console.log(
+message
+);
 
 const box =
-document.getElementById("debug");
+document.getElementById(
+"debug"
+);
 
 if(box){
 
-box.innerText = message;
+box.innerText =
+message;
 
-box.style.display = "block";
+box.style.display =
+"block";
 
 }
 
@@ -1226,7 +1001,8 @@ navigator.clipboard &&
 window.isSecureContext
 ){
 
-return navigator.clipboard.writeText(text);
+return navigator.clipboard
+.writeText(text);
 
 }
 
@@ -1236,21 +1012,33 @@ return new Promise(function(resolve,reject){
 const textarea =
 document.createElement("textarea");
 
-textarea.value = text;
+textarea.value =
+text;
 
-textarea.style.position = "fixed";
-textarea.style.opacity = "0";
+textarea.style.position =
+"fixed";
 
-document.body.appendChild(textarea);
+textarea.style.opacity =
+"0";
+
+document.body.appendChild(
+textarea
+);
 
 textarea.focus();
+
 textarea.select();
+
 
 try{
 
-document.execCommand("copy");
+document.execCommand(
+"copy"
+);
 
-document.body.removeChild(textarea);
+document.body.removeChild(
+textarea
+);
 
 resolve();
 
@@ -1258,7 +1046,9 @@ resolve();
 
 catch(error){
 
-document.body.removeChild(textarea);
+document.body.removeChild(
+textarea
+);
 
 reject(error);
 
@@ -1276,7 +1066,10 @@ reject(error);
 function copyAddress(){
 
 const element =
-document.getElementById("warehouseText");
+document.getElementById(
+"warehouseText"
+);
+
 
 const text =
 element
@@ -1325,7 +1118,10 @@ alert(text);
 function copyClientCode(){
 
 const element =
-document.getElementById("clientCode");
+document.getElementById(
+"clientCode"
+);
+
 
 const code =
 element
@@ -1374,20 +1170,29 @@ alert(code);
 function showSuccess(message){
 
 const box =
-document.getElementById("success");
+document.getElementById(
+"success"
+);
+
 
 if(!box){
+
 return;
+
 }
 
-box.innerText = message;
 
-box.style.display = "block";
+box.innerText =
+message;
+
+box.style.display =
+"block";
 
 
 setTimeout(function(){
 
-box.style.display = "none";
+box.style.display =
+"none";
 
 },3000);
 
@@ -1401,15 +1206,23 @@ box.style.display = "none";
 function showError(message){
 
 const box =
-document.getElementById("error");
+document.getElementById(
+"error"
+);
+
 
 if(!box){
+
 return;
+
 }
 
-box.innerText = message;
 
-box.style.display = "block";
+box.innerText =
+message;
+
+box.style.display =
+"block";
 
 }
 
@@ -1422,7 +1235,8 @@ function getStatus(item){
 
 const status =
 String(
-item.status || ""
+item.status ||
+""
 )
 .toLowerCase()
 .trim();
@@ -1485,7 +1299,8 @@ text:"⏳ Обработка"
 
 }
 
-* =====================================================
+
+/* =====================================================
    LOAD CLIENT
 ===================================================== */
 
@@ -1515,7 +1330,15 @@ return;
 const url =
 API_URL +
 "?action=profile&tg_id=" +
-encodeURIComponent(tg_id);
+encodeURIComponent(
+tg_id
+);
+
+
+console.log(
+"PROFILE URL:",
+url
+);
 
 
 fetch(url)
@@ -1537,12 +1360,20 @@ return response.text();
 
 .then(function(text){
 
+console.log(
+"PROFILE RAW:",
+text
+);
+
+
 let data;
 
 try{
 
 data =
-JSON.parse(text);
+JSON.parse(
+text
+);
 
 }
 
@@ -1568,7 +1399,10 @@ data.status !== "ok"
 ){
 
 throw new Error(
-"Клиент не найден."
+"Клиент не найден. API ответ: " +
+JSON.stringify(
+data
+)
 );
 
 }
@@ -1577,57 +1411,80 @@ throw new Error(
 /* NAME */
 
 document
-.getElementById("clientName")
+.getElementById(
+"clientName"
+)
 .innerText =
-data.name || "-";
+data.name ||
+"-";
 
 
 /* PHONE */
 
 document
-.getElementById("clientPhone")
+.getElementById(
+"clientPhone"
+)
 .innerText =
-data.phone || "Нет данных";
+data.phone ||
+"Нет данных";
 
 
 /* CLIENT CODE */
 
 document
-.getElementById("clientCode")
+.getElementById(
+"clientCode"
+)
 .innerText =
-data.client_code || "---";
+data.client_code ||
+"---";
 
 
-/* TOTAL BONUS */
+/* ОБЩИЙ ЗАРАБОТАННЫЙ БОНУС — G */
 
 document
-.getElementById("totalBonus")
+.getElementById(
+"totalBonus"
+)
 .innerText =
-(Number(data.balance) || 0) +
+(
+Number(
+data.balance
+) || 0
+) +
 " сом";
 
-
-/* REFERRAL BONUS */
+/* ТЕКУЩИЙ БОНУС — H */
 
 document
-.getElementById("bonusValue")
+.getElementById(
+"bonusValue"
+)
 .innerText =
-(Number(data.referral_bonus) || 0) +
+(
+Number(
+data.referral_bonus
+) || 0
+) +
 " сом";
 
-
-/* REFERRAL COUNT */
+/* МОИ РЕФЕРАЛЫ — N */
 
 document
-.getElementById("referralCount")
+.getElementById(
+"referralCount"
+)
 .innerText =
-Number(data.referral_count) || 0;
-
-
+Number(
+data.referral_count
+) || 0;
 /* WAREHOUSE */
 
 document
-.getElementById("warehouseText")
+.getElementById(
+"warehouseText"
+)
 .innerText =
 data.address_warehouse ||
 "Нет данных";
@@ -1641,70 +1498,45 @@ data.referral_level ||
 
 
 document
-.getElementById("levelValue")
+.getElementById(
+"levelValue"
+)
 .innerText =
 level;
-
-
-/* LEVEL COLOR */
-
-const levelBox =
-document.getElementById("levelBox");
-
-levelBox.className =
-"level-box newbie";
-
-
-const levelText =
-String(level).toLowerCase();
-
-
-if(levelText.includes("vip")){
-
-levelBox.className =
-"level-box vip";
-
-}
-else if(levelText.includes("gold") ||
-        levelText.includes("золот")){
-
-levelBox.className =
-"level-box gold";
-
-}
-else if(levelText.includes("silver") ||
-        levelText.includes("сереб")){
-
-levelBox.className =
-"level-box silver";
-
-}
 
 
 /* DISCOUNT */
 
 document
-.getElementById("discountValue")
+.getElementById(
+"discountValue"
+)
 .innerText =
 "🎁 Ваша скидка: " +
-(Number(data.discount_percent) || 0) +
+(Number(data.discount_percent) || 0)
++
 "%";
 
 
 /* MONTH PURCHASE */
 
 document
-.getElementById("monthPurchase")
+.getElementById(
+"monthPurchase"
+)
 .innerText =
 "📊 Прошлый месяц: " +
-(Number(data.monthly_purchase) || 0) +
+(Number(data.monthly_purchase) || 0)
++
 " сом";
 
 
 /* ACTIVE REFERRALS */
 
 document
-.getElementById("activeReferrals")
+.getElementById(
+"activeReferrals"
+)
 .innerText =
 "👥 Активные клиенты: " +
 (Number(data.qualified_referrals) || 0);
@@ -1712,7 +1544,73 @@ document
 
 /* LOAD PARCELS */
 
-loadParcels(tg_id);
+loadParcels(
+tg_id
+);document
+.getElementById(
+"discountValue"
+)
+.innerText =
+"🎁 Ваша скидка: " +
+(Number(data.discount_percent) || 0)
++
+"%";
+
+
+document
+.getElementById(
+"monthPurchase"
+)
+.innerText =
+"📊 Прошлый месяц: " +
+(Number(data.monthly_purchase) || 0)
++
+" сом";
+
+
+
+document
+.getElementById(
+"activeReferrals"
+)
+.innerText =
+"👥 Активные клиенты: " +
+(data.qualified_referrals || 0);
+document
+.getElementById(
+"discountValue"
+)
+.innerText =
+"🎁 Ваша скидка: " +
+(Number(data.discount_percent) || 0)
++
+"%";
+
+
+document
+.getElementById(
+"monthPurchase"
+)
+.innerText =
+"📊 Прошлый месяц: " +
+(Number(data.monthly_purchase) || 0)
++
+" сом";
+
+
+document
+.getElementById(
+"activeReferrals"
+)
+.innerText =
+"👥 Активные клиенты: " +
+(Number(data.qualified_referrals) || 0);
+
+/* LOAD PARCELS */
+
+loadParcels(
+tg_id
+);
 
 })
 
@@ -1722,6 +1620,7 @@ console.error(
 "PROFILE ERROR:",
 error
 );
+
 
 showError(
 "❌ " +
@@ -1742,7 +1641,15 @@ function loadParcels(tg_id){
 const url =
 API_URL +
 "?action=all&tg_id=" +
-encodeURIComponent(tg_id);
+encodeURIComponent(
+tg_id
+);
+
+
+console.log(
+"PARCEL URL:",
+url
+);
 
 
 fetch(url)
@@ -1764,12 +1671,20 @@ return response.text();
 
 .then(function(text){
 
+console.log(
+"PARCEL RAW:",
+text
+);
+
+
 let data;
 
 try{
 
 data =
-JSON.parse(text);
+JSON.parse(
+text
+);
 
 }
 
@@ -1809,7 +1724,9 @@ allParcels = [];
 /* OFFICE */
 
 if(
-Array.isArray(data.office)
+Array.isArray(
+data.office
+)
 ){
 
 data.office.forEach(
@@ -1845,14 +1762,19 @@ item.date_arrived
 /* WAY */
 
 if(
-Array.isArray(data.way)
+Array.isArray(
+data.way
+)
 ){
 
 data.way.forEach(
 function(item){
 
 const st =
-getStatus(item);
+getStatus(
+item
+);
+
 
 allParcels.push({
 
@@ -1864,78 +1786,6 @@ st.key,
 
 statusText:
 st.text,
-
-price:
-item.price,
-
-send_date:
-item.date_sent,
-
-expected:
-item.date_arrived
-
-});
-
-});
-
-}
-
-
-/* CHINA */
-
-if(
-Array.isArray(data.china)
-){
-
-data.china.forEach(
-function(item){
-
-allParcels.push({
-
-track:
-item.track,
-
-status:
-"china",
-
-statusText:
-"🇨🇳 На складе в Китае",
-
-price:
-item.price,
-
-send_date:
-item.date_sent,
-
-expected:
-item.date_arrived
-
-});
-
-});
-
-}
-
-
-/* ISSUED */
-
-if(
-Array.isArray(data.issued)
-){
-
-data.issued.forEach(
-function(item){
-
-allParcels.push({
-
-track:
-item.track,
-
-status:
-"issued",
-
-statusText:
-"✅ Выдано",
 
 price:
 item.price,
@@ -1970,8 +1820,8 @@ renderParcels();
 
 });
 
-}
 
+}
 
 /* =====================================================
    RENDER PARCELS
@@ -1980,11 +1830,15 @@ renderParcels();
 function renderParcels(){
 
 const container =
-document.getElementById("parcelList");
+document.getElementById(
+"parcelList"
+);
 
 
 if(!container){
+
 return;
+
 }
 
 
@@ -1993,21 +1847,27 @@ allParcels.filter(
 function(item){
 
 if(
-currentFilter === "all"
+currentFilter ===
+"all"
 ){
 
 return true;
 
 }
 
-return item.status === currentFilter;
+
+return (
+item.status ===
+currentFilter
+);
 
 }
 );
 
 
 if(
-filtered.length === 0
+filtered.length ===
+0
 ){
 
 container.innerHTML =
@@ -2042,7 +1902,8 @@ html +=
 '📦 ' +
 
 escapeHtml(
-item.track || "-"
+item.track ||
+"-"
 ) +
 
 '</div>' +
@@ -2069,7 +1930,10 @@ item.statusText ||
 '<div class="parcel-info-value">' +
 
 escapeHtml(
-String(item.price || 0)
+String(
+item.price ||
+0
+)
 ) +
 
 ' сом' +
@@ -2087,7 +1951,8 @@ String(item.price || 0)
 '<div class="parcel-info-value">' +
 
 escapeHtml(
-item.send_date || "-"
+item.send_date ||
+"-"
 ) +
 
 '</div>' +
@@ -2103,7 +1968,8 @@ item.send_date || "-"
 '<div class="parcel-info-value">' +
 
 escapeHtml(
-item.expected || "-"
+item.expected ||
+"-"
 ) +
 
 '</div>' +
@@ -2130,170 +1996,192 @@ html;
 
 function escapeHtml(value){
 
-return String(value)
+return String(
+value
+)
 
-.replace(/&/g,"&")
-.replace(/</g,"<")
-.replace(/>/g,">")
-.replace(/"/g,""")
-.replace(/'/g,"'");
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
-
 
 /* =====================================================
-   REFERRALS
-===================================================== */
-
-function showReferrals(){
-
-const tg_id =
-getTG();
-
-
-if(!tg_id){
-
-showError(
-"⚠️ Telegram ID не найден."
-);
-
-return;
-
-}
-
-
-const url =
-API_URL +
-"?action=referrals&tg_id=" +
-encodeURIComponent(tg_id);
-
-
-fetch(url)
-
-.then(function(response){
-
-if(!response.ok){
-
-throw new Error(
-"HTTP " +
-response.status
-);
-
-}
-
-return response.json();
-
-})
-
-.then(function(data){
-
-console.log(
-"REFERRALS DATA:",
-data
-);
-
-
-if(
-!data ||
-data.status !== "ok"
-){
-
-throw new Error(
-"Рефералы не найдены"
-);
-
-}
-
-
-if(
-!data.referrals ||
-data.referrals.length === 0
-){
-
-alert(
-"👥 У вас пока нет приглашённых клиентов."
-);
-
-return;
-
-}
-
-
-let text =
-"👥 Мои рефералы\n\n" +
-
-"Всего приглашено: " +
-data.count +
-"\n\n";
-
-
-data.referrals.forEach(
-function(referral,index){
-
-text +=
-
-(index + 1) +
-". " +
-
-(referral.name ||
-"Без имени") +
-
-"\n📱 " +
-
-(referral.phone ||
-"Нет телефона") +
-
-"\n🆔 Код: " +
-
-(referral.client_code ||
-"---") +
-
-"\n\n";
-
-});
-
-
-alert(text);
-
-})
-
-.catch(function(error){
-
-console.error(
-"REFERRALS ERROR:",
-error
-);
-
-showError(
-"❌ " +
-error.message
-);
-
-});
-
-}
-
-
-/* =====================================================
-   START
+   START APP
 ===================================================== */
 
 window.addEventListener(
 "load",
 function(){
 
-setTimeout(
-function(){
+    setTimeout(
+        function(){
 
-loadClient();
+            loadClient();
 
-},
-300
-);
+        },
+        300
+    );
 
 });
+
+
+/* =====================================================
+   SHOW REFERRALS — МОИ РЕФЕРАЛЫ
+===================================================== */
+
+function showReferrals(){
+
+    const tg_id = getTG();
+
+    if(!tg_id){
+
+        showError(
+            "⚠️ Telegram ID не найден."
+        );
+
+        return;
+
+    }
+
+
+    const url =
+        API_URL +
+        "?action=referrals&tg_id=" +
+        encodeURIComponent(tg_id);
+
+
+    fetch(url)
+
+    .then(function(response){
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+        return response.json();
+
+    })
+
+    .then(function(data){
+
+        console.log(
+            "REFERRALS DATA:",
+            data
+        );
+
+
+        if(
+            !data ||
+            data.status !== "ok"
+        ){
+
+            throw new Error(
+                "Рефералы не найдены"
+            );
+
+        }
+
+
+        if(
+            !data.referrals ||
+            data.referrals.length === 0
+        ){
+
+            alert(
+                "👥 У вас пока нет приглашённых клиентов."
+            );
+
+            return;
+
+        }
+
+
+        let text =
+            "👥 Мои рефералы\n\n" +
+
+            "Всего приглашено: " +
+            data.count +
+            "\n\n";
+
+
+        data.referrals.forEach(
+            function(referral, index){
+
+                text +=
+
+                    (index + 1) +
+                    ". " +
+
+                    (referral.name ||
+                    "Без имени") +
+
+                    "\n📱 " +
+
+                    (referral.phone ||
+                    "Нет телефона") +
+
+                    "\n🆔 Код: " +
+
+                    (referral.client_code ||
+                    "---") +
+
+                    "\n\n";
+
+            }
+        );
+
+
+        alert(
+            text
+        );
+
+    })
+
+    .catch(function(error){
+
+        console.error(
+            "REFERRALS ERROR:",
+            error
+        );
+
+        showError(
+            "❌ " +
+            error.message
+        );
+
+    });
+
+}
 
 </script>
 
 </body>
+
 </html>
