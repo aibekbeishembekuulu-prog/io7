@@ -858,6 +858,7 @@ onclick="copyAddress()">
 </div>
 
 </div>
+
 <!-- MAP -->
 
 <div id="map" class="page">
@@ -865,28 +866,31 @@ onclick="copyAddress()">
     <div class="parcel-header">
         <h2>🗺️ Грузы на карте</h2>
 
-        <p>
-            Отслеживание движения грузов
-        </p>
+        <p>Отслеживание движения грузов</p>
     </div>
 
-    <div class="map-box">
+    <div class="cargo-map">
 
-        <div class="map-icon">
+        <div class="route-line"></div>
+
+        <div class="location china">
+            <div class="location-icon">🇨🇳</div>
+            <div class="location-title">Китай</div>
+            <div class="location-text">Склад</div>
+        </div>
+
+        <div class="truck">
             🚚
         </div>
 
-        <div class="map-title">
-            Грузы на карте
+        <div class="location kyrgyzstan">
+            <div class="location-icon">🇰🇬</div>
+            <div class="location-title">Кыргызстан</div>
+            <div class="location-text">Бишкек</div>
         </div>
 
-        <div class="map-text">
-            Здесь будет отображаться местоположение
-            и движение ваших грузов.
-        </div>
-
-        <div class="map-status">
-            🚚 Система отслеживания готова
+        <div class="cargo-status">
+            🚚 Ваш груз находится в пути
         </div>
 
     </div>
@@ -2341,12 +2345,191 @@ function showReferrals(){
             error.message
         );
 
-    });
+   });
 
 }
+
+
+/* =====================================================
+   CARGO MAP
+===================================================== */
+
+function renderCargoMap(){
+
+    const map =
+        document.getElementById("map");
+
+    if(!map){
+        return;
+    }
+
+    const cargoMap =
+        map.querySelector(".cargo-map");
+
+    if(!cargoMap){
+        return;
+    }
+
+    const wayParcels =
+        allParcels.filter(function(item){
+
+            return item.status === "way";
+
+        });
+
+    const dates = [];
+
+    wayParcels.forEach(function(item){
+
+        const date =
+            String(item.send_date || "").trim();
+
+        if(
+            date &&
+            date !== "-" &&
+            !dates.includes(date)
+        ){
+
+            dates.push(date);
+
+        }
+
+    });
+
+    dates.sort(function(a,b){
+
+        return parseDate(a) - parseDate(b);
+
+    });
+
+
+    if(dates.length === 0){
+
+        cargoMap.innerHTML =
+
+        '<div style="padding:40px;text-align:center;">' +
+
+        '<div style="font-size:40px;">📦</div>' +
+
+        '<div style="font-weight:800;margin-top:10px;">' +
+
+        'В пути грузов нет' +
+
+        '</div>' +
+
+        '</div>';
+
+        return;
+
+    }
+
+
+    let html =
+
+    '<div class="route-line"></div>' +
+
+    '<div class="location china">' +
+
+        '<div class="location-icon">🇨🇳</div>' +
+
+        '<div class="location-title">Китай</div>' +
+
+        '<div class="location-text">Склад</div>' +
+
+    '</div>' +
+
+    '<div class="location kyrgyzstan">' +
+
+        '<div class="location-icon">🇰🇬</div>' +
+
+        '<div class="location-title">Кыргызстан</div>' +
+
+        '<div class="location-text">Бишкек</div>' +
+
+    '</div>';
+
+
+    dates.forEach(function(date,index){
+
+        const total = dates.length;
+
+        let position;
+
+        if(total === 1){
+
+            position = 50;
+
+        }else{
+
+            position =
+                20 +
+                (index / (total - 1)) * 60;
+
+        }
+
+
+        html +=
+
+        '<div class="cargo-truck" ' +
+
+        'style="left:' + position + '%;">' +
+
+            '<div class="cargo-truck-icon">🚚</div>' +
+
+            '<div class="cargo-date">' +
+
+                escapeHtml(date) +
+
+            '</div>' +
+
+        '</div>';
+
+    });
+
+
+    html +=
+
+    '<div class="cargo-status">' +
+
+        '🚚 Отправок: ' +
+
+        dates.length +
+
+    '</div>';
+
+
+    cargoMap.innerHTML = html;
+
+}
+
+
+/* Датаны сорттоо */
+
+function parseDate(date){
+
+    const parts =
+        String(date).split(".");
+
+    if(parts.length !== 3){
+
+        return 0;
+
+    }
+
+    return new Date(
+
+        Number(parts[2]),
+        Number(parts[1]) - 1,
+        Number(parts[0])
+
+    ).getTime();
+
+}
+
 
 </script>
 
 </body>
 
 </html>
+
