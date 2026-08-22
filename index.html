@@ -2280,12 +2280,13 @@ function addCargoLocation(
 }
 
 /* =====================================================
-   CARGO MOVEMENT — ПО ДАТАМ
+   CARGO MOVEMENT — 10 КҮНДҮК РЕАЛДУУ ЖҮРҮШ
 ===================================================== */
 
 function animateCargoTrucks(parcels, routePoints){
 
-    /* Эски машиналарды өчүрүү */
+    /* Эски машиналарды тазалайбыз */
+
     cargoTruckMarkers.forEach(function(marker){
         marker.remove();
     });
@@ -2327,7 +2328,7 @@ function animateCargoTrucks(parcels, routePoints){
 
 
     /* =================================================
-       2. ДАТАЛАРДЫ ЭСКИ → ЖАҢЫ ТАРТИБИНДЕ
+       2. ДАТАЛАРДЫ ЭСКИ → ЖАҢЫ
     ================================================= */
 
     const dates =
@@ -2338,16 +2339,16 @@ function animateCargoTrucks(parcels, routePoints){
 
             const da =
                 new Date(
-                    pa[2],
-                    pa[1] - 1,
-                    pa[0]
+                    Number(pa[2]),
+                    Number(pa[1]) - 1,
+                    Number(pa[0])
                 );
 
             const db =
                 new Date(
-                    pb[2],
-                    pb[1] - 1,
-                    pb[0]
+                    Number(pb[2]),
+                    Number(pb[1]) - 1,
+                    Number(pb[0])
                 );
 
             return da - db;
@@ -2356,7 +2357,19 @@ function animateCargoTrucks(parcels, routePoints){
 
 
     /* =================================================
-       3. АР БИР ДАТАГА БИР МАШИНА
+       3. БҮГҮНКҮ КҮН
+    ================================================= */
+
+    const today =
+        new Date();
+
+    today.setHours(
+        0,0,0,0
+    );
+
+
+    /* =================================================
+       4. БИР МАШИНА = БИР ДАТА
     ================================================= */
 
     dates.forEach(function(date,index){
@@ -2365,41 +2378,114 @@ function animateCargoTrucks(parcels, routePoints){
             groups[date].length;
 
 
-        /*
-           Эски дата алдыда,
-           жаңы дата артта.
-        */
-
-        let progress =
-            0.55 -
-            (index * 0.10);
+        const parts =
+            date.split(".");
 
 
-        if(progress < 0.08){
-            progress = 0.08;
+        if(parts.length !== 3){
+            return;
         }
 
 
+        const sendDate =
+            new Date(
+
+                Number(parts[2]),
+
+                Number(parts[1]) - 1,
+
+                Number(parts[0])
+
+            );
+
+
+        sendDate.setHours(
+            0,0,0,0
+        );
+
+
         /* =================================================
-           МАШИНА + ЖҮК САНЫ
+           КАНЧА КҮН ӨТТҮ
+        ================================================= */
+
+        const diffMs =
+            today.getTime() -
+            sendDate.getTime();
+
+
+        let daysPassed =
+            Math.floor(
+                diffMs /
+                86400000
+            );
+
+
+        if(daysPassed < 0){
+            daysPassed = 0;
+        }
+
+
+        /*
+           10 күндө Кытай → Бишкек
+        */
+
+        /* =================================================
+   РЕАЛДУУ ПОЗИЦИЯ — КЫТАЙ → БИШКЕК
+   10 КҮНДӨ БИШКЕККЕ ЖЕТЕТ
+================================================= */
+
+const TOTAL_DAYS = 10;
+
+let progress =
+    daysPassed / TOTAL_DAYS;
+
+
+/* Жаңы чыккан жүк Кытайда */
+
+if(progress < 0.02){
+    progress = 0.02;
+}
+
+
+/* 10 күн же андан көп болсо
+   Бишкекте токтойт */
+
+if(progress >= 1){
+    progress = 1;
+}
+
+
+        /* =================================================
+           МАШИНА ИКОНКАСЫ
         ================================================= */
 
         const icon =
             L.divIcon({
 
-                className:"cargo-date-truck",
+                className:
+                    "cargo-date-truck",
 
                 html:
+
                     '<div style="' +
 
                     'background:#ff3b4d;' +
+
                     'border:3px solid #fff;' +
+
                     'border-radius:18px;' +
+
                     'padding:5px 9px;' +
+
                     'color:#fff;' +
+
                     'font-weight:900;' +
+
                     'font-size:13px;' +
-                    'box-shadow:0 4px 14px rgba(0,0,0,.35);' +
+
+                    'box-shadow:' +
+                    '0 4px 14px rgba(0,0,0,.35);' +
+
                     'white-space:nowrap;' +
 
                     '">' +
@@ -2411,10 +2497,17 @@ function animateCargoTrucks(parcels, routePoints){
 
                 iconSize:null,
 
-                iconAnchor:[30,20]
+                iconAnchor:[
+                    30,
+                    20
+                ]
 
             });
 
+
+        /* =================================================
+           МАШИНАНЫ КАРТАГА КОЮУ
+        ================================================= */
 
         const marker =
             L.marker(
@@ -2425,6 +2518,7 @@ function animateCargoTrucks(parcels, routePoints){
                 ),
 
                 {
+
                     icon:icon,
 
                     zIndexOffset:
@@ -2450,12 +2544,18 @@ function animateCargoTrucks(parcels, routePoints){
             "<br>📅 " +
             date +
 
-            "<br>🚚 В пути",
+            "<br>⏱️ " +
+            daysPassed +
+            " күн жолдо",
 
             {
+
                 direction:"top",
 
-                offset:[0,-20]
+                offset:[
+                    0,
+                    -20
+                ]
 
             }
 
@@ -2466,16 +2566,16 @@ function animateCargoTrucks(parcels, routePoints){
             progress;
 
 
-        marker._cargoIndex =
-            index;
-
-
         marker._cargoDate =
             date;
 
 
         marker._cargoCount =
             count;
+
+
+        marker._daysPassed =
+            daysPassed;
 
 
         cargoTruckMarkers.push(
@@ -2486,11 +2586,11 @@ function animateCargoTrucks(parcels, routePoints){
 
 
     /* =================================================
-       4. ӨТӨ ЖАЙ КЫЙМЫЛ
+       5. ӨТӨ ЖАЙ КЫЙМЫЛ
     ================================================= */
 
     const SPEED =
-        0.000012;
+        0.000004;
 
 
     function moveTrucks(){
@@ -2498,22 +2598,34 @@ function animateCargoTrucks(parcels, routePoints){
         cargoTruckMarkers.forEach(
             function(marker){
 
+                /*
+                   10 күнгө жеткен жүк
+                   Бишкекке жакын жерде токтойт
+                */
+
+                if(
+                    marker._daysPassed >= 10
+                ){
+
+                    return;
+
+                }
+
+
                 marker._cargoProgress +=
                     SPEED;
 
 
                 /*
-                   Акыркы чекке жеткенде
-                   кайра башынан башталбайт.
-                   Жай гана баштапкы чекке кайтабыз.
+                   Бишкекке жеткенде токтойт
                 */
 
                 if(
-                    marker._cargoProgress >= 0.98
+                    marker._cargoProgress >= 0.97
                 ){
 
                     marker._cargoProgress =
-                        0.05;
+                        0.97;
 
                 }
 
