@@ -2280,11 +2280,12 @@ function addCargoLocation(
 }
 
 /* =====================================================
-   REALISTIC TRUCK MOVEMENT
+   CARGO MOVEMENT — ПО ДАТАМ
 ===================================================== */
 
 function animateCargoTrucks(parcels, routePoints){
 
+    /* Эски машиналарды өчүрүү */
     cargoTruckMarkers.forEach(function(marker){
         marker.remove();
     });
@@ -2293,95 +2294,263 @@ function animateCargoTrucks(parcels, routePoints){
 
     if(cargoAnimationTimer){
         clearInterval(cargoAnimationTimer);
+        cargoAnimationTimer = null;
     }
 
     if(!parcels || parcels.length === 0){
         return;
     }
 
-    parcels.forEach(function(parcel, index){
 
-        const icon = L.divIcon({
-            className:"",
-            html:
-                '<div class="cargo-truck-marker">🚚</div>',
-            iconSize:[46,46],
-            iconAnchor:[23,23]
-        });
+    /* =================================================
+       1. ЖҮКТӨРДҮ ДАТА БОЮНЧА ТОПТОЙБУЗ
+    ================================================= */
 
-        const marker = L.marker(
-            routePoints[0],
-            {
-                icon:icon,
-                zIndexOffset:1000 + index
-            }
-        ).addTo(cargoMapInstance);
+    const groups = {};
 
-        marker.bindTooltip(
-            "📦 " +
-            (parcel.track || "Груз") +
-            "<br>📅 " +
-            (parcel.send_date || "-"),
-            {
-                direction:"top",
-                offset:[0,-20]
-            }
-        );
+    parcels.forEach(function(parcel){
 
-        cargoTruckMarkers.push(marker);
+        const date =
+            String(parcel.send_date || "").trim();
+
+        if(!date){
+            return;
+        }
+
+        if(!groups[date]){
+            groups[date] = [];
+        }
+
+        groups[date].push(parcel);
 
     });
 
 
-    /*
-       Ар бир машина ар башка жерден башталат.
-       Кыймыл жай жана үзгүлтүксүз болот.
-    */
+    /* =================================================
+       2. ДАТАЛАРДЫ ЭСКИ → ЖАҢЫ ТАРТИБИНДЕ
+    ================================================= */
 
-    let progress = 0;
+    const dates =
+        Object.keys(groups).sort(function(a,b){
+
+            const pa = a.split(".");
+            const pb = b.split(".");
+
+            const da =
+                new Date(
+                    pa[2],
+                    pa[1] - 1,
+                    pa[0]
+                );
+
+            const db =
+                new Date(
+                    pb[2],
+                    pb[1] - 1,
+                    pb[0]
+                );
+
+            return da - db;
+
+        });
+
+
+    /* =================================================
+       3. АР БИР ДАТАГА БИР МАШИНА
+    ================================================= */
+
+    dates.forEach(function(date,index){
+
+        const count =
+            groups[date].length;
+
+
+        /*
+           Эски дата алдыда,
+           жаңы дата артта.
+        */
+
+        let progress =
+            0.55 -
+            (index * 0.10);
+
+
+        if(progress < 0.08){
+            progress = 0.08;
+        }
+
+
+        /* =================================================
+           МАШИНА + ЖҮК САНЫ
+        ================================================= */
+
+        const icon =
+            L.divIcon({
+
+                className:"cargo-date-truck",
+
+                html:
+                    '<div style="' +
+
+                    'background:#ff3b4d;' +
+                    'border:3px solid #fff;' +
+                    'border-radius:18px;' +
+                    'padding:5px 9px;' +
+                    'color:#fff;' +
+                    'font-weight:900;' +
+                    'font-size:13px;' +
+                    'box-shadow:0 4px 14px rgba(0,0,0,.35);' +
+                    'white-space:nowrap;' +
+
+                    '">' +
+
+                    '🚚 ' +
+                    count +
+
+                    '</div>',
+
+                iconSize:null,
+
+                iconAnchor:[30,20]
+
+            });
+
+
+        const marker =
+            L.marker(
+
+                getPositionOnRoute(
+                    routePoints,
+                    progress
+                ),
+
+                {
+                    icon:icon,
+
+                    zIndexOffset:
+                        2000 - index
+
+                }
+
+            ).addTo(
+                cargoMapInstance
+            );
+
+
+        /* =================================================
+           TOOLTIP
+        ================================================= */
+
+        marker.bindTooltip(
+
+            "🚚 <b>" +
+            count +
+            " грузов</b>" +
+
+            "<br>📅 " +
+            date +
+
+            "<br>🚚 В пути",
+
+            {
+                direction:"top",
+
+                offset:[0,-20]
+
+            }
+
+        );
+
+
+        marker._cargoProgress =
+            progress;
+
+
+        marker._cargoIndex =
+            index;
+
+
+        marker._cargoDate =
+            date;
+
+
+        marker._cargoCount =
+            count;
+
+
+        cargoTruckMarkers.push(
+            marker
+        );
+
+    });
+
+
+    /* =================================================
+       4. ӨТӨ ЖАЙ КЫЙМЫЛ
+    ================================================= */
+
+    const SPEED =
+        0.000012;
+
 
     function moveTrucks(){
 
-        progress += 0.0007;
+        cargoTruckMarkers.forEach(
+            function(marker){
 
-        if(progress >= 1){
-            progress = 0;
-        }
+                marker._cargoProgress +=
+                    SPEED;
 
-        cargoTruckMarkers.forEach(function(marker,index){
 
-            let individualProgress =
-                progress + (index * 0.035);
+                /*
+                   Акыркы чекке жеткенде
+                   кайра башынан башталбайт.
+                   Жай гана баштапкы чекке кайтабыз.
+                */
 
-            if(individualProgress >= 1){
-                individualProgress -= 1;
-            }
+                if(
+                    marker._cargoProgress >= 0.98
+                ){
 
-            const position =
-                getPositionOnRoute(
-                    routePoints,
-                    individualProgress
+                    marker._cargoProgress =
+                        0.05;
+
+                }
+
+
+                const position =
+                    getPositionOnRoute(
+
+                        routePoints,
+
+                        marker._cargoProgress
+
+                    );
+
+
+                marker.setLatLng(
+                    position
                 );
 
-            marker.setLatLng(position);
-
-        });
+            }
+        );
 
     }
 
 
     moveTrucks();
 
-    cargoAnimationTimer = setInterval(
-        moveTrucks,
-        50
-    );
+
+    cargoAnimationTimer =
+        setInterval(
+
+            moveTrucks,
+
+            100
+
+        );
 
 }
-
-            
-
-
 /* =====================================================
    POSITION
 ===================================================== */
