@@ -604,7 +604,7 @@ body{
     z-index:1000;
     left:12px;
     right:12px;
-    bottom:12px;
+   top:12px;
     background:rgba(255,255,255,0.96);
     border-radius:15px;
     padding:12px 14px;
@@ -614,7 +614,60 @@ body{
     font-weight:800;
     color:#333;
 }
+/* =====================================================
+   LIVE INDICATOR
+===================================================== */
 
+.live-status{
+    position:absolute;
+    z-index:1100;
+    left:12px;
+    bottom:12px;
+
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    background:rgba(255,255,255,0.96);
+    padding:7px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+    font-weight:900;
+    color:#e53935;
+
+    box-shadow:0 4px 14px rgba(0,0,0,0.18);
+}
+
+.live-dot{
+    width:9px;
+    height:9px;
+    background:#e53935;
+    border-radius:50%;
+
+    animation:liveBlink 1s infinite;
+}
+
+@keyframes liveBlink{
+    0%,100%{
+        opacity:1;
+        transform:scale(1);
+        box-shadow:0 0 0 0 rgba(229,57,53,0.5);
+    }
+
+    50%{
+        opacity:.35;
+        transform:scale(1.25);
+        box-shadow:0 0 0 5px rgba(229,57,53,0);
+    }
+}
+
+/* Убираем подпись Leaflet */
+
+.leaflet-control-attribution{
+    display:none !important;
+}
 .cargo-map-info strong{
     color:#ff3b4d;
 }
@@ -834,18 +887,23 @@ onclick="copyAddress()">
 
     </div>
 
-    <div class="cargo-map">
+   <div class="cargo-map">
 
-        <div id="cargoRealMap"></div>
+    <div id="cargoRealMap"></div>
 
-        <div
-            class="cargo-map-info"
-            id="cargoMapInfo"
-        >
-            🚚 Загрузка маршрута...
-        </div>
-
+    <div class="live-status">
+        <span class="live-dot"></span>
+        <span>LIVE</span>
     </div>
+
+    <div
+        class="cargo-map-info"
+        id="cargoMapInfo"
+    >
+        🚚 Загрузка маршрута...
+    </div>
+
+</div>
 
 </div>
 
