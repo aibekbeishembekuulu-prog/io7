@@ -1820,16 +1820,12 @@ function loadParcels(tg_id){
 const url =
 API_URL +
 "?action=all&tg_id=" +
-encodeURIComponent(
-tg_id
-);
-
+encodeURIComponent(tg_id);
 
 console.log(
 "PARCEL URL:",
 url
 );
-
 
 fetch(url)
 
@@ -1855,15 +1851,12 @@ console.log(
 text
 );
 
-
 let data;
 
 try{
 
 data =
-JSON.parse(
-text
-);
+JSON.parse(text);
 
 }
 
@@ -1875,7 +1868,6 @@ text
 );
 
 }
-
 
 console.log(
 "PARCEL DATA:",
@@ -1900,12 +1892,12 @@ return;
 allParcels = [];
 
 
-/* OFFICE */
+/* =====================================================
+   🏢 OFFICE
+===================================================== */
 
 if(
-Array.isArray(
-data.office
-)
+Array.isArray(data.office)
 ){
 
 data.office.forEach(
@@ -1914,7 +1906,9 @@ function(item){
 allParcels.push({
 
 track:
-item.track,
+item.track ||
+item.трек ||
+"",
 
 status:
 "office",
@@ -1923,13 +1917,19 @@ statusText:
 "🏢 В офисе",
 
 price:
-item.price,
+item.price !== undefined
+? item.price
+: item.цена,
 
 send_date:
-item.date_sent,
+item.date_sent ||
+item.дата_отправлена ||
+"",
 
 expected:
-item.date_arrived
+item.date_arrived ||
+item.дата_прибытия ||
+""
 
 });
 
@@ -1938,27 +1938,26 @@ item.date_arrived
 }
 
 
-/* WAY */
+/* =====================================================
+   🚚 WAY
+===================================================== */
 
 if(
-Array.isArray(
-data.way
-)
+Array.isArray(data.way)
 ){
 
 data.way.forEach(
 function(item){
 
 const st =
-getStatus(
-item
-);
-
+getStatus(item);
 
 allParcels.push({
 
 track:
-item.track,
+item.track ||
+item.трек ||
+"",
 
 status:
 st.key,
@@ -1967,13 +1966,19 @@ statusText:
 st.text,
 
 price:
-item.price,
+item.price !== undefined
+? item.price
+: item.цена,
 
 send_date:
-item.date_sent,
+item.date_sent ||
+item.дата_отправлена ||
+"",
 
 expected:
-item.date_arrived
+item.date_arrived ||
+item.дата_прибытия ||
+""
 
 });
 
@@ -1982,12 +1987,131 @@ item.date_arrived
 }
 
 
+/* =====================================================
+   🇨🇳 CHINA
+===================================================== */
+
+if(
+Array.isArray(data.china)
+){
+
+data.china.forEach(
+function(item){
+
+allParcels.push({
+
+track:
+item.track ||
+item.трек ||
+"",
+
+status:
+"china",
+
+statusText:
+"🇨🇳 На складе в Китае",
+
+price:
+item.price !== undefined
+? item.price
+: item.цена,
+
+send_date:
+item.date_sent ||
+item.дата_отправлена ||
+"",
+
+expected:
+item.date_arrived ||
+item.дата_прибытия ||
+""
+
+});
+
+});
+
+}
+
+
+/* =====================================================
+   ✅ ISSUED / ВЫДАНО
+===================================================== */
+
+if(
+Array.isArray(data.выдан)
+){
+
+data.выдан.forEach(
+function(item){
+
+allParcels.push({
+
+track:
+item.трек ||
+item.track ||
+"",
+
+status:
+"issued",
+
+statusText:
+"✅ Выдано",
+
+price:
+item.цена !== undefined
+? item.цена
+: item.price,
+
+send_date:
+item.дата_отправлена ||
+item.date_sent ||
+"",
+
+expected:
+item.дата_прибытия ||
+item.date_arrived ||
+""
+
+});
+
+});
+
+}
+
+
+/* =====================================================
+   🔍 DEBUG
+===================================================== */
+
+console.log(
+"ВСЕ ПОСЫЛКИ:",
+allParcels
+);
+
+console.log(
+"ВЫДАНО:",
+allParcels.filter(
+function(item){
+
+return item.status === "issued";
+
+}
+)
+);
+
+
+/* =====================================================
+   📦 RENDER
+===================================================== */
+
 renderParcels();
+
 renderCargoMap();
 
 })
 
 .catch(function(error){
+
 console.error(
 "PARCEL ERROR:",
 error
@@ -1999,9 +2123,7 @@ renderParcels();
 
 });
 
-
 }
-
 /* =====================================================
    REAL CARGO MAP
 ===================================================== */
