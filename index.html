@@ -215,6 +215,69 @@ body{
     font-size:14px;
     cursor:pointer;
 }
+    /* 📱 МОЙ QR КОД */
+
+.qr-code-btn{
+    width:100%;
+    margin-top:10px;
+    border:none;
+    background:#222;
+    color:#ffffff;
+    padding:13px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.qr-code-btn:active{
+    transform:scale(.98);
+}
+
+.client-qr-box{
+    display:none;
+    margin-top:15px;
+    padding:18px;
+    background:#ffffff;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 5px 18px rgba(0,0,0,0.10);
+}
+
+.client-qr-box.show{
+    display:block;
+}
+
+.qr-title{
+    font-size:16px;
+    font-weight:900;
+    color:#222;
+    margin-bottom:12px;
+}
+
+.client-qr-box img{
+    width:230px;
+    height:230px;
+    max-width:100%;
+    display:block;
+    margin:0 auto;
+    border-radius:10px;
+}
+
+.qr-code-text{
+    margin-top:12px;
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:2px;
+    color:#ff3b4d;
+}
+
+.qr-hint{
+    margin-top:8px;
+    font-size:12px;
+    color:#999;
+    line-height:1.4;
+}
 
 /* WAREHOUSE */
 
@@ -789,18 +852,64 @@ id="clientName">Загрузка...
 </div><div class="info-value"
 id="clientPhone">Загрузка...
 
-</div></div></div><div class="code-box"><div class="code-label">
+</div></div></div><div class="code-box">
+
+<div class="code-label">
 Ваш клиентский код
-</div><div class="code"
+</div>
+
+<div class="code"
 id="clientCode">---
 
-</div><button
+</div>
+
+<button
 class="copy-code-btn"
 onclick="copyClientCode()">
 
 📋 Скопировать клиентский код
 
-</button></div><div class="warehouse"><div class="warehouse-title">
+</button>
+
+
+<!-- QR BUTTON -->
+
+<button
+class="qr-code-btn"
+onclick="toggleClientQR()">
+
+📱 Мой QR код
+
+</button>
+
+
+<!-- QR CODE -->
+
+<div
+id="clientQRBox"
+class="client-qr-box">
+
+<div class="qr-title">
+📱 Ваш QR код
+</div>
+
+<img
+id="clientQR"
+src=""
+alt="QR Code">
+
+<div class="qr-code-text"
+id="clientQRText">
+</div>
+
+<div class="qr-hint">
+Покажите этот QR-код сотруднику
+для быстрого получения посылки
+</div>
+
+</div>
+
+</div><div class="warehouse"><div class="warehouse-title">
 📦 Адрес склада в Китае
 </div><div class="warehouse-address"
 id="warehouseText">Загрузка...
@@ -1340,7 +1449,87 @@ alert(code);
 });
 
 }
+/* =====================================================
+   📱 SHOW / HIDE CLIENT QR
+===================================================== */
 
+function toggleClientQR(){
+
+    const qrBox =
+        document.getElementById(
+            "clientQRBox"
+        );
+
+    const qrImage =
+        document.getElementById(
+            "clientQR"
+        );
+
+    const qrText =
+        document.getElementById(
+            "clientQRText"
+        );
+
+    const codeElement =
+        document.getElementById(
+            "clientCode"
+        );
+
+
+    if(
+        !qrBox ||
+        !qrImage ||
+        !codeElement
+    ){
+        return;
+    }
+
+
+    const clientCode =
+        String(
+            codeElement.innerText || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    if(
+        !clientCode ||
+        clientCode === "---" ||
+        clientCode === "ЗАГРУЗКА..."
+    ){
+
+        showError(
+            "⚠️ Клиентский код ещё не загружен."
+        );
+
+        return;
+
+    }
+
+
+    const qrURL =
+        "https://quickchart.io/qr?text=" +
+        encodeURIComponent(
+            clientCode
+        ) +
+        "&size=300";
+
+
+    qrImage.src =
+        qrURL;
+
+
+    qrText.innerText =
+        clientCode;
+
+
+    qrBox.classList.toggle(
+        "show"
+    );
+
+}
+    
 
 /* =====================================================
    SUCCESS
