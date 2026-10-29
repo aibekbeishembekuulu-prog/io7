@@ -320,199 +320,79 @@ body{
     cursor:pointer;
 }
 
-/* =====================================================
-💎 PREMIUM BONUS & LEVEL CARDS
-===================================================== */
+/* BONUS */
 
 .bonus-grid{
-display:grid;
-grid-template-columns:1fr;
-gap:12px;
-margin-bottom:15px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:15px;
 }
 
 .bonus-card{
-background:linear-gradient(135deg,#ffffff,#fff5f6);
-border:1px solid #ffe0e4;
-border-radius:20px;
-padding:18px;
-box-shadow:0 7px 22px rgba(255,59,77,.08);
+    background:#ffffff;
+    border:1px solid #f0f0f0;
+    border-radius:17px;
+    padding:17px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.05);
 }
 
-.premium-bonus-main{
-background:linear-gradient(135deg,#ff3b4d,#ff6473);
-color:#ffffff;
-border:none;
-box-shadow:0 10px 25px rgba(255,59,77,.22);
+.bonus-icon{
+    font-size:24px;
+    margin-bottom:8px;
 }
 
-.premium-card-heading{
-display:flex;
-align-items:center;
-gap:10px;
-font-size:16px;
-font-weight:900;
-margin-bottom:16px;
+.bonus-title{
+    font-size:12px;
+    color:#999;
 }
 
-.premium-bonus-main .bonus-title{
-color:rgba(255,255,255,.85);
+.bonus-value{
+    color:#ff3b4d;
+    font-size:20px;
+    font-weight:900;
+    margin-top:4px;
 }
 
-.premium-bonus-main .bonus-value{
-color:#ffffff;
+/* LEVEL */
+
+.level-box{
+    padding:19px;
+    border-radius:18px;
+    text-align:center;
+    margin-bottom:17px;
+    font-weight:800;
+    box-shadow:0 6px 20px rgba(0,0,0,0.07);
 }
 
-.premium-bonus-main .bonus-icon{
-margin:0;
+.level-title{
+    font-size:12px;
+    opacity:0.7;
+    margin-bottom:5px;
 }
 
-.premium-bonus-total{
-padding-bottom:15px;
-border-bottom:1px solid rgba(255,255,255,.25);
-margin-bottom:14px;
+.level-value{
+    font-size:21px;
 }
 
-.premium-bonus-total .bonus-value{
-font-size:30px;
-font-weight:900;
-margin-top:5px;
+.vip{
+    background:linear-gradient(135deg,#ffe5e8,#ff9ca8);
+    color:#a80016;
 }
 
-.premium-bonus-details{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+.gold{
+    background:linear-gradient(135deg,#fff1d6,#ffd27a);
+    color:#8a5700;
 }
 
-.premium-bonus-details .bonus-value{
-font-size:19px;
-margin-top:5px;
+.silver{
+    background:linear-gradient(135deg,#f1f1f1,#d3d3d3);
+    color:#555;
 }
 
-.premium-level-card{
-background:linear-gradient(135deg,#ffffff,#f8f8fb);
-border:1px solid #ececf2;
-border-radius:20px;
-padding:18px;
-margin-bottom:15px;
-box-shadow:0 7px 22px rgba(0,0,0,.06);
-}
-
-.premium-level-heading{
-font-size:16px;
-font-weight:900;
-margin-bottom:14px;
-}
-
-.premium-level-badge{
-background:linear-gradient(135deg,#fff1f3,#ffdce0);
-border-radius:15px;
-padding:15px;
-text-align:center;
-color:#c42135;
-margin-bottom:14px;
-}
-
-.premium-level-badge .level-title{
-font-size:12px;
-margin-bottom:5px;
-}
-
-.premium-level-badge .level-value{
-font-size:23px;
-font-weight:900;
-}
-
-.premium-level-stats{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.premium-level-stat{
-background:#ffffff;
-border:1px solid #eeeeF2;
-border-radius:13px;
-padding:12px;
-}
-
-.premium-level-stat .stat-label{
-color:#888;
-font-size:11px;
-margin-bottom:6px;
-}
-
-.premium-level-stat .stat-value{
-color:#222;
-font-size:16px;
-font-weight:900;
-overflow-wrap:anywhere;
-}
-
-.premium-level-stat.full{
-grid-column:1/-1;
-}
-
-.premium-level-stat .stat-value.highlight{
-color:#ff3b4d;
-}
-
-/* 🎁 REFERRAL CARD */
-
-.referral-premium-card{
-background:linear-gradient(135deg,#fff8e8,#ffffff);
-border:1px solid #ffe3ad;
-border-radius:20px;
-padding:19px;
-margin-bottom:16px;
-box-shadow:0 7px 22px rgba(210,150,30,.10);
-}
-
-.referral-premium-title{
-font-size:18px;
-font-weight:900;
-color:#292929;
-line-height:1.35;
-}
-
-.referral-premium-description{
-font-size:13px;
-line-height:1.6;
-color:#666;
-margin:9px 0 15px;
-}
-
-.referral-share-btn{
-width:100%;
-border:none;
-border-radius:14px;
-padding:14px;
-background:#25D366;
-color:#ffffff;
-font-size:15px;
-font-weight:900;
-cursor:pointer;
-box-shadow:0 5px 14px rgba(37,211,102,.20);
-}
-
-.referral-share-btn:active{
-transform:scale(.98);
-}
-
-@media(max-width:380px){
-.premium-bonus-details{
-gap:8px;
-}
-
-.premium-bonus-details .bonus-value{
-    font-size:17px;
-}
-
-.premium-level-stat{
-    padding:10px;
-}
-
+.newbie{
+    background:linear-gradient(135deg,#fff1f3,#ffdce0);
+    color:#c42135;
 }
 
 /* PARCELS */
@@ -1040,138 +920,65 @@ onclick="copyAddress()">
 
 📋 Скопировать адрес склада
 
-</button></div><!-- 💎 PREMIUM BONUS CARD --><div class="bonus-grid"><div class="bonus-card premium-bonus-main">
+</button></div><div class="bonus-grid">
 
-    <div class="premium-card-heading">
-        💎 Мои бонусы
+<div class="bonus-card">
+    <div class="bonus-icon">
+        💎
+    </div>
+    <div class="bonus-title">
+        Общий заработанный бонус
+    </div>
+    <div class="bonus-value" id="totalBonus">
+        0 сом
+    </div>
+</div>
+
+<div class="bonus-card">
+    <div class="bonus-icon">
+        💰
+    </div>
+    <div class="bonus-title">
+        🎁 Бонус от рефералов
+    </div>
+    <div class="bonus-value" id="bonusValue">
+        0 сом
+    </div>
+</div>
+
+<div class="bonus-card" onclick="showReferrals()" style="cursor:pointer;">
+    <div class="bonus-icon">
+        👥
     </div>
 
-    <div class="premium-bonus-total">
-
-        <div class="bonus-title">
-            Общий заработанный бонус
-        </div>
-
-        <div class="bonus-value" id="totalBonus">
-            0 сом
-        </div>
-
+    <div class="bonus-title">
+        Мои рефералы
     </div>
-
-    <div class="premium-bonus-details">
-
-        <div>
-            <div class="bonus-icon">🎁</div>
-
-            <div class="bonus-title">
-                Бонус от рефералов
-            </div>
-
-            <div class="bonus-value" id="bonusValue">
-                0 сом
-            </div>
-        </div>
-
-        <div
-            onclick="showReferrals()"
-            style="cursor:pointer;"
-        >
-            <div class="bonus-icon">👥</div>
-
-            <div class="bonus-title">
-                Мои рефералы
-            </div>
-
-            <div class="bonus-value" id="referralCount">
-                0
-            </div>
-        </div>
-
-    </div>
+<div class="bonus-value" id="referralCount">
+    0
+</div>
+</div>
 
 </div>
 
-</div><!-- 👑 PREMIUM LEVEL CARD --><div class="premium-level-card"><div class="premium-level-heading">
-    👑 Мой статус клиента
+<div id="levelBox" class="level-box newbie">
+    
+<div class="level-title">
+💎 Ваш уровень
+</div><div class="level-value" id="levelValue">
+⏳ Загрузка...
 </div>
 
-<div class="premium-level-badge" id="levelBox">
-
-    <div class="level-title">
-        Ваш уровень
-    </div>
-
-    <div class="level-value" id="levelValue">
-        ⏳ Загрузка...
-    </div>
-
+<div style="margin-top:10px;font-size:14px;" id="discountValue">
 </div>
 
-<div class="premium-level-stats">
-
-    <div class="premium-level-stat">
-
-        <div class="stat-label">
-            🎯 Ваша скидка
-        </div>
-
-        <div
-            class="stat-value highlight"
-            id="discountValue"
-        >
-            Загрузка...
-        </div>
-
-    </div>
-
-    <div class="premium-level-stat">
-
-        <div class="stat-label">
-            💰 Оплата за прошлый месяц
-        </div>
-
-        <div
-            class="stat-value"
-            id="monthPurchase"
-        >
-            Загрузка...
-        </div>
-
-    </div>
-
-    <div class="premium-level-stat full">
-
-        <div class="stat-label">
-            👥 Активные рефералы
-        </div>
-
-        <div
-            class="stat-value"
-            id="activeReferrals"
-        >
-            Загрузка...
-        </div>
-
-    </div>
-
+<div style="margin-top:5px;font-size:14px;" id="monthPurchase">
 </div>
 
-</div><!-- 🎁 REFERRAL CARD --><div class="referral-premium-card"><div class="referral-premium-title">
-    🎁 Пригласи друга и зарабатывай!
+<div style="margin-top:5px;font-size:14px;" id="activeReferrals">
 </div>
 
-<div class="referral-premium-description">
-    Расскажи друзьям о Tez Kargo, приглашай новых клиентов
-    и получай бонусы за их заказы!
 </div>
-
-<button
-    type="button"
-    class="referral-share-btn"
-    onclick="shareReferral()"
->
-    🟢 Пригласить друга через WhatsApp
-</button>
 
 </div>
 
@@ -3605,4 +3412,3 @@ function showReferrals(){
 </body>
 
 </html>
-
